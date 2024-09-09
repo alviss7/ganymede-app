@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+:not(input):not(textarea):not(select):not(a):not(button):not(button *):not(a *):not(.select-text):not(code) {
+  user-select: none;
+  cursor: default;
+}
+
+[data-radix-popper-content-wrapper] {
+  z-index: 50 !important;
+}
+
+html, body {
+  min-height: 100vh;
+  /*border-radius: 0.65rem;*/
+}
+
+html {
+  overscroll-behavior: none;
+  background: white;
+}
+
+* {
+  user-select: none;
+}
