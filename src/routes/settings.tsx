@@ -119,11 +119,7 @@ function Settings() {
 
               // Check if the profile name is not empty and if it doesn't already exist
               if (profileName.trim() !== '' && !conf.data.profiles.find((p) => p.name === profileName.trim())) {
-                console.log('yo')
-
                 const id = await newId()
-
-                console.log(id)
 
                 id.map((id) => {
                   setConf.mutate({
@@ -133,6 +129,7 @@ function Settings() {
                       {
                         id,
                         name: profileName.trim(),
+                        progresses: [],
                       },
                     ],
                     profileInUse: id,

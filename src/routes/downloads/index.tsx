@@ -1,5 +1,4 @@
-import { PageContent } from '@/components/page-content.tsx'
-import { PageTitle, PageTitleText } from '@/components/page-title.tsx'
+import { Page } from '@/routes/-page.tsx'
 import { Slot } from '@radix-ui/react-slot'
 import { Link, LinkProps, type RegisteredRouter, createFileRoute } from '@tanstack/react-router'
 import { BookOpenCheckIcon, BookOpenTextIcon, NotebookPenIcon, TrophyIcon } from 'lucide-react'
@@ -36,10 +35,7 @@ function GuideLink({
 
 function DownloadIndex() {
   return (
-    <PageContent>
-      <PageTitle>
-        <PageTitleText>Catégories</PageTitleText>
-      </PageTitle>
+    <Page title="Catégories">
       <ul className="flex flex-col gap-2 p-4">
         <GuideLink params={{ status: 'gp' }} icon={<BookOpenTextIcon />}>
           Guides principaux
@@ -54,6 +50,6 @@ function DownloadIndex() {
           Guides draft
         </GuideLink>
       </ul>
-    </PageContent>
+    </Page>
   )
 }

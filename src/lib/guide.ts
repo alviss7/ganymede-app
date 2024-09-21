@@ -1,4 +1,5 @@
-import { DownloadGuide } from '@/types/download.ts'
+import { GuideWithSteps } from '@/types/download.ts'
+import { Guide } from '@/types/guide.ts'
 
 /**
  * Check if a guide is new compared to another guide.
@@ -7,14 +8,14 @@ import { DownloadGuide } from '@/types/download.ts'
  * @param guide
  * @param otherGuide
  */
-export function isGuideNew(guide: DownloadGuide, otherGuide?: DownloadGuide): boolean {
-  if (!guide.updated_at || !otherGuide?.updated_at) {
+export function isGuideNew(guide?: Guide | GuideWithSteps, otherGuide?: Guide | GuideWithSteps): boolean {
+  if (!guide?.updated_at || !otherGuide?.updated_at) {
     return false
   }
 
   return +guide.updated_at !== +otherGuide.updated_at
 }
 
-export function getGuideById(guides: DownloadGuide[], id: number): DownloadGuide | undefined {
+export function getGuideById<T extends Guide | GuideWithSteps>(guides: T[], id: number): T | undefined {
   return guides.find((guide) => guide.id === id)
 }

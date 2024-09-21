@@ -9,7 +9,7 @@ export class GetGuidesError extends Error {
   }
 }
 
-export function getGuides(status: string) {
+export function getAvailableGuides(status: string) {
   return fromPromise(invoke('get_guides', { status }), GetGuidesError.from).map((res) => {
     return z.array(GuideZod).parseAsync(res)
   })

@@ -8,7 +8,7 @@ export function useDownloadGuide() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (guide: Guide) => {
+    mutationFn: async (guide: Pick<Guide, 'id'>) => {
       const result = await downloadGuide(guide.id)
 
       if (result.isErr()) {

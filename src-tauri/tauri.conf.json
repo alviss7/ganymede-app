@@ -1,5 +1,5 @@
 {
-  "productName": "ganymede-app",
+  "productName": "Ganymède",
   "version": "0.1.0",
   "identifier": "com.ganymede.ganymede-app",
   "build": {
@@ -16,6 +16,7 @@
         "height": 500,
         "minWidth": 300,
         "minHeight": 400,
+        "decorations": false,
         "alwaysOnTop": true
       }
     ],

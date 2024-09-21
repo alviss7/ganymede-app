@@ -9,8 +9,12 @@ export function PageTitle({ children }: PropsWithChildren) {
   )
 }
 
-export function PageTitleText({ children, ...props }: ComponentProps<'span'>) {
-  return <span {...props}>{children}</span>
+export function PageTitleText({ children, className, ...props }: ComponentProps<'span'>) {
+  return (
+    <span className={cn('text-lg', className)} {...props}>
+      {children}
+    </span>
+  )
 }
 
 export function PageTitleExtra({ children, className, ...props }: ComponentProps<'span'>) {
