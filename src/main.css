@@ -17,9 +17,14 @@
   z-index: 50 !important;
 }
 
-html, body {
+html, body, #root {
   min-height: 100vh;
   /*border-radius: 0.65rem;*/
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
 }
 
 html {

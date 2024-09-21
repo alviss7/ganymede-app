@@ -15,6 +15,14 @@
     "core:window:allow-toggle-maximize",
     "core:window:allow-close",
     "core:window:allow-start-dragging",
-    "window-state:default"
+    "window-state:default",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://ganymede-dofus.com"
+        }
+      ]
+    }
   ]
 }
