@@ -57,8 +57,10 @@ export const Route = createFileRoute('/guides/$id')({
 function Pending() {
   return (
     <Page title="" key="guide" to="/guides">
-      <header className="flex h-16 items-center justify-between gap-2 bg-gray-500 p-2" />
-      <GenericLoader />
+      <header className="flex h-11 items-center justify-between gap-2 bg-gray-500 p-2" />
+      <div className="flex grow items-center justify-center">
+        <GenericLoader />
+      </div>
     </Page>
   )
 }
@@ -136,21 +138,23 @@ function GuideIdPage() {
 
   return (
     <Page key="guide" title={guide.name} to="/guides">
-      <header className="sticky top-[66px] flex items-center justify-between gap-2 bg-gray-500 p-1">
-        {step && (
-          <>
-            <Position pos_x={step.pos_x} pos_y={step.pos_y} />
-            <ChangeStep
-              current={index + 1}
-              max={guide.steps.length}
-              onPrevious={onClickPrevious}
-              onNext={onClickNext}
-            />
-            <Button size="icon">
-              <MapIcon className="size-4" />
-            </Button>
-          </>
-        )}
+      <header className="sticky top-[66px] bg-gray-500">
+        <div className="relative flex h-10 items-center justify-between gap-2 p-1">
+          {step && (
+            <>
+              <Position pos_x={step.pos_x} pos_y={step.pos_y} />
+              <ChangeStep
+                current={index + 1}
+                max={guide.steps.length}
+                onPrevious={onClickPrevious}
+                onNext={onClickNext}
+              />
+              <Button size="icon">
+                <MapIcon className="size-4" />
+              </Button>
+            </>
+          )}
+        </div>
       </header>
       {/* dangerouslySetInnerHTML for now but keep in mind for script tags */}
       {step && <div className="p-2 text-sm leading-4" dangerouslySetInnerHTML={{ __html: step.text }}></div>}

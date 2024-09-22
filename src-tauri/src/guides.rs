@@ -76,7 +76,7 @@ pub struct GuideWithSteps {
     pub order: u32,
     pub user: User,
     pub web_description: Option<String>,
-    pub steps: Vec<Step>
+    pub steps: Vec<Step>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Default)]
@@ -150,7 +150,11 @@ pub fn get_downloads(window: Window<Wry>) -> Result<Download, Error> {
 
 #[tauri::command]
 pub async fn get_guides(status: Status) -> Result<Vec<Guide>, Error> {
-    let res = reqwest::get(format!("https://ganymede-dofus.com/api/guides?status={}", status)).await?;
+    let res = reqwest::get(format!(
+        "https://ganymede-dofus.com/api/guides?status={}",
+        status
+    ))
+    .await?;
 
     let text = res.text().await?;
 
@@ -164,9 +168,7 @@ pub async fn get_guides(status: Status) -> Result<Vec<Guide>, Error> {
 
             Ok(vec![])
         }
-        Ok(guides) => {
-            Ok(guides)
-        }
+        Ok(guides) => Ok(guides),
     }
 }
 
@@ -174,7 +176,11 @@ pub async fn get_guides(status: Status) -> Result<Vec<Guide>, Error> {
 pub async fn download_guide(guide_id: u32, window: Window<Wry>) -> Result<Download, Error> {
     println!("set_download_guides");
 
-    let res = reqwest::get(format!("https://ganymede-dofus.com/api/guides/{}", guide_id)).await?;
+    let res = reqwest::get(format!(
+        "https://ganymede-dofus.com/api/guides/{}",
+        guide_id
+    ))
+    .await?;
     let text = res.text().await?;
     let des = &mut serde_json::Deserializer::from_str(text.as_str());
     let guide: Result<GuideWithSteps, _> = serde_path_to_error::deserialize(des);
@@ -184,8 +190,12 @@ pub async fn download_guide(guide_id: u32, window: Window<Wry>) -> Result<Downlo
             let resolver = window.path();
             let guide_ref = &guide;
             let mut download = Download::get(resolver)?;
-            
-            match download.downloaded_guides.iter().position(|g| g.id == guide_ref.id) {
+
+            match download
+                .downloaded_guides
+                .iter()
+                .position(|g| g.id == guide_ref.id)
+            {
                 Some(index) => download.downloaded_guides[index] = guide,
                 None => download.downloaded_guides.push(guide),
             }

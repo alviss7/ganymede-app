@@ -32,6 +32,9 @@ importers:
       '@tauri-apps/api':
         specifier: '>=2.0.0-rc.0'
         version: 2.0.0-rc.4
+      '@tauri-apps/plugin-clipboard-manager':
+        specifier: 2.0.0-rc.2
+        version: 2.0.0-rc.2
       '@tauri-apps/plugin-http':
         specifier: ^2.0.0-rc
         version: 2.0.0-rc.2
@@ -1138,6 +1141,9 @@ packages:
     resolution: {integrity: sha512-rNcVSyGHGz8vNk542isYKPk5fEMAsgmzER+1s9YYbGZCH7m4e0rH89p/P9W40I/Z4AZk4ZqjpEeajeS5izDI4g==}
     engines: {node: '>= 10'}
     hasBin: true
+
+  '@tauri-apps/plugin-clipboard-manager@2.0.0-rc.2':
+    resolution: {integrity: sha512-WWHPgUAOXeh1/LRpv4+FeFyb2Dd+FwNH5gHEROcGJa5K4Gb+6J8VlZc/rglT5BOFoDI7dpvV1O/Z6MuKn3ydGw==}
 
   '@tauri-apps/plugin-http@2.0.0-rc.2':
     resolution: {integrity: sha512-s/AbbMaQPgqnIOoObvWNAjJOV17gyf9G+U6gmvjLoFbt7D6jsujOUW6fn+Oe/+rzNSEeo1ZSVrUoMen5DgM+OA==}
@@ -2754,6 +2760,10 @@ snapshots:
       '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-rc.12
       '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-rc.12
       '@tauri-apps/cli-win32-x64-msvc': 2.0.0-rc.12
+
+  '@tauri-apps/plugin-clipboard-manager@2.0.0-rc.2':
+    dependencies:
+      '@tauri-apps/api': 2.0.0-rc.4
 
   '@tauri-apps/plugin-http@2.0.0-rc.2':
     dependencies:

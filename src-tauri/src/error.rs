@@ -5,7 +5,7 @@ pub enum Error {
     Tauri(tauri::Error),
     Invoke(tauri::ipc::InvokeError),
     Http(tauri_plugin_http::reqwest::Error),
-    JsonPath(serde_path_to_error::Error<serde_json::Error>)
+    JsonPath(serde_path_to_error::Error<serde_json::Error>),
 }
 
 impl From<std::io::Error> for Error {
@@ -47,7 +47,7 @@ impl Into<tauri::ipc::InvokeError> for Error {
             Error::Io(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::Tauri(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::Http(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::JsonPath(err) => tauri::ipc::InvokeError::from(err.to_string())
+            Error::JsonPath(err) => tauri::ipc::InvokeError::from(err.to_string()),
         }
     }
 }

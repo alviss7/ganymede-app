@@ -42,18 +42,23 @@ export const Route = createFileRoute('/downloads/$status')({
     }
   },
   loader: async ({ context, params, deps: { page } }) => {
+    console.log('start')
     await context.queryClient.ensureQueryData(availableGuidesQuery({ status: params.status, page }))
   },
-  pendingComponent: () => {
-    const status = Route.useParams({ select: (p) => p.status })
-
-    return (
-      <Page key={`download-${status}`} to="/downloads" title={titleByStatus(status)}>
-        <GenericLoader />
-      </Page>
-    )
-  },
+  pendingComponent: Pending,
 })
+
+function Pending() {
+  const status = Route.useParams({ select: (p) => p.status })
+
+  return (
+    <Page key={`download-${status}`} to="/downloads" title={titleByStatus(status)}>
+      <div className="flex grow items-center justify-center">
+        <GenericLoader />
+      </div>
+    </Page>
+  )
+}
 
 function titleByStatus(status: string) {
   switch (status) {

@@ -17,7 +17,7 @@ export function TitleBar() {
         <DropdownMenuTrigger className="h-full px-2 outline-none">
           <ChevronDownIcon className="size-4" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="start" alignOffset={6} sideOffset={0}>
           <DropdownMenuItem asChild>
             <Link to="/">Accueil</Link>
           </DropdownMenuItem>

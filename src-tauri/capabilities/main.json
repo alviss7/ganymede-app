@@ -23,6 +23,7 @@
           "url": "https://ganymede-dofus.com"
         }
       ]
-    }
+    },
+    "clipboard-manager:allow-write-text"
   ]
 }

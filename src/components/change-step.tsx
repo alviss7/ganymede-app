@@ -13,7 +13,7 @@ export function ChangeStep({
   onNext?: () => void
 }) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="-translate-y-1/2 -translate-x-1/2 absolute top-1/2 left-1/2 flex items-center gap-1">
       <Button size="icon" className="size-8" onClick={onPrevious}>
         <ChevronLeftIcon className="size-4" />
       </Button>

@@ -17,7 +17,9 @@ export const Route = createFileRoute('/guides/')({
 function Pending() {
   return (
     <Page title="Guides" key="guide-page">
-      <GenericLoader />
+      <div className="flex grow items-center justify-center">
+        <GenericLoader />
+      </div>
     </Page>
   )
 }

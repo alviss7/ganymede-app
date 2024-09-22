@@ -8,6 +8,7 @@ export function availableGuidesQuery({ status, page }: { status: Status; page: n
   return queryOptions({
     queryKey: ['guides', 'available', status, page],
     queryFn: async () => {
+      console.log('availableGuidesQuery', 'start', new Date().toISOString())
       const result = await getAvailableGuides(status)
 
       if (result.isErr()) {
@@ -19,7 +20,7 @@ export function availableGuidesQuery({ status, page }: { status: Status; page: n
       const start = (page - 1) * itemsPerPage
       const end = page * itemsPerPage
 
-      console.log(guides.slice(start, end), page)
+      console.log('availableGuidesQuery', 'end', new Date().toISOString())
 
       return {
         data: guides.slice(start, end),

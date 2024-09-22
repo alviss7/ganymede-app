@@ -1,5 +1,5 @@
 use crate::conf::{get_conf, set_conf, Conf};
-use crate::guides::{download_guide, get_guides, get_downloads, Download};
+use crate::guides::{download_guide, get_downloads, get_guides, Download};
 use crate::id::new_id;
 use tauri::Manager;
 
@@ -13,6 +13,7 @@ mod tauri_api;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
