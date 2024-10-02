@@ -25,7 +25,7 @@ function Index() {
       </article>
       <div className="mx-4 flex grow items-center justify-center border p-4">Almanax ici</div>
       <div className="flex justify-center">Liens Discord, etc</div>
-      <div className="text-center text-xs">Ganymède - Non affilité à Ankama Games</div>
+      <div className="text-center text-xs">Ganymède - Non affilié à Ankama Games</div>
     </div>
   )
 }

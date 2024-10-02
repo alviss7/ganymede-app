@@ -157,7 +157,7 @@ function GuideIdPage() {
         </div>
       </header>
       {/* dangerouslySetInnerHTML for now but keep in mind for script tags */}
-      {step && <div className="p-2 text-sm leading-4" dangerouslySetInnerHTML={{ __html: step.text }}></div>}
+      {step && <div className="guide p-2 text-sm leading-4" dangerouslySetInnerHTML={{ __html: step.web_text }}></div>}
     </Page>
   )
 }

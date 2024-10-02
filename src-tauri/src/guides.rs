@@ -40,6 +40,7 @@ pub struct Step {
     pub pos_x: i32,
     pub pos_y: i32,
     pub text: String,
+    pub web_text: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]

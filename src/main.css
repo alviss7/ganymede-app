@@ -29,9 +29,117 @@ html, body, #root {
 
 html {
   overscroll-behavior: none;
-  background: white;
+  background: theme('colors.gray.950');
+  color: white;
 }
 
 * {
   user-select: none;
+}
+
+.tag-quest,
+.tag-dungeon,
+.tag-monster,
+.tag-item,
+.guide-step {
+  display: inline-flex;
+  align-items: baseline;
+  border-radius: 20px;
+  padding: 2px 2px;
+}
+
+.tag-quest {
+  color: #eb5bc6;
+}
+
+.tag-dungeon {
+  color: #2cc75d;
+}
+
+.tag-monster {
+  color: #D94A4B;
+}
+
+.tag-item {
+  color: #DB9542;
+}
+
+.guide-step {
+  text-decoration: underline;
+  color: #8E7CC3
+}
+
+
+.tag-monster img,
+.tag-item img,
+.tag-dungeon img,
+.tag-quest img,
+.guide-step img {
+  align-self: flex-end;
+  max-width: 1.5em;
+  max-height: 1.5em;
+  margin-right: 0.2em;
+}
+
+.guide {
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 0.5rem 0.5rem 0.5rem 0.4rem;
+  }
+
+  ul li p,
+  ol li p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  /* Task list specific styles */
+  ul[data-type='taskList'] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  ul[data-type='taskList'] li {
+    align-items: flex-start;
+    display: flex;
+  }
+
+  ul[data-type='taskList'] li>label {
+    flex: 0 0 auto;
+    margin-right: 0.5rem;
+    user-select: none;
+  }
+
+  ul[data-type='taskList'] li>div {
+    flex: 1 1 auto;
+  }
+
+  ul[data-type='taskList'] label {}
+
+  ul[data-type='taskList'] ul[data-type='taskList'] {
+    margin: 0;
+  }
+
+  .button-bg-color {
+    background-color: rgb(31 41 55);
+    color: white;
+  }
+
+  .img-small {
+    width: 20%;
+    margin: auto;
+  }
+
+  .img-medium {
+    width: 30%;
+    margin: auto;
+  }
+
+  .img-large {
+    width: 45%;
+    margin: auto;
+  }
 }

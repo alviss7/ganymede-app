@@ -6,6 +6,7 @@ export const StepZod = z.object({
   pos_x: z.number(),
   pos_y: z.number(),
   text: z.string(),
+  web_text: z.string(),
 })
 
 export type Step = z.infer<typeof StepZod>
