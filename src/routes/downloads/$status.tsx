@@ -8,7 +8,7 @@ import {
   PaginationLink,
   PaginationPrevious,
 } from '@/components/ui/pagination.tsx'
-import { availableGuidesQuery, itemsPerPage } from '@/queries/available-guides.query.ts'
+import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { StatusZod } from '@/types/status.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -43,7 +43,7 @@ export const Route = createFileRoute('/downloads/$status')({
   },
   loader: async ({ context, params, deps: { page } }) => {
     console.log('start')
-    await context.queryClient.ensureQueryData(availableGuidesQuery({ status: params.status, page }))
+    await context.queryClient.ensureQueryData(guidesFromServerQuery({ status: params.status, page }))
   },
   pendingComponent: Pending,
 })
@@ -80,7 +80,7 @@ function titleByStatus(status: string) {
 function DownloadGuidePage() {
   const page = Route.useSearch({ select: (s) => s.page })
   const status = Route.useParams({ select: (p) => p.status })
-  const guides = useSuspenseQuery(availableGuidesQuery({ status, page }))
+  const guides = useSuspenseQuery(guidesFromServerQuery({ status, page }))
 
   const title = titleByStatus(status)
 
@@ -105,7 +105,7 @@ function DownloadGuidePage() {
         )}
       </div>
       {guides.data.total !== 0 && (
-        <Pagination className="fixed right-0 bottom-0 left-0 h-10 border bg-white px-2">
+        <Pagination className="fixed right-0 bottom-0 left-0 h-10 border bg-white px-2 text-black">
           <PaginationContent>
             {page !== 1 && guides.data.total > itemsPerPage && (
               <PaginationItem>

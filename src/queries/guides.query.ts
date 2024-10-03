@@ -1,10 +1,10 @@
-import { getDownloadedGuides } from '@/ipc/download.ts'
+import { getGuides } from '@/ipc/guides.ts'
 import { queryOptions } from '@tanstack/react-query'
 
-export const downloadsQuery = queryOptions({
+export const guidesQuery = queryOptions({
   queryKey: ['conf', 'guides'],
   queryFn: async () => {
-    const guides = await getDownloadedGuides()
+    const guides = await getGuides()
 
     if (guides.isErr()) {
       throw guides.error

@@ -6,6 +6,7 @@ pub enum Error {
     Invoke(tauri::ipc::InvokeError),
     Http(tauri_plugin_http::reqwest::Error),
     JsonPath(serde_path_to_error::Error<serde_json::Error>),
+    Glob(glob::GlobError),
 }
 
 impl From<std::io::Error> for Error {
@@ -38,6 +39,18 @@ impl From<tauri_plugin_http::reqwest::Error> for Error {
     }
 }
 
+impl From<serde_path_to_error::Error<serde_json::Error>> for Error {
+    fn from(err: serde_path_to_error::Error<serde_json::Error>) -> Self {
+        Error::JsonPath(err)
+    }
+}
+
+impl From<glob::GlobError> for Error {
+    fn from(err: glob::GlobError) -> Self {
+        Error::Glob(err)
+    }
+}
+
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         println!("Error: {:?}", self);
@@ -48,6 +61,7 @@ impl Into<tauri::ipc::InvokeError> for Error {
             Error::Tauri(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::Http(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::JsonPath(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::Glob(err) => tauri::ipc::InvokeError::from(err.to_string()),
         }
     }
 }

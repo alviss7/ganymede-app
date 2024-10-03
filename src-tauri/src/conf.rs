@@ -50,7 +50,7 @@ impl Conf {
                 std::io::ErrorKind::NotFound => Ok(Conf::default()),
                 _ => Err(err.into()),
             },
-            Ok(file) => Ok(serde_json::from_str::<Conf>(file.as_str()).map_err(Error::from)?),
+            Ok(file) => Ok(crate::json::from_str::<Conf>(file.as_str()).map_err(Error::from)?),
         }
     }
 

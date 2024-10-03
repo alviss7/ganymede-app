@@ -5,7 +5,7 @@ export const StepZod = z.object({
   map: z.string(),
   pos_x: z.number(),
   pos_y: z.number(),
-  text: z.string(),
+  text: z.string().nullable(),
   web_text: z.string(),
 })
 

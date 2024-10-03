@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button.tsx'
-import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx'
+import { CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx'
 import { getGuideById, isGuideNew } from '@/lib/guide.ts'
 import { cn } from '@/lib/utils.ts'
-import { useDownloadGuide } from '@/mutations/set-downloaded-guides.mutation.ts'
-import { availableGuidesQuery } from '@/queries/available-guides.query.ts'
-import { downloadsQuery } from '@/queries/downloads.query.ts'
+import { useDownloadGuideFromServer } from '@/mutations/download-guide-from-server.mutation.ts'
+import { guidesFromServerQuery } from '@/queries/guides-from-server.query.ts'
+import { guidesQuery } from '@/queries/guides.query.ts'
 import { Guide } from '@/types/guide.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { DownloadIcon, VerifiedIcon } from 'lucide-react'
+import { CircleAlertIcon, CircleCheckIcon, ImportIcon, LoaderIcon, VerifiedIcon } from 'lucide-react'
 import { fromPromise } from 'neverthrow'
 import { ComponentProps } from 'react'
 
@@ -30,7 +30,6 @@ export function GuideCardHeader({
           </span>
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-3 pb-3">{guide.downloads != null && <p>{guide.downloads}</p>}</CardContent>
     </>
   )
 }
@@ -49,28 +48,32 @@ export function GuideDownloadButton({
   guide: Pick<Guide, 'id' | 'status'>
 }) {
   const guides = useSuspenseQuery(
-    availableGuidesQuery({
+    guidesFromServerQuery({
       status: guide.status,
       page: 1,
     }),
   )
-  const downloads = useSuspenseQuery(downloadsQuery)
-  const downloadGuide = useDownloadGuide()
+  const downloads = useSuspenseQuery(guidesQuery)
+  const downloadGuideFromServer = useDownloadGuideFromServer()
 
   return (
     <>
       <Button
         size="icon"
         onClick={async () => {
-          await fromPromise(downloadGuide.mutateAsync(guide), (err) => err)
+          await fromPromise(downloadGuideFromServer.mutateAsync(guide), (err) => err)
         }}
+        disabled={downloadGuideFromServer.isPending}
+        className="relative z-0"
       >
-        <DownloadIcon className="size-4" />
+        {downloadGuideFromServer.isSuccess && <CircleCheckIcon className="size-4" />}
+        {downloadGuideFromServer.isPending && <LoaderIcon className="size-4 animate-[spin_2s_linear_infinite]" />}
+        {downloadGuideFromServer.isIdle && <ImportIcon className="size-4" />}
+        {isGuideNew(getGuideById(guides.data.data, guide.id), getGuideById(downloads.data.guides, guide.id)) && (
+          <span className="-right-2 -top-3.5 absolute size-4 font-black text-2xl text-yellow-400">!</span>
+        )}
       </Button>
-      {isGuideNew(
-        getGuideById(guides.data.data, guide.id),
-        getGuideById(downloads.data.downloaded_guides, guide.id),
-      ) && <span>MAJ disponible</span>}
+      {downloadGuideFromServer.isError && <CircleAlertIcon className="size-5 text-red-500" />}
     </>
   )
 }

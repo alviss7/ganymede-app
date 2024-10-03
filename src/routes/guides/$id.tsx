@@ -4,7 +4,7 @@ import { Position } from '@/components/position.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
-import { downloadsQuery } from '@/queries/downloads.query.ts'
+import { guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { GuideProgress } from '@/types/profile.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -29,11 +29,11 @@ export const Route = createFileRoute('/guides/$id')({
   },
   loader: async ({ context, params }) => {
     const [downloads, conf] = await Promise.all([
-      await context.queryClient.ensureQueryData(downloadsQuery),
+      await context.queryClient.ensureQueryData(guidesQuery),
       await context.queryClient.ensureQueryData(confQuery),
     ])
 
-    const guide = downloads.downloaded_guides.find((guide) => guide.id === params.id)
+    const guide = downloads.guides.find((guide) => guide.id === params.id)
 
     if (!guide) {
       throw notFound({

@@ -1,7 +1,6 @@
-import { GuideZod } from '@/types/guide.ts'
+import { GuidesZod } from '@/types/download.ts'
 import { invoke } from '@tauri-apps/api/core'
 import { fromPromise } from 'neverthrow'
-import { z } from 'zod'
 
 export class GetGuidesError extends Error {
   static from(error: unknown) {
@@ -9,8 +8,18 @@ export class GetGuidesError extends Error {
   }
 }
 
-export function getAvailableGuides(status: string) {
-  return fromPromise(invoke('get_guides', { status }), GetGuidesError.from).map((res) => {
-    return z.array(GuideZod).parseAsync(res)
+export class DownloadGuideFromServerError extends Error {
+  static from(error: unknown) {
+    return new DownloadGuideFromServerError('Failed to download guide', { cause: error })
+  }
+}
+
+export function getGuides() {
+  return fromPromise(invoke('get_guides'), GetGuidesError.from).map((response) => {
+    return GuidesZod.parseAsync(response)
   })
+}
+
+export async function downloadGuideFromServer(guideId: number) {
+  return fromPromise(invoke('download_guide_from_server', { guideId }), DownloadGuideFromServerError.from)
 }

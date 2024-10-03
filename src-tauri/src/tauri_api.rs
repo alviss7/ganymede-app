@@ -6,26 +6,22 @@ pub trait ConfPath {
     fn app_conf_file(&self) -> PathBuf;
 }
 
-pub trait DownloadPath {
-    fn app_download_file(&self) -> PathBuf;
+pub trait GuidesPath {
+    fn app_guides_dir(&self) -> PathBuf;
 }
 
 impl<R: Runtime> ConfPath for PathResolver<R> {
     fn app_conf_file(&self) -> PathBuf {
-        let mut path = self.app_config_dir().unwrap();
+        let path = self.app_config_dir().unwrap();
 
-        path.push("conf.json");
-
-        path
+        path.join("conf.json")
     }
 }
 
-impl<R: Runtime> DownloadPath for PathResolver<R> {
-    fn app_download_file(&self) -> PathBuf {
-        let mut path = self.app_config_dir().unwrap();
+impl<R: Runtime> GuidesPath for PathResolver<R> {
+    fn app_guides_dir(&self) -> PathBuf {
+        let path = self.app_config_dir().unwrap();
 
-        path.push("download.json");
-
-        path
+        path.join("guides")
     }
 }

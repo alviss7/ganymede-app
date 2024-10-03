@@ -1,5 +1,5 @@
 use crate::conf::{get_conf, set_conf, Conf};
-use crate::guides::{download_guide, get_downloads, get_guides, Download};
+use crate::guides::{download_guide_from_server, get_guides, get_guides_from_server, Guides};
 use crate::id::new_id;
 use tauri::Manager;
 
@@ -7,6 +7,7 @@ mod conf;
 mod error;
 mod guides;
 mod id;
+mod json;
 mod tauri_api;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -25,7 +26,7 @@ pub fn run() {
                 Ok(_) => {}
             }
 
-            match Download::ensure(&app.path()) {
+            match Guides::ensure(&app.path()) {
                 Err(err) => {
                     eprintln!("Failed to ensure download: {:?}", err);
                 }
@@ -38,9 +39,9 @@ pub fn run() {
             get_conf,
             set_conf,
             new_id,
+            get_guides_from_server,
             get_guides,
-            get_downloads,
-            download_guide
+            download_guide_from_server
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

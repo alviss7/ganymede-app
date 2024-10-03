@@ -1,10 +1,12 @@
 use crate::error::Error;
-use crate::tauri_api::DownloadPath;
+use crate::tauri_api::GuidesPath;
 use serde::{Deserialize, Serialize};
 use std::{fmt, fs};
 use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
 use tauri_plugin_http::reqwest;
+
+const GANYMEDE_API: &str = "https://ganymede-dofus.com/api/v2";
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct User {
@@ -39,15 +41,14 @@ pub struct Step {
     pub map: String,
     pub pos_x: i32,
     pub pos_y: i32,
-    pub text: String,
-    pub web_text: Option<String>,
+    pub text: Option<String>,
+    pub web_text: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Guide {
     pub id: u32,
     pub name: String,
-    pub description: Option<String>,
     pub status: Status,
     pub likes: u32,
     pub dislikes: u32,
@@ -59,6 +60,7 @@ pub struct Guide {
     pub order: u32,
     pub user: User,
     pub user_id: u32,
+    pub description: Option<String>,
     pub web_description: Option<String>,
 }
 
@@ -81,8 +83,8 @@ pub struct GuideWithSteps {
 }
 
 #[derive(Serialize, Deserialize, Clone, Default)]
-pub struct Download {
-    pub downloaded_guides: Vec<GuideWithSteps>,
+pub struct Guides {
+    pub guides: Vec<GuideWithSteps>,
 }
 
 impl fmt::Display for Status {
@@ -98,74 +100,102 @@ impl fmt::Display for Status {
     }
 }
 
-impl Download {
-    pub fn get<R: Runtime>(resolver: &PathResolver<R>) -> Result<Download, Error> {
-        let download_path = resolver.app_download_file();
+impl Guides {
+    pub fn get<R: Runtime>(resolver: &PathResolver<R>) -> Result<Guides, Error> {
+        let guides_dir = &resolver.app_guides_dir();
+        println!("get_guides in {:?}", guides_dir);
 
-        let file = fs::read_to_string(download_path);
+        let options = glob::MatchOptions {
+            case_sensitive: false,
+            require_literal_separator: false,
+            require_literal_leading_dot: false,
+        };
 
-        match file {
-            Err(err) => match err.kind() {
-                std::io::ErrorKind::NotFound => Ok(Download::default()),
-                _ => Err(err.into()),
-            },
-            Ok(file) => Ok(serde_json::from_str::<Download>(file.as_str()).map_err(Error::from)?),
+        let files = glob::glob_with(guides_dir.join("**/*.json").to_str().unwrap(), options)
+            .expect("Failed to read guides directory for json");
+
+        let mut guides = Vec::new();
+
+        for entry in files {
+            match entry {
+                Ok(file) => {
+                    println!("file: {:?}", file.file_name().unwrap());
+
+                    let file = fs::read_to_string(file.to_str().unwrap());
+
+                    match file {
+                        Err(err) => return Err(err.into()),
+                        Ok(file) => {
+                            let guide = crate::json::from_str::<GuideWithSteps>(file.as_str())
+                                .map_err(Error::from)?;
+
+                            guides.push(guide);
+                        }
+                    }
+                }
+                Err(err) => {
+                    return Err(crate::error::Error::from(err));
+                }
+            }
         }
+
+        Ok(Guides { guides })
     }
 
     pub fn ensure<R: Runtime>(resolver: &PathResolver<R>) -> Result<(), Error> {
-        let download_dir = resolver.app_config_dir()?;
+        let guides_dir = &resolver.app_guides_dir();
 
-        if !download_dir.exists() {
-            fs::create_dir_all(download_dir)?;
-        }
-
-        let download_path = resolver.app_download_file();
-
-        println!("download_path: {:?}", download_path);
-
-        if !download_path.exists() {
-            println!("Download file does not exists, creating default one");
-
-            let default_download = Download::default();
-
-            default_download.save(resolver)?;
+        if !guides_dir.exists() {
+            fs::create_dir_all(guides_dir)?;
         }
 
         Ok(())
     }
 
     pub fn save<R: Runtime>(&self, resolver: &PathResolver<R>) -> Result<(), Error> {
-        let download_path = resolver.app_download_file();
+        let guides_dir = &resolver.app_guides_dir();
 
-        let json = serde_json::to_string_pretty(self).expect("Failed to serialize downloads");
+        for guide in &self.guides {
+            let json = serde_json::to_string_pretty(guide).expect("Failed to serialize guide");
 
-        fs::write(download_path, json).map_err(Error::from)
+            // Create the status directory if it doesn't exist
+            let file = guides_dir
+                .join(guide.status.to_string())
+                .join(format!("{}.json", guide.id));
+
+            if !file.exists() {
+                fs::create_dir_all(file.parent().unwrap())?;
+            }
+
+            fs::write(file, json).map_err(Error::from)?;
+        }
+
+        Ok(())
     }
 }
 
 #[tauri::command]
-pub fn get_downloads(window: Window<Wry>) -> Result<Download, Error> {
-    Download::get(window.path())
+pub fn get_guides(window: Window<Wry>) -> Result<Guides, Error> {
+    Guides::get(window.path())
 }
 
 #[tauri::command]
-pub async fn get_guides(status: Status) -> Result<Vec<Guide>, Error> {
-    let res = reqwest::get(format!(
-        "https://ganymede-dofus.com/api/guides?status={}",
-        status
-    ))
-    .await?;
+pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error> {
+    println!("get_guides_from_server");
+
+    let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API, status)).await?;
 
     let text = res.text().await?;
 
-    let des = &mut serde_json::Deserializer::from_str(text.as_str());
-
-    let guides: Result<Vec<Guide>, _> = serde_path_to_error::deserialize(des);
+    let guides = crate::json::from_str::<Vec<Guide>>(text.as_str()).map_err(Error::from);
 
     match guides {
         Err(err) => {
-            println!("Error2: {:?}", err.path().to_string());
+            if let Error::JsonPath(json_error) = &err {
+                println!("JsonError: {:?}", json_error.path().to_string());
+            } else {
+                println!("Error: {:?}", err);
+            }
 
             Ok(vec![])
         }
@@ -174,41 +204,38 @@ pub async fn get_guides(status: Status) -> Result<Vec<Guide>, Error> {
 }
 
 #[tauri::command]
-pub async fn download_guide(guide_id: u32, window: Window<Wry>) -> Result<Download, Error> {
-    println!("set_download_guides");
+pub async fn download_guide_from_server(
+    guide_id: u32,
+    window: Window<Wry>,
+) -> Result<Guides, Error> {
+    println!("download_guide_from_server");
 
-    let res = reqwest::get(format!(
-        "https://ganymede-dofus.com/api/guides/{}",
-        guide_id
-    ))
-    .await?;
+    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API, guide_id)).await?;
     let text = res.text().await?;
-    let des = &mut serde_json::Deserializer::from_str(text.as_str());
-    let guide: Result<GuideWithSteps, _> = serde_path_to_error::deserialize(des);
+    let guide = crate::json::from_str::<GuideWithSteps>(text.as_str());
 
     match guide {
         Ok(guide) => {
             let resolver = window.path();
             let guide_ref = &guide;
-            let mut download = Download::get(resolver)?;
+            let mut guides = Guides::get(resolver)?;
 
-            match download
-                .downloaded_guides
-                .iter()
-                .position(|g| g.id == guide_ref.id)
-            {
-                Some(index) => download.downloaded_guides[index] = guide,
-                None => download.downloaded_guides.push(guide),
+            // Update the guide file if it exists
+            match guides.guides.iter().position(|g| g.id == guide_ref.id) {
+                Some(index) => guides.guides[index] = guide,
+                None => guides.guides.push(guide),
             }
 
-            download.save(resolver)?;
+            guides.save(resolver)?;
 
-            Ok(download)
+            Ok(guides)
         }
         Err(err) => {
-            println!("Error: {:?}", err.path().to_string());
+            if let Error::JsonPath(json_error) = &err {
+                println!("JsonError: {:?}", json_error.path().to_string());
+            }
 
-            Err(Error::JsonPath(err))
+            Err(err)
         }
     }
 }

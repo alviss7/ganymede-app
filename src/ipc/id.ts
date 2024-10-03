@@ -1,9 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
-import { ResultAsync } from 'neverthrow'
+import { fromPromise } from 'neverthrow'
 
 export function newId() {
-  return ResultAsync.fromThrowable(
-    () => invoke<string>('new_id'),
-    (error) => new Error('Failed to generate new id', { cause: error }),
-  )()
+  return fromPromise(invoke<string>('new_id'), (error) => new Error('Failed to generate new id', { cause: error }))
 }

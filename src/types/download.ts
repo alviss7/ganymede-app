@@ -10,10 +10,10 @@ export const GuideWithStepsZod = GuideZod.omit({
   steps: z.array(StepZod),
 })
 
-export const DownloadZod = z.object({
-  downloaded_guides: z.array(GuideWithStepsZod),
+export const GuidesZod = z.object({
+  guides: z.array(GuideWithStepsZod),
 })
 
-export type Download = z.infer<typeof DownloadZod>
+export type Download = z.infer<typeof GuidesZod>
 
 export type GuideWithSteps = z.infer<typeof GuideWithStepsZod>

@@ -3,7 +3,7 @@ import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/compone
 import { Button } from '@/components/ui/button.tsx'
 import { Card } from '@/components/ui/card.tsx'
 import { confQuery } from '@/queries/conf.query.ts'
-import { downloadsQuery } from '@/queries/downloads.query.ts'
+import { guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
@@ -26,12 +26,12 @@ function Pending() {
 
 function GuidesPage() {
   const conf = useSuspenseQuery(confQuery)
-  const downloads = useSuspenseQuery(downloadsQuery)
+  const downloads = useSuspenseQuery(guidesQuery)
 
   return (
     <Page key="guide-page" title="Guides">
       <div className="flex flex-col gap-2 p-4">
-        {downloads.data.downloaded_guides.map((guide) => {
+        {downloads.data.guides.map((guide) => {
           const profile = conf.data.profiles.find((profile) => profile.id === conf.data.profileInUse)
           const progress = profile?.progresses.find((progress) => progress.id === guide.id)
 
