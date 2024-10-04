@@ -50,6 +50,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      country-flag-icons:
+        specifier: ^1.5.13
+        version: 1.5.13
       ky:
         specifier: ^1.7.2
         version: 1.7.2
@@ -87,6 +90,9 @@ importers:
       '@tauri-apps/cli':
         specifier: '>=2.0.0-rc.0'
         version: 2.0.0-rc.12
+      '@types/country-flag-icons':
+        specifier: ^1.2.2
+        version: 1.2.2
       '@types/node':
         specifier: ^22.5.4
         version: 22.5.4
@@ -1166,6 +1172,9 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
+  '@types/country-flag-icons@1.2.2':
+    resolution: {integrity: sha512-CefEn/J336TBDp7NX8JqzlDtCBOsm8M3r1Li0gEOt0HOMHF1XemNyrx9lSHjsafcb1yYWybU0N8ZAXuyCaND0w==}
+
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
@@ -1300,6 +1309,9 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  country-flag-icons@1.5.13:
+    resolution: {integrity: sha512-4JwHNqaKZ19doQoNcBjsoYA+I7NqCH/mC/6f5cBWvdKzcK5TMmzLpq3Z/syVHMHJuDGFwJ+rPpGizvrqJybJow==}
 
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -2798,6 +2810,8 @@ snapshots:
     dependencies:
       '@babel/types': 7.25.6
 
+  '@types/country-flag-icons@1.2.2': {}
+
   '@types/estree@1.0.5': {}
 
   '@types/node@22.5.4':
@@ -2938,6 +2952,8 @@ snapshots:
   commander@4.1.1: {}
 
   convert-source-map@2.0.0: {}
+
+  country-flag-icons@1.5.13: {}
 
   cross-spawn@7.0.3:
     dependencies:

@@ -17,7 +17,7 @@ function GuideLink({
   icon: JSX.Element
 }>) {
   return (
-    <li className="flex flex-col rounded bg-gray-400 shadow">
+    <li className="flex flex-col rounded bg-primary-800 shadow">
       <Link
         to="/downloads/$status"
         params={params}

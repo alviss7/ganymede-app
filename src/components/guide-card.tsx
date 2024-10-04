@@ -10,21 +10,44 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { CircleAlertIcon, CircleCheckIcon, ImportIcon, LoaderIcon, VerifiedIcon } from 'lucide-react'
 import { fromPromise } from 'neverthrow'
 import { ComponentProps } from 'react'
+import * as Flag from 'country-flag-icons/react/3x2'
+
+function FlagPerLang({ lang }: { lang: string }) {
+  switch (lang) {
+    case 'fr':
+      return <Flag.FR className="size-5" />
+    case 'en':
+      return <Flag.US className="size-5" />
+    case 'de':
+      return <Flag.DE className="size-5" />
+    case 'es':
+      return <Flag.ES className="size-5" />
+    case 'it':
+      return <Flag.IT className="size-5" />
+    case 'pt':
+      return <Flag.PT className="size-5" />
+    default:
+      return <Flag.FR />
+  }
+}
 
 export function GuideCardHeader({
   guide,
 }: {
-  guide: Pick<Guide, 'name' | 'user' | 'id'> & { downloads?: Guide['downloads'] | null }
+  guide: Pick<Guide, 'name' | 'user' | 'id' | 'lang'> & { downloads?: Guide['downloads'] | null }
 }) {
   return (
     <>
       <CardHeader className="p-3">
         <CardTitle className="leading-5">{guide.name}</CardTitle>
-        <CardDescription className="flex justify-between gap-2">
-          <span>id: {guide.id}</span>
+        <CardDescription className="flex items-start justify-between gap-2">
+          <div>
+            <FlagPerLang lang={guide.lang} />
+            <span>id: {guide.id}</span>
+          </div>
           <span className="flex items-center gap-1">
             <span>
-              de: <span className="font-semibold text-blue-600">{guide.user.name}</span>
+              de: <span className="font-semibold text-blue-400">{guide.user.name}</span>
             </span>
             {guide.user.is_certified && <VerifiedIcon className="size-4 text-orange-300" />}
           </span>

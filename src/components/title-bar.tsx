@@ -6,13 +6,13 @@ import {
 } from '@/components/ui/dropdown-menu.tsx'
 import { Link } from '@tanstack/react-router'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { ChevronDownIcon } from 'lucide-react'
+import { ChevronDownIcon, MaximizeIcon, MinusIcon, XIcon } from 'lucide-react'
 
 const appWindow = getCurrentWindow()
 
 export function TitleBar() {
   return (
-    <div className="sticky top-0 flex h-[30px] items-center bg-[#329ea3]">
+    <div className="sticky top-0 flex h-[30px] items-center bg-primary">
       <DropdownMenu>
         <DropdownMenuTrigger className="h-full px-2 outline-none">
           <ChevronDownIcon className="size-4" />
@@ -40,28 +40,28 @@ export function TitleBar() {
           onClick={async () => {
             await appWindow.minimize()
           }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-[#5bbec3]"
+          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
           id="titlebar-minimize"
         >
-          <img src="https://api.iconify.design/mdi:window-minimize.svg" alt="minimize" />
+          <MinusIcon className="size-4" />
         </button>
         <button
           onClick={async () => {
             await appWindow.toggleMaximize()
           }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-[#5bbec3]"
+          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
           id="titlebar-maximize"
         >
-          <img src="https://api.iconify.design/mdi:window-maximize.svg" alt="maximize" />
+          <MaximizeIcon className="size-4" />
         </button>
         <button
           onClick={async () => {
             await appWindow.close()
           }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-[#5bbec3]"
+          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
           id="titlebar-close"
         >
-          <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
+          <XIcon className="size-4" />
         </button>
       </div>
     </div>

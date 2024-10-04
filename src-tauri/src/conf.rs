@@ -123,8 +123,6 @@ pub fn get_conf(window: Window<Wry>) -> Result<Conf, Error> {
 
 #[tauri::command]
 pub fn set_conf(conf: Conf, window: Window<Wry>) -> Result<(), Error> {
-    println!("set_conf: {:?}", conf.lang);
-
     let resolver = window.path();
 
     conf.save(resolver)

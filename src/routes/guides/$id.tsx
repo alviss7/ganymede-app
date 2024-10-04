@@ -10,6 +10,7 @@ import { GuideProgress } from '@/types/profile.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { MapIcon } from 'lucide-react'
+import { useLayoutEffect } from 'react'
 import { z } from 'zod'
 
 const ParamsZod = z.object({
@@ -57,7 +58,7 @@ export const Route = createFileRoute('/guides/$id')({
 function Pending() {
   return (
     <Page title="" key="guide" to="/guides">
-      <header className="flex h-11 items-center justify-between gap-2 bg-gray-500 p-2" />
+      <header className="flex h-10 items-center justify-between gap-2 bg-gray-500 p-2" />
       <div className="flex grow items-center justify-center">
         <GenericLoader />
       </div>
@@ -72,6 +73,11 @@ function GuideIdPage() {
   const setConf = useSetConf()
   const step = guide.steps[index]
   const navigate = Route.useNavigate()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: want to scroll to top when step changes
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step])
 
   const changeStep = async (nextStep: (progress: Pick<GuideProgress, 'step'>) => number) => {
     await setConf.mutateAsync({
@@ -137,8 +143,8 @@ function GuideIdPage() {
   }
 
   return (
-    <Page key="guide" title={guide.name} to="/guides">
-      <header className="sticky top-[66px] bg-gray-500">
+    <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
+      <header className="sticky top-[62px] bg-gray-500">
         <div className="relative flex h-10 items-center justify-between gap-2 p-1">
           {step && (
             <>

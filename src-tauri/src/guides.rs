@@ -41,7 +41,6 @@ pub struct Step {
     pub map: String,
     pub pos_x: i32,
     pub pos_y: i32,
-    pub text: Option<String>,
     pub web_text: String,
 }
 

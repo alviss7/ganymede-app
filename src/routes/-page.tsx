@@ -18,7 +18,9 @@ export function Page<
   hash,
   state,
   className,
-}: PropsWithChildren<{ title: string; className?: string }> & LinkProps<TRouter, TFrom, TTo>) {
+  pageTitleTextClassName,
+}: PropsWithChildren<{ title: string; className?: string; pageTitleTextClassName?: string }> &
+  LinkProps<TRouter, TFrom, TTo>) {
   return (
     <PageContent className={cn('pb-2', className)}>
       <PageTitle>
@@ -26,7 +28,7 @@ export function Page<
           {(to || search || from || hash || state) && (
             <BackButtonLink to={to} search={search} from={from} hash={hash} state={state} />
           )}
-          <PageTitleText>{title}</PageTitleText>
+          <PageTitleText className={pageTitleTextClassName}>{title}</PageTitleText>
         </div>
       </PageTitle>
       {children}

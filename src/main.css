@@ -117,7 +117,7 @@ html {
     flex: 1 1 auto;
   }
 
-  ul[data-type='taskList'] label {}
+  /* ul[data-type='taskList'] label {} */
 
   ul[data-type='taskList'] ul[data-type='taskList'] {
     margin: 0;
