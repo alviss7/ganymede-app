@@ -1,5 +1,8 @@
+import { DiscordIcon } from '@/components/icons/discord-icon.tsx'
+import { TwitterIcon } from '@/components/icons/twitter-icon.tsx'
 import { PageTitle, PageTitleExtra, PageTitleText } from '@/components/page-title.tsx'
 import { createFileRoute } from '@tanstack/react-router'
+import { GlobeIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -24,7 +27,32 @@ function Index() {
         <p>Créez vos guides via le site officiel et téléchargez ceux des autres !</p>
       </article>
       <div className="mx-4 flex grow items-center justify-center border p-4">Almanax ici</div>
-      <div className="flex justify-center">Liens Discord, etc</div>
+      <div className="flex justify-center gap-2">
+        <a
+          href="https://discord.gg/fxWuXB3dct"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex size-9 items-center justify-center"
+        >
+          <DiscordIcon className="size-6" />
+        </a>
+        <a
+          href="https://x.com/GanymedeDofus"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex size-9 items-center justify-center"
+        >
+          <TwitterIcon className="size-4" />
+        </a>
+        <a
+          href="https://ganymede-dofus.com"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex size-9 items-center justify-center"
+        >
+          <GlobeIcon className="size-5" />
+        </a>
+      </div>
       <div className="text-center text-xs">Ganymède - Non affilié à Ankama Games</div>
     </div>
   )
