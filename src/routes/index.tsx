@@ -1,14 +1,18 @@
 import { DiscordIcon } from '@/components/icons/discord-icon.tsx'
 import { TwitterIcon } from '@/components/icons/twitter-icon.tsx'
 import { PageTitle, PageTitleExtra, PageTitleText } from '@/components/page-title.tsx'
+import { almanaxQuery } from '@/queries/almanax.query.ts'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { GlobeIcon } from 'lucide-react'
+import { GlobeIcon, LoaderIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/')({
   component: Index,
 })
 
 function Index() {
+  const almanax = useQuery(almanaxQuery)
+
   return (
     <div className="flex grow flex-col">
       <PageTitle>
@@ -26,7 +30,16 @@ function Index() {
         <p>Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure.</p>
         <p>Créez vos guides via le site officiel et téléchargez ceux des autres !</p>
       </article>
-      <div className="mx-4 flex grow items-center justify-center border p-4">Almanax ici</div>
+      <div className="mx-4 flex grow items-center justify-center border p-4">
+        {almanax.isLoading && <LoaderIcon className="size-8 text-blue-400" />}
+        {almanax.isSuccess && (
+          <div className="flex flex-col gap-2">
+            <div className="text-center text-lg">Almanax</div>
+            <div className="text-center text-sm">{almanax.data.date}</div>
+            <div className="text-center text-sm">{almanax.data.bonus}</div>
+          </div>
+        )}
+      </div>
       <div className="flex justify-center gap-2">
         <a
           href="https://discord.gg/fxWuXB3dct"

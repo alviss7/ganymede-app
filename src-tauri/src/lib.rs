@@ -1,8 +1,10 @@
+use crate::almanax::get_almanax;
 use crate::conf::{get_conf, set_conf, Conf};
 use crate::guides::{download_guide_from_server, get_guides, get_guides_from_server, Guides};
 use crate::id::new_id;
 use tauri::Manager;
 
+mod almanax;
 mod conf;
 mod error;
 mod guides;
@@ -41,7 +43,8 @@ pub fn run() {
             new_id,
             get_guides_from_server,
             get_guides,
-            download_guide_from_server
+            download_guide_from_server,
+            get_almanax
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
