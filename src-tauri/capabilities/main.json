@@ -25,6 +25,7 @@
         }
       ]
     },
-    "clipboard-manager:allow-write-text"
+    "clipboard-manager:allow-write-text",
+    "core:webview:allow-internal-toggle-devtools"
   ]
 }

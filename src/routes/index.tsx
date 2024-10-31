@@ -30,13 +30,20 @@ function Index() {
         <p>Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure.</p>
         <p>Créez vos guides via le site officiel et téléchargez ceux des autres !</p>
       </article>
-      <div className="mx-4 flex grow items-center justify-center border p-4">
+      <div className="mx-4 flex grow items-center justify-center border p-2">
         {almanax.isLoading && <LoaderIcon className="size-8 text-blue-400" />}
         {almanax.isSuccess && (
-          <div className="flex flex-col gap-2">
-            <div className="text-center text-lg">Almanax</div>
-            <div className="text-center text-sm">{almanax.data.date}</div>
-            <div className="text-center text-sm">{almanax.data.bonus}</div>
+          <div className="flex flex-col gap-0.5">
+            <div className="text-center text-lg">Almanax LVL: 200</div>
+            <div className="text-center text-xs">
+              {almanax.data.quantity}x {almanax.data.name}
+            </div>
+            <div className="text-center text-xs">{almanax.data.experience} EXP</div>
+            <div className="text-center text-xs">{almanax.data.kamas} KAMAS</div>
+            <div
+              className="prose-sm text-center text-xs leading-4"
+              dangerouslySetInnerHTML={{ __html: almanax.data.bonus }}
+            />
           </div>
         )}
       </div>

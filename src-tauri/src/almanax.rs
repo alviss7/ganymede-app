@@ -1,61 +1,128 @@
+use crate::api::DOFUSDB_API;
+use crate::item::Item;
+use crate::quest::get_quest_data;
 use chrono::Datelike;
 use serde::{Deserialize, Serialize};
+use tauri::{Manager, Window, Wry};
 use tauri_plugin_http::reqwest;
 
+use crate::conf::Lang;
 use crate::error::Error;
 
-const DOFUSDB_API: &str = "https://api.dofusdb.fr";
+const REWARD_REDUCED_SCALE: f32 = 0.7;
+const REWARD_SCALE_CAP: f32 = 1.5;
+const PLAYER_LEVEL: u32 = 200;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AlmanaxName {
+    de: String,
+    en: String,
+    es: String,
+    fr: String,
+    it: String,
+    pt: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AlmanaxDesc {
+    en: String,
+    es: String,
+    fr: String,
+    pt: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Almanax {
-    pub id: u32,
-    pub desc: Description,
+    id: u32,
+    name: AlmanaxName,
+    #[serde(rename = "descId")]
+    desc_id: i32,
+    desc: AlmanaxDesc,
+    #[serde(rename = "npcId")]
+    npc_id: i32,
+    #[serde(rename = "createdAt")]
+    created_at: String,
+    #[serde(rename = "updatedAt")]
+    updated_at: String,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct Description {
-    pub fr: String,
-    pub es: String,
-    pub en: String,
-    pub pt: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct QuestStep {
-    description: Description,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Quest {}
-
-#[derive(Serialize, Deserialize)]
-pub struct QuestData {
-    data: Vec<Quest>,
-}
-
-pub async fn get_quest_data(id: u32) -> Result<QuestData, Error> {
-    let res = reqwest::get(format!(
-        "{}/quests?startCriterion[$regex]=Ad={}",
-        DOFUSDB_API, id
-    ))
-    .await?;
-
-    let text = res.text().await?;
-
-    let json = crate::json::from_str::<QuestData>(text.as_str());
-
-    match json {
-        Err(err) => {
-            eprintln!("Failed to get quest data: {:?}", err);
-
-            Err(Error::from(err))
+impl Almanax {
+    pub fn description(&self, lang: Lang) -> &str {
+        match lang {
+            Lang::En => self.desc.en.as_str(),
+            Lang::Es => self.desc.es.as_str(),
+            Lang::Fr => self.desc.fr.as_str(),
+            Lang::Pt => self.desc.pt.as_str(),
         }
-        Ok(json) => Ok(json),
     }
 }
 
-#[tauri::command]
-pub async fn get_almanax() -> Result<Almanax, Error> {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AlmanaxReward {
+    pub name: String,
+    pub quantity: u32,
+    pub kamas: u32,
+    pub experience: u32,
+    pub bonus: String,
+}
+
+pub fn get_kamas_reward(
+    actual_player_level: u32,
+    level_max: i32,
+    optimal_level: u32,
+    kamas_ratio: f32,
+    duration: f32,
+    kamas_scale_with_player_level: bool,
+) -> u32 {
+    let player_level = if level_max == -1 && kamas_scale_with_player_level {
+        actual_player_level
+    } else {
+        level_max as u32
+    };
+
+    let level = if kamas_scale_with_player_level {
+        player_level
+    } else {
+        optimal_level
+    };
+
+    let reward: f32 = (level.pow(2) + 20 * level - 20) as f32 * kamas_ratio * duration;
+
+    reward as u32
+}
+
+pub fn get_fixe_experience_reward(level: u32, duration: f32, experience_ratio: f32) -> u32 {
+    let level_pow = (100 + 2 * level).pow(2);
+
+    let reward: f32 = level as f32 * ((level_pow / 20) as f32 * duration * experience_ratio);
+
+    reward as u32
+}
+
+pub fn get_experience_reward(
+    actual_player_level: u32,
+    optimal_level: u32,
+    experience_ratio: f32,
+    duration: f32,
+) -> u32 {
+    if actual_player_level > optimal_level {
+        let reward_level =
+            (actual_player_level as f32).min(optimal_level as f32 * REWARD_SCALE_CAP) as u32;
+        let fixe_optimal_level_experience_reward =
+            get_fixe_experience_reward(optimal_level, duration, experience_ratio);
+        let fixe_level_experience_reward =
+            get_fixe_experience_reward(reward_level, duration, experience_ratio);
+        let reduced_optimal_experience_reward =
+            (1.0 - REWARD_REDUCED_SCALE) * fixe_optimal_level_experience_reward as f32;
+        let reduced_experience_reward = REWARD_REDUCED_SCALE * fixe_level_experience_reward as f32;
+
+        (reduced_optimal_experience_reward + reduced_experience_reward) as u32
+    } else {
+        get_fixe_experience_reward(actual_player_level, duration, experience_ratio)
+    }
+}
+
+pub async fn get_almanax_data() -> Result<Almanax, Error> {
     let date = chrono::offset::Local::now();
     let day = date.day();
     let month = date.month();
@@ -70,13 +137,78 @@ pub async fn get_almanax() -> Result<Almanax, Error> {
 
     let json = crate::json::from_str::<Almanax>(text.as_str());
 
-    if let Err(err) = &json {
+    if let Err(err) = json {
         eprintln!("Failed to get almanax: {:?}", err);
 
-        return Err(Error::from(err));
+        return Err(err);
     }
 
     let almanax = json.unwrap();
 
-    let quest_data = get_quest_data(almanax.id).await?;
+    Ok(almanax)
+}
+
+pub async fn get_item_data(item_id: u32) -> Result<Item, Error> {
+    let res = reqwest::get(format!("{}/items/{}", DOFUSDB_API, item_id)).await?;
+
+    let text = res.text().await?;
+
+    let json = crate::json::from_str::<Item>(text.as_str());
+
+    match json {
+        Err(err) => {
+            eprintln!("Failed to get item {} data: {:?}", item_id, err);
+
+            Err(Error::from(err))
+        }
+        Ok(json) => Ok(json),
+    }
+}
+
+#[tauri::command]
+pub async fn get_almanax(window: Window<Wry>) -> Result<AlmanaxReward, Error> {
+    let almanax = get_almanax_data().await?;
+    let quest = get_quest_data(almanax.id).await?;
+    let item_id = quest.data[0].steps[0].objectives[0].need.generated.items[0];
+    let quantity = quest.data[0].steps[0].objectives[0]
+        .need
+        .generated
+        .quantities[0];
+    let kamas_ratio = quest.data[0].steps[0].rewards[0].kamas_ratio;
+    let item = get_item_data(item_id).await?;
+    let resolver = window.path();
+    let conf = crate::conf::Conf::get(resolver)?;
+
+    let name = match conf.lang {
+        crate::conf::Lang::En => item.name.en,
+        crate::conf::Lang::Es => item.name.es,
+        crate::conf::Lang::Fr => item.name.fr,
+        crate::conf::Lang::Pt => item.name.pt,
+    };
+
+    let experience = get_experience_reward(
+        PLAYER_LEVEL,
+        quest.optimal_level(),
+        quest.experience_ratio(),
+        quest.duration(),
+    );
+
+    let kamas = get_kamas_reward(
+        PLAYER_LEVEL,
+        quest.level_max(),
+        quest.optimal_level(),
+        quest.kamas_ratio(),
+        quest.duration(),
+        quest.kamas_scale_with_player_level(),
+    );
+
+    let bonus = almanax.description(conf.lang);
+
+    Ok(AlmanaxReward {
+        name,
+        quantity,
+        kamas,
+        experience,
+        bonus: bonus.to_string(),
+    })
 }

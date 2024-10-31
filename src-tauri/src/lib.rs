@@ -5,11 +5,14 @@ use crate::id::new_id;
 use tauri::Manager;
 
 mod almanax;
+mod api;
 mod conf;
 mod error;
 mod guides;
 mod id;
+mod item;
 mod json;
+mod quest;
 mod tauri_api;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
