@@ -1,13 +1,7 @@
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
 import { Card } from '@/components/ui/card.tsx'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationPrevious,
-} from '@/components/ui/pagination.tsx'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination.tsx'
 import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { StatusZod } from '@/types/status.ts'
@@ -104,14 +98,9 @@ function DownloadGuidePage() {
           </div>
         )}
       </div>
-      {guides.data.total !== 0 && (
+      {guides.data.total !== 0 && guides.data.total > itemsPerPage && (
         <Pagination className="fixed right-0 bottom-0 left-0 h-10 border bg-white px-2 text-black">
           <PaginationContent>
-            {page !== 1 && guides.data.total > itemsPerPage && (
-              <PaginationItem>
-                <PaginationPrevious />
-              </PaginationItem>
-            )}
             {Array.from({ length: nextPages }).map((_, index) => (
               <PaginationItem key={index}>
                 <PaginationLink size="sm" from={Route.fullPath} to="." params={{ status }} search={{ page: index + 1 }}>

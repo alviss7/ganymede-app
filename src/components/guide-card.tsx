@@ -40,17 +40,19 @@ export function GuideCardHeader({
     <>
       <CardHeader className="p-3">
         <CardTitle className="leading-5">{guide.name}</CardTitle>
-        <CardDescription className="flex items-start justify-between gap-2">
+        <CardDescription className="flex items-start justify-between gap-2" asChild>
           <div>
-            <FlagPerLang lang={guide.lang} />
-            <span>id: {guide.id}</span>
-          </div>
-          <span className="flex items-center gap-1">
-            <span>
-              de: <span className="font-semibold text-blue-400">{guide.user.name}</span>
+            <div>
+              <FlagPerLang lang={guide.lang} />
+              <span>id: {guide.id}</span>
+            </div>
+            <span className="flex items-center gap-1">
+              <span>
+                de: <span className="font-semibold text-blue-400">{guide.user.name}</span>
+              </span>
+              {guide.user.is_certified && <VerifiedIcon className="size-4 text-orange-300" />}
             </span>
-            {guide.user.is_certified && <VerifiedIcon className="size-4 text-orange-300" />}
-          </span>
+          </div>
         </CardDescription>
       </CardHeader>
     </>

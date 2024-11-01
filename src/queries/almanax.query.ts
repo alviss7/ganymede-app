@@ -12,4 +12,6 @@ export const almanaxQuery = queryOptions({
 
     return res.value
   },
+  // staleTime today until midnight in ms, if it's 8 pm, it will gc in 4 hours, etc
+  staleTime: new Date().setHours(24, 0, 0, 0) - Date.now(),
 })
