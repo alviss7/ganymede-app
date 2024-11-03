@@ -64,6 +64,7 @@ pub struct AlmanaxReward {
     pub kamas: u32,
     pub experience: u32,
     pub bonus: String,
+    pub img: Option<String>,
 }
 
 pub fn get_kamas_reward(
@@ -174,7 +175,6 @@ pub async fn get_almanax(window: Window<Wry>) -> Result<AlmanaxReward, Error> {
         .need
         .generated
         .quantities[0];
-    let kamas_ratio = quest.data[0].steps[0].rewards[0].kamas_ratio;
     let item = get_item_data(item_id).await?;
     let resolver = window.path();
     let conf = crate::conf::Conf::get(resolver)?;
@@ -210,5 +210,6 @@ pub async fn get_almanax(window: Window<Wry>) -> Result<AlmanaxReward, Error> {
         kamas,
         experience,
         bonus: bonus.to_string(),
+        img: item.img,
     })
 }

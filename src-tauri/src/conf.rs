@@ -83,10 +83,6 @@ impl Conf {
 
         fs::write(conf_path, json).map_err(Error::from)
     }
-
-    pub fn get_profile(&self) -> Option<&Profile> {
-        self.profiles.iter().find(|p| p.id == self.profile_in_use)
-    }
 }
 
 impl Default for Lang {

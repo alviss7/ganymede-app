@@ -17,5 +17,5 @@ pub struct Item {
     created_at: String,
     #[serde(rename = "updatedAt")]
     updated_at: String,
-    appearance: Option<String>,
+    pub img: Option<String>,
 }

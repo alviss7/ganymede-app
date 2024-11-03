@@ -6,4 +6,5 @@ export const AlmanaxZod = z.object({
   kamas: z.number(),
   experience: z.number(),
   bonus: z.string(),
+  img: z.string().optional(),
 })
