@@ -3,9 +3,9 @@ import * as React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen.ts'
-import './main.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import './main.css'
+import { routeTree } from './routeTree.gen.ts'
 
 const queryClient = new QueryClient({
   defaultOptions: {

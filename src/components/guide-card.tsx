@@ -7,10 +7,10 @@ import { guidesFromServerQuery } from '@/queries/guides-from-server.query.ts'
 import { guidesQuery } from '@/queries/guides.query.ts'
 import { Guide } from '@/types/guide.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import * as Flag from 'country-flag-icons/react/3x2'
 import { CircleAlertIcon, CircleCheckIcon, ImportIcon, LoaderIcon, VerifiedIcon } from 'lucide-react'
 import { fromPromise } from 'neverthrow'
 import { ComponentProps } from 'react'
-import * as Flag from 'country-flag-icons/react/3x2'
 
 function FlagPerLang({ lang }: { lang: string }) {
   switch (lang) {

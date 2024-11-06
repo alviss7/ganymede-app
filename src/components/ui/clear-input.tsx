@@ -1,8 +1,8 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { Input } from './input'
 import { XIcon } from 'lucide-react'
+import { Input } from './input'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onValueChange?: (value: string) => void
