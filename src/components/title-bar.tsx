@@ -21,37 +21,40 @@ const appWindow = getCurrentWindow()
 
 export function TitleBar() {
   return (
-    <div className="sticky top-0 flex h-[30px] items-center bg-primary">
+    <div className="sticky top-0 z-10 flex h-[30px] items-center bg-primary text-primary-foreground">
       <DropdownMenu>
         <DropdownMenuTrigger className="h-full px-2 outline-none">
           <MenuIcon className="size-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" alignOffset={6} sideOffset={0}>
           <DropdownMenuItem className="gap-2" asChild>
-            <Link to="/">
-              <HomeIcon className="size-4" />
+            <Link to="/" draggable={false}>
+              <HomeIcon />
               Accueil
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
-            <Link to="/guides">
-              <NotebookTextIcon className="size-4" />
+            <Link to="/guides" draggable={false}>
+              <NotebookTextIcon />
               Guides
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
-            <Link to="/downloads">
-              <CloudDownloadIcon className="size-4" />
+            <Link to="/downloads" draggable={false}>
+              <CloudDownloadIcon />
               Téléchargements
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <p data-tauri-drag-region="" className="grow cursor-default select-none text-center font-semibold">
-        Ganymède
-      </p>
+      <p className="center-absolute cursor-default select-none text-center font-semibold">Ganymède</p>
+      <p data-tauri-drag-region="" className="relative z-10 size-full grow"></p>
       <div className="flex justify-end">
-        <Link to="/settings" className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800">
+        <Link
+          to="/settings"
+          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
+          draggable={false}
+        >
           <SettingsIcon className="size-4" />
         </Link>
         <button

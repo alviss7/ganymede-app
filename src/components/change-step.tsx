@@ -18,9 +18,10 @@ export function ChangeStep({
   const [innerValue, setInnerValue] = useState(current.toString())
 
   return (
-    <div className="-translate-y-1/2 -translate-x-1/2 absolute top-1/2 left-1/2 flex items-center gap-1">
+    <div className="center-absolute flex items-center gap-1">
       <Button
         size="icon"
+        variant="secondary"
         className="size-8"
         onClick={() => {
           onPrevious()
@@ -32,9 +33,9 @@ export function ChangeStep({
           setInnerValue((current - 1).toString())
         }}
       >
-        <ChevronLeftIcon className="size-4" />
+        <ChevronLeftIcon />
       </Button>
-      <div className="flex flex-col items-center rounded bg-neutral-900/50 px-1 font-semibold text-neutral-50 text-sm leading-4">
+      <div className="flex flex-col items-center rounded bg-primary px-1 font-semibold text-neutral-50 text-sm leading-4">
         <form
           onSubmit={async (evt) => {
             evt.preventDefault()
@@ -73,6 +74,7 @@ export function ChangeStep({
       </div>
       <Button
         size="icon"
+        variant="secondary"
         className="size-8"
         onClick={() => {
           onNext()
@@ -84,7 +86,7 @@ export function ChangeStep({
           setInnerValue((current + 1).toString())
         }}
       >
-        <ChevronRightIcon className="size-4" />
+        <ChevronRightIcon />
       </Button>
     </div>
   )

@@ -8,9 +8,9 @@ export function BackButtonLink<
   TTo extends string | undefined = '.',
 >({ to, params, search, from, state, hash }: LinkProps<TRouter, TFrom, TTo>) {
   return (
-    <Button size="icon" className="min-w-6" asChild>
-      <Link to={to} params={params} search={search} from={from} state={state} hash={hash}>
-        <ChevronLeftIcon className="size-4" />
+    <Button size="icon" variant="secondary" className="size-6" asChild>
+      <Link to={to} params={params} search={search} from={from} state={state} hash={hash} draggable={false}>
+        <ChevronLeftIcon />
       </Link>
     </Button>
   )

@@ -2,6 +2,7 @@ import { ChangeStep } from '@/components/change-step.tsx'
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { Position } from '@/components/position.tsx'
 import { Button } from '@/components/ui/button.tsx'
+import { cn } from '@/lib/utils'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { guidesQuery } from '@/queries/guides.query.ts'
@@ -12,7 +13,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { MapIcon } from 'lucide-react'
 import { useLayoutEffect } from 'react'
 import { z } from 'zod'
-import { cn } from '@/lib/utils'
+import { GuideFrame } from '../../components/guide-frame'
 
 const ParamsZod = z.object({
   id: z.coerce.number(),
@@ -149,7 +150,7 @@ function GuideIdPage() {
 
   return (
     <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
-      <header className="sticky top-[62px] bg-gray-500">
+      <header className="sticky top-[62px] bg-primary">
         <div className="relative flex h-10 items-center justify-between gap-2 p-1">
           {step && (
             <>
@@ -163,24 +164,20 @@ function GuideIdPage() {
                   return changeStep(() => current - 1)
                 }}
               />
-              <Button size="icon">
-                <MapIcon className="size-4" />
-              </Button>
             </>
           )}
         </div>
       </header>
-      {/* dangerouslySetInnerHTML for now but keep in mind for script tags */}
       {step && (
-        <div
+        <GuideFrame
           className={cn(
             'guide p-2 leading-5',
             conf.data.fontSize === 'Small' && 'text-sm leading-4',
             conf.data.fontSize === 'Large' && 'text-md leading-5',
             conf.data.fontSize === 'Extra' && 'text-lg leading-6',
           )}
-          dangerouslySetInnerHTML={{ __html: step.web_text }}
-        ></div>
+          text={step.web_text}
+        />
       )}
     </Page>
   )

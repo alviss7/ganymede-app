@@ -96,11 +96,9 @@ export function GuideDownloadButton({
         className="relative"
       >
         {!downloadGuideFromServer.isPending &&
-          (downloadGuideFromServer.isSuccess || guideInDownloads !== undefined) && (
-            <CircleCheckIcon className="size-4" />
-          )}
-        {downloadGuideFromServer.isPending && <LoaderIcon className="size-4 animate-[spin_2s_linear_infinite]" />}
-        {downloadGuideFromServer.isIdle && guideInDownloads === undefined && <ImportIcon className="size-4" />}
+          (downloadGuideFromServer.isSuccess || guideInDownloads !== undefined) && <CircleCheckIcon />}
+        {downloadGuideFromServer.isPending && <LoaderIcon className="animate-[spin_2s_linear_infinite]" />}
+        {downloadGuideFromServer.isIdle && guideInDownloads === undefined && <ImportIcon />}
         {isGuideNew(guideInServer, guideInDownloads) && (
           <span
             className="-right-2 -top-3.5 absolute size-4 font-black text-2xl text-yellow-400"

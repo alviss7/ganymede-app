@@ -3,6 +3,7 @@ import { Slot } from '@radix-ui/react-slot'
 import { Link, LinkProps, type RegisteredRouter, createFileRoute } from '@tanstack/react-router'
 import { BookOpenCheckIcon, BookOpenTextIcon, NotebookPenIcon, TrophyIcon } from 'lucide-react'
 import { type JSX, type PropsWithChildren } from 'react'
+import { Card } from '../../components/ui/card'
 
 export const Route = createFileRoute('/downloads/')({
   component: DownloadIndex,
@@ -17,19 +18,22 @@ function GuideLink({
   icon: JSX.Element
 }>) {
   return (
-    <li className="flex flex-col rounded bg-primary-800 shadow">
-      <Link
-        to="/downloads/$status"
-        params={params}
-        search={{ page: 1 }}
-        className="flex w-full items-center gap-x-2 px-2 py-4"
-      >
-        <span>
-          <Slot className="size-4">{icon}</Slot>
-        </span>
-        <span className="font-semibold">{children}</span>
-      </Link>
-    </li>
+    <Card asChild className="flex flex-col rounded-md">
+      <li>
+        <Link
+          to="/downloads/$status"
+          params={params}
+          search={{ page: 1 }}
+          className="flex w-full items-center gap-x-2 px-2 py-4"
+          draggable={false}
+        >
+          <span>
+            <Slot>{icon}</Slot>
+          </span>
+          <span className="font-semibold">{children}</span>
+        </Link>
+      </li>
+    </Card>
   )
 }
 

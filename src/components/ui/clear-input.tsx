@@ -12,17 +12,10 @@ const ClearInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, onValueChange, value, type, ...props }, ref) => {
     return (
       <div className="relative z-0 flex w-full">
-        <Input
-          data-has-value={value !== ''}
-          className={cn('peer focus:outline-none', className)}
-          type={type}
-          {...props}
-          value={value}
-          ref={ref}
-        />
+        <Input className={cn('peer', className)} type={type} {...props} value={value} ref={ref} />
         <button
           type="button"
-          className="-translate-y-1/2 absolute top-1/2 right-2 transform opacity-0 transition-opacity peer-data-[has-value=true]:opacity-100"
+          className="center-y-absolute right-2 opacity-0 transition-opacity peer-has-value:opacity-100"
           onClick={() => {
             onValueChange?.('')
           }}

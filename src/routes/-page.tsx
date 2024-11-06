@@ -25,7 +25,7 @@ export function Page<
   return (
     <PageContent className={cn('pb-2', className)}>
       <PageTitle>
-        <div className="flex items-center gap-2 w-full">
+        <div className="flex w-full items-center gap-2">
           {(to || search || from || hash || state) && (
             <BackButtonLink to={to} search={search} from={from} hash={hash} state={state} />
           )}

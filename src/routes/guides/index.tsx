@@ -70,10 +70,10 @@ function GuidesPage() {
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
           {guides.isFetched && guides.isFetching && <GenericLoader className="size-4" />}
-          <Button size="icon" onClick={onRefresh}>
+          <Button size="icon" variant="secondary" onClick={onRefresh}>
             <FolderSyncIcon className="size-4" />
           </Button>
-          <Button size="icon" onClick={onOpenExplorer}>
+          <Button size="icon" variant="secondary" onClick={onOpenExplorer}>
             <FolderOpenIcon className="size-4" />
           </Button>
         </div>
@@ -105,7 +105,12 @@ function GuidesPage() {
                 <GuideDownloadButton guide={guide} />
                 {guide.steps.length > 0 && (
                   <Button asChild>
-                    <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: guide.currentStep ?? 0 }}>
+                    <Link
+                      to="/guides/$id"
+                      params={{ id: guide.id }}
+                      search={{ step: guide.currentStep ?? 0 }}
+                      draggable={false}
+                    >
                       Ouvrir
                     </Link>
                   </Button>

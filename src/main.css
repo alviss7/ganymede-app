@@ -4,37 +4,73 @@
 
 @layer base {
   :root {
-    --radius: 0.5rem;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --primary-800: 217.2 91.2% 49.8%;
+    --primary-foreground-800: 222.2 47.4% 1.2%;
   }
 }
 
-:not(input):not(textarea):not(select):not(a):not(button):not(button *):not(a *):not(.select-text):not(code) {
-  user-select: none;
-  cursor: default;
-}
+@layer base {
+  :root {
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --radius: 0.5rem;
+  }
 
-[data-radix-popper-content-wrapper] {
-  z-index: 50 !important;
-}
+  * {
+    @apply border-border;
+    user-select: none;
+  }
 
-html, body, #root {
-  min-height: 100vh;
-  /*border-radius: 0.65rem;*/
-}
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 
-#root {
-  display: flex;
-  flex-direction: column;
-}
+  :not(input):not(textarea):not(select):not(a):not(button):not(button *):not(a *):not(.select-text):not(code) {
+    user-select: none;
+    cursor: default;
+  }
 
-html {
-  overscroll-behavior: none;
-  background: theme('colors.gray.950');
-  color: white;
-}
+  [data-radix-popper-content-wrapper] {
+    z-index: 50 !important;
+  }
 
-* {
-  user-select: none;
+  html, body, #root {
+    min-height: 100vh;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+  }
+
+  html {
+    overscroll-behavior: none;
+  }
 }
 
 .tag-quest,
@@ -68,7 +104,6 @@ html {
   text-decoration: underline;
   color: #8E7CC3
 }
-
 
 .tag-monster img,
 .tag-item img,
