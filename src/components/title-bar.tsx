@@ -6,7 +6,16 @@ import {
 } from '@/components/ui/dropdown-menu.tsx'
 import { Link } from '@tanstack/react-router'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { MaximizeIcon, MenuIcon, MinusIcon, SettingsIcon, XIcon } from 'lucide-react'
+import {
+  CloudDownloadIcon,
+  HomeIcon,
+  MaximizeIcon,
+  MenuIcon,
+  MinusIcon,
+  NotebookTextIcon,
+  SettingsIcon,
+  XIcon,
+} from 'lucide-react'
 
 const appWindow = getCurrentWindow()
 
@@ -18,14 +27,23 @@ export function TitleBar() {
           <MenuIcon className="size-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" alignOffset={6} sideOffset={0}>
-          <DropdownMenuItem asChild>
-            <Link to="/">Accueil</Link>
+          <DropdownMenuItem className="gap-2" asChild>
+            <Link to="/">
+              <HomeIcon className="size-4" />
+              Accueil
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/guides">Guides</Link>
+          <DropdownMenuItem className="gap-2" asChild>
+            <Link to="/guides">
+              <NotebookTextIcon className="size-4" />
+              Guides
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/downloads">Téléchargements</Link>
+          <DropdownMenuItem className="gap-2" asChild>
+            <Link to="/downloads">
+              <CloudDownloadIcon className="size-4" />
+              Téléchargements
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
