@@ -71,7 +71,7 @@ function GuidesPage() {
                   <span>
                     Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
                   </span>
-                  <span>({(((guide.currentStep ?? 0) / guide.steps.length) * 100).toFixed(0)}%)</span>
+                  <span>({(((guide.currentStep ?? 0) / (guide.steps.length - 1)) * 100).toFixed(1)}%)</span>
                 </p>
               </CardContent>
               <GuideCardFooter className="items-end justify-between">
