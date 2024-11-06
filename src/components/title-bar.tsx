@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/dropdown-menu.tsx'
 import { Link } from '@tanstack/react-router'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { ChevronDownIcon, MaximizeIcon, MinusIcon, XIcon } from 'lucide-react'
+import { ChevronDownIcon, MaximizeIcon, MinusIcon, SettingsIcon, XIcon } from 'lucide-react'
 
 const appWindow = getCurrentWindow()
 
@@ -36,6 +36,9 @@ export function TitleBar() {
         Ganymède
       </p>
       <div className="flex justify-end">
+        <Link to="/settings" className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800">
+          <SettingsIcon className="size-4" />
+        </Link>
         <button
           onClick={async () => {
             await appWindow.minimize()
