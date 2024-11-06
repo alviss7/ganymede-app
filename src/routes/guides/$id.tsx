@@ -79,7 +79,7 @@ function GuideIdPage() {
     window.scrollTo(0, 0)
   }, [step])
 
-  const changeStep = async (nextStep: (progress: Pick<GuideProgress, 'step'>) => number) => {
+  const changeStep = async (nextStep: (progress: Pick<GuideProgress, 'step'>) => number): Promise<number> => {
     await setConf.mutateAsync({
       ...conf.data,
       profiles: conf.data.profiles.map((p) => {
@@ -119,11 +119,15 @@ function GuideIdPage() {
       .find((p) => p.id === conf.data.profileInUse)
       ?.progresses.find((p) => p.id === guide.id)
 
+    const newStep = nextStep(progress ?? { step: 0 })
+
     await navigate({
       search: {
-        step: nextStep(progress ?? { step: 0 }),
+        step: newStep,
       },
     })
+
+    return newStep
   }
 
   const onClickPrevious = async () => {
@@ -154,6 +158,9 @@ function GuideIdPage() {
                 max={guide.steps.length}
                 onPrevious={onClickPrevious}
                 onNext={onClickNext}
+                setCurrent={async (current) => {
+                  return changeStep(() => current - 1)
+                }}
               />
               <Button size="icon">
                 <MapIcon className="size-4" />
