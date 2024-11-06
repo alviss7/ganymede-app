@@ -75,11 +75,15 @@ export function GuideDownloadButton({
   const guides = useSuspenseQuery(
     guidesFromServerQuery({
       status: guide.status,
-      page: 1,
     }),
   )
   const downloads = useSuspenseQuery(guidesQuery)
   const downloadGuideFromServer = useDownloadGuideFromServer()
+
+  const guideInServer = getGuideById(guides.data, guide.id)
+  const guideInDownloads = getGuideById(downloads.data.guides, guide.id)
+
+  // show a button to download the guide, checkmark if already downloaded, and alert icon if the guide has an update
 
   return (
     <>
@@ -89,13 +93,21 @@ export function GuideDownloadButton({
           await fromPromise(downloadGuideFromServer.mutateAsync(guide), (err) => err)
         }}
         disabled={downloadGuideFromServer.isPending}
-        className="relative z-0"
+        className="relative"
       >
-        {downloadGuideFromServer.isSuccess && <CircleCheckIcon className="size-4" />}
+        {!downloadGuideFromServer.isPending &&
+          (downloadGuideFromServer.isSuccess || guideInDownloads !== undefined) && (
+            <CircleCheckIcon className="size-4" />
+          )}
         {downloadGuideFromServer.isPending && <LoaderIcon className="size-4 animate-[spin_2s_linear_infinite]" />}
-        {downloadGuideFromServer.isIdle && <ImportIcon className="size-4" />}
-        {isGuideNew(getGuideById(guides.data.data, guide.id), getGuideById(downloads.data.guides, guide.id)) && (
-          <span className="-right-2 -top-3.5 absolute size-4 font-black text-2xl text-yellow-400">!</span>
+        {downloadGuideFromServer.isIdle && guideInDownloads === undefined && <ImportIcon className="size-4" />}
+        {isGuideNew(guideInServer, guideInDownloads) && (
+          <span
+            className="-right-2 -top-3.5 absolute size-4 font-black text-2xl text-yellow-400"
+            title="Update available"
+          >
+            !
+          </span>
         )}
       </Button>
       {downloadGuideFromServer.isError && <CircleAlertIcon className="size-5 text-red-500" />}

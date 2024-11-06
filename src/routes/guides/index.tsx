@@ -2,13 +2,16 @@ import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Card, CardContent } from '@/components/ui/card.tsx'
+import { useProfile } from '@/hooks/use_profile'
 import { confQuery } from '@/queries/conf.query.ts'
 import { guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { ChevronRightIcon } from 'lucide-react'
-import { useProfile } from '../../hooks/use_profile'
+
+import { ClearInput } from '@/components/ui/clear-input'
+import { rankList } from '@/lib/rank'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/guides/')({
   component: GuidesPage,
@@ -29,6 +32,7 @@ function GuidesPage() {
   const conf = useSuspenseQuery(confQuery)
   const profile = useProfile()
   const guides = useSuspenseQuery(guidesQuery)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const guidesWithCurrentProgression = guides.data.guides.map((guide) => {
     const currentStep = profile.progresses.find((progress) => progress.id === guide.id)?.step ?? null
@@ -44,17 +48,30 @@ function GuidesPage() {
       guidesWithCurrentProgression.filter((guide) => {
         return guide.currentStep === null || guide.currentStep < guide.steps.length - 1
       })
+  const filteredGuides = rankList(notDoneGuides, [(guide) => guide.name], searchTerm)
 
   return (
     <Page key="guide-page" title="Guides">
       <div className="flex flex-col gap-2 p-4">
-        {notDoneGuides.map((guide) => {
+        <ClearInput
+          value={searchTerm}
+          onChange={(evt) => setSearchTerm(evt.currentTarget.value)}
+          onValueChange={setSearchTerm}
+          autoComplete="off"
+          autoCorrect="off"
+          placeholder="Rechercher un guide"
+        />
+
+        {filteredGuides.map((guide) => {
           return (
             <Card key={guide.id}>
               <GuideCardHeader guide={guide} />
-              <CardContent>
-                <p className="text-sm">
-                  {(guide.currentStep ?? 0) + 1}/{guide.steps.length}
+              <CardContent className="px-3">
+                <p className="text-sm italic">
+                  <span>
+                    Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
+                  </span>
+                  <span>({(((guide.currentStep ?? 0) / guide.steps.length) * 100).toFixed(0)}%)</span>
                 </p>
               </CardContent>
               <GuideCardFooter className="items-end justify-between">

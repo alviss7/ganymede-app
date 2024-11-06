@@ -1,6 +1,7 @@
 use crate::error::Error;
 use crate::tauri_api::GuidesPath;
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 use std::{fmt, fs};
 use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
@@ -100,9 +101,8 @@ impl fmt::Display for Status {
 }
 
 impl Guides {
-    pub fn get<R: Runtime>(resolver: &PathResolver<R>) -> Result<Guides, Error> {
-        let guides_dir = &resolver.app_guides_dir();
-        println!("get_guides in {:?}", guides_dir);
+    pub fn get_with_path(path_buf: &PathBuf) -> Result<Guides, Error> {
+        println!("get_guides in {:?}", path_buf);
 
         let options = glob::MatchOptions {
             case_sensitive: false,
@@ -110,10 +110,10 @@ impl Guides {
             require_literal_leading_dot: false,
         };
 
-        let files = glob::glob_with(guides_dir.join("**/*.json").to_str().unwrap(), options)
+        let files = glob::glob_with(path_buf.join("**/*.json").to_str().unwrap(), options)
             .expect("Failed to read guides directory for json");
 
-        let mut guides = Vec::new();
+        let mut guides = vec![];
 
         for entry in files {
             match entry {
@@ -139,6 +139,12 @@ impl Guides {
         }
 
         Ok(Guides { guides })
+    }
+
+    pub fn get_with_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<Guides, Error> {
+        let guides_dir = &resolver.app_guides_dir();
+
+        Guides::get_with_path(guides_dir)
     }
 
     pub fn ensure<R: Runtime>(resolver: &PathResolver<R>) -> Result<(), Error> {
@@ -175,7 +181,13 @@ impl Guides {
 
 #[tauri::command]
 pub fn get_guides(window: Window<Wry>) -> Result<Guides, Error> {
-    Guides::get(window.path())
+    Guides::get_with_resolver(window.path())
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+struct TestGuide {
+    id: u32,
+    updated_at: Option<String>,
 }
 
 #[tauri::command]
@@ -211,13 +223,14 @@ pub async fn download_guide_from_server(
 
     let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API, guide_id)).await?;
     let text = res.text().await?;
+
     let guide = crate::json::from_str::<GuideWithSteps>(text.as_str());
 
     match guide {
         Ok(guide) => {
             let resolver = window.path();
             let guide_ref = &guide;
-            let mut guides = Guides::get(resolver)?;
+            let mut guides = Guides::get_with_resolver(resolver)?;
 
             // Update the guide file if it exists
             match guides.guides.iter().position(|g| g.id == guide_ref.id) {

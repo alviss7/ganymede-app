@@ -1,13 +1,18 @@
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
 import { Card } from '@/components/ui/card.tsx'
+import { ClearInput } from '@/components/ui/clear-input'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination.tsx'
+import { rankList } from '@/lib/rank'
 import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { StatusZod } from '@/types/status.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useDebounce } from '@uidotdev/usehooks'
+import { useState } from 'react'
 import { z } from 'zod'
+import { paginate } from '../../lib/search'
 
 const SearchZod = z.object({
   page: z.coerce.number(),
@@ -35,9 +40,8 @@ export const Route = createFileRoute('/downloads/$status')({
       page: search.page,
     }
   },
-  loader: async ({ context, params, deps: { page } }) => {
-    console.log('start')
-    await context.queryClient.ensureQueryData(guidesFromServerQuery({ status: params.status, page }))
+  loader: async ({ context, params }) => {
+    await context.queryClient.ensureQueryData(guidesFromServerQuery({ status: params.status }))
   },
   pendingComponent: Pending,
 })
@@ -72,22 +76,46 @@ function titleByStatus(status: string) {
 }
 
 function DownloadGuidePage() {
+  const [searchTerm, setSearchTerm] = useState('')
   const page = Route.useSearch({ select: (s) => s.page })
   const status = Route.useParams({ select: (p) => p.status })
-  const guides = useSuspenseQuery(guidesFromServerQuery({ status, page }))
+  const debouncedTerm = useDebounce(searchTerm, 300)
+  const guides = useSuspenseQuery(guidesFromServerQuery({ status }))
 
   const title = titleByStatus(status)
+  const nextPages = Math.ceil(guides.data.length / itemsPerPage)
 
-  const nextPages = Math.ceil(guides.data.total / itemsPerPage)
+  const term = searchTerm !== '' ? debouncedTerm : ''
+
+  const filteredGuides = rankList(guides.data, [(guide) => guide.name, (guide) => guide.user.name], term)
+
+  // if we are searching, we don't want to paginate
+  const paginatedOrFilteredGuides =
+    term !== ''
+      ? filteredGuides
+      : paginate({
+          page,
+          itemsPerPage,
+          items: filteredGuides,
+        })
 
   return (
     <Page key={`download-${status}`} to="/downloads" title={title}>
       <div className="flex grow flex-col pb-8">
-        {guides.data.total === 0 ? (
+        {guides.data.length === 0 ? (
           <p className="p-4">Aucun guide trouvé</p>
         ) : (
           <div className="flex flex-col gap-2 p-4">
-            {guides.data.data.map((guide) => (
+            <ClearInput
+              value={searchTerm}
+              onChange={(evt) => setSearchTerm(evt.currentTarget.value)}
+              onValueChange={setSearchTerm}
+              autoComplete="off"
+              autoCorrect="off"
+              placeholder="Rechercher un guide"
+            />
+
+            {paginatedOrFilteredGuides.map((guide) => (
               <Card key={guide.id}>
                 <GuideCardHeader guide={guide} />
                 <GuideCardFooter>
@@ -98,8 +126,8 @@ function DownloadGuidePage() {
           </div>
         )}
       </div>
-      {guides.data.total !== 0 && guides.data.total > itemsPerPage && (
-        <Pagination className="fixed right-0 bottom-0 left-0 h-10 border bg-white px-2 text-black">
+      {term === '' && guides.data.length !== 0 && guides.data.length > itemsPerPage && (
+        <Pagination className="fixed right-0 bottom-0 left-0 h-10 bg-primary px-2 text-primary-foreground">
           <PaginationContent>
             {Array.from({ length: nextPages }).map((_, index) => (
               <PaginationItem key={index}>

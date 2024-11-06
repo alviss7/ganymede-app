@@ -39,7 +39,7 @@ const PaginationLink = ({ className, from, to, search, size = 'icon', children, 
     <Link
       className={cn(
         buttonVariants({
-          variant: ariaCurrent === 'page' ? 'outline' : 'ghost',
+          variant: ariaCurrent === 'page' ? 'secondary' : 'ghost',
           size,
         }),
         className,
