@@ -1,9 +1,9 @@
+import { AlmanaxFrame } from '@/components/almanax-frame'
 import { DiscordIcon } from '@/components/icons/discord-icon.tsx'
 import { TwitterIcon } from '@/components/icons/twitter-icon.tsx'
 import { PageTitle, PageTitleExtra, PageTitleText } from '@/components/page-title.tsx'
 import { createFileRoute } from '@tanstack/react-router'
 import { GlobeIcon } from 'lucide-react'
-import { AlmanaxFrame } from '../components/almanax-frame'
 
 export const Route = createFileRoute('/')({
   component: Index,

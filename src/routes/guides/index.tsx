@@ -11,6 +11,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { ClearInput } from '@/components/ui/clear-input'
 import { rankList } from '@/lib/rank'
+import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation'
+import { FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/guides/')({
@@ -32,6 +34,7 @@ function GuidesPage() {
   const conf = useSuspenseQuery(confQuery)
   const profile = useProfile()
   const guides = useSuspenseQuery(guidesQuery)
+  const openGuidesFolder = useOpenGuidesFolder()
   const [searchTerm, setSearchTerm] = useState('')
 
   const guidesWithCurrentProgression = guides.data.guides.map((guide) => {
@@ -50,8 +53,32 @@ function GuidesPage() {
       })
   const filteredGuides = rankList(notDoneGuides, [(guide) => guide.name], searchTerm)
 
+  const onRefresh = () => {
+    if (!guides.isFetching) {
+      guides.refetch()
+    }
+  }
+
+  const onOpenExplorer = () => {
+    openGuidesFolder.mutate()
+  }
+
   return (
-    <Page key="guide-page" title="Guides">
+    <Page
+      key="guide-page"
+      title="Guides"
+      actions={
+        <div className="flex w-full items-center justify-end gap-1 text-sm">
+          {guides.isFetched && guides.isFetching && <GenericLoader className="size-4" />}
+          <Button size="icon" onClick={onRefresh}>
+            <FolderSyncIcon className="size-4" />
+          </Button>
+          <Button size="icon" onClick={onOpenExplorer}>
+            <FolderOpenIcon className="size-4" />
+          </Button>
+        </div>
+      }
+    >
       <div className="flex flex-col gap-2 p-4">
         <ClearInput
           value={searchTerm}

@@ -14,6 +14,12 @@ export class DownloadGuideFromServerError extends Error {
   }
 }
 
+export class OpenGuidesFolderError extends Error {
+  static from(error: unknown) {
+    return new OpenGuidesFolderError('Failed to open guides folder', { cause: error })
+  }
+}
+
 export function getGuides() {
   return fromPromise(invoke('get_guides'), GetGuidesError.from).map((response) => {
     return GuidesZod.parseAsync(response)
@@ -22,4 +28,8 @@ export function getGuides() {
 
 export async function downloadGuideFromServer(guideId: number) {
   return fromPromise(invoke('download_guide_from_server', { guideId }), DownloadGuideFromServerError.from)
+}
+
+export async function openGuidesFolder() {
+  return fromPromise(invoke('open_guides_folder'), OpenGuidesFolderError.from)
 }

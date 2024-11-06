@@ -6,6 +6,7 @@ use std::{fmt, fs};
 use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
 use tauri_plugin_http::reqwest;
+use tauri_plugin_shell::ShellExt;
 
 const GANYMEDE_API: &str = "https://ganymede-dofus.com/api/v2";
 
@@ -250,4 +251,15 @@ pub async fn download_guide_from_server(
             Err(err)
         }
     }
+}
+
+#[tauri::command]
+pub fn open_guides_folder(window: Window<Wry>) -> Result<(), tauri_plugin_shell::Error> {
+    let resolver = window.path();
+    let guides_dir = resolver.app_guides_dir();
+
+    window
+        .app_handle()
+        .shell()
+        .open(guides_dir.to_str().unwrap().to_string(), None)
 }

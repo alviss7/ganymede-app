@@ -1,6 +1,6 @@
+import { almanaxQuery } from '@/queries/almanax.query'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderIcon } from 'lucide-react'
-import { almanaxQuery } from '../queries/almanax.query'
 
 export function AlmanaxFrame() {
   const almanax = useQuery(almanaxQuery)

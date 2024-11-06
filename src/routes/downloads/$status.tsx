@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card.tsx'
 import { ClearInput } from '@/components/ui/clear-input'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination.tsx'
 import { rankList } from '@/lib/rank'
+import { paginate } from '@/lib/search'
 import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { StatusZod } from '@/types/status.ts'
@@ -12,7 +13,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useState } from 'react'
 import { z } from 'zod'
-import { paginate } from '../../lib/search'
 
 const SearchZod = z.object({
   page: z.coerce.number(),
