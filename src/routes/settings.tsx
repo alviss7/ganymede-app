@@ -2,13 +2,14 @@ import { GenericLoader } from '@/components/generic-loader.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { Switch } from '@/components/ui/switch.tsx'
 import { newId } from '@/ipc/id.ts'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Page } from '@/routes/-page.tsx'
-import { Lang } from '@/types/conf.ts'
+import { FontSize, Lang } from '@/types/conf.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -34,6 +35,37 @@ function Settings() {
   return (
     <Page key="settings-page" title="Paramètres">
       <div className="container flex flex-col gap-4 pt-4 text-sm">
+        <section className="flex flex-col gap-2">
+          <p className="font-medium text-sm leading-none">Taille de texte des guides</p>
+          <RadioGroup
+            className="grid-cols-2"
+            orientation="horizontal"
+            value={conf.data.fontSize}
+            onValueChange={(value) => {
+              setConf.mutate({
+                ...conf.data,
+                fontSize: value as FontSize,
+              })
+            }}
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Small" id="text-sm" />
+              <Label htmlFor="text-sm">Small</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Base" id="text-base" />
+              <Label htmlFor="text-base">Base</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Large" id="text-md" />
+              <Label htmlFor="text-md">Large</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Extra" id="text-lg" />
+              <Label htmlFor="text-lg">Extra</Label>
+            </div>
+          </RadioGroup>
+        </section>
         <section className="flex items-center justify-between gap-2">
           <Label htmlFor="auto-travel-copy">Copie d'autopilote</Label>
           <Switch

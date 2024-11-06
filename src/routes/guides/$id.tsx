@@ -12,6 +12,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { MapIcon } from 'lucide-react'
 import { useLayoutEffect } from 'react'
 import { z } from 'zod'
+import { cn } from '@/lib/utils'
 
 const ParamsZod = z.object({
   id: z.coerce.number(),
@@ -170,7 +171,17 @@ function GuideIdPage() {
         </div>
       </header>
       {/* dangerouslySetInnerHTML for now but keep in mind for script tags */}
-      {step && <div className="guide p-2 text-sm leading-4" dangerouslySetInnerHTML={{ __html: step.web_text }}></div>}
+      {step && (
+        <div
+          className={cn(
+            'guide p-2 leading-5',
+            conf.data.fontSize === 'Small' && 'text-sm leading-4',
+            conf.data.fontSize === 'Large' && 'text-md leading-5',
+            conf.data.fontSize === 'Extra' && 'text-lg leading-6',
+          )}
+          dangerouslySetInnerHTML={{ __html: step.web_text }}
+        ></div>
+      )}
     </Page>
   )
 }

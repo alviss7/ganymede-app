@@ -26,6 +26,14 @@ pub enum Lang {
     Pt,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum FontSize {
+    Small,
+    Base,
+    Large,
+    Extra,
+}
+
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Conf {
@@ -33,6 +41,8 @@ pub struct Conf {
     pub show_done_guides: bool,
     #[serde(default)]
     pub lang: Lang,
+    #[serde(default)]
+    pub font_size: FontSize,
     pub profiles: Vec<Profile>,
     pub profile_in_use: String,
 }
@@ -91,6 +101,12 @@ impl Default for Lang {
     }
 }
 
+impl Default for FontSize {
+    fn default() -> Self {
+        FontSize::Base
+    }
+}
+
 impl Default for Conf {
     fn default() -> Self {
         let default_profile = Profile::default();
@@ -100,6 +116,7 @@ impl Default for Conf {
             auto_travel_copy: true,
             show_done_guides: true,
             lang: Lang::default(),
+            font_size: FontSize::default(),
             profiles: vec![default_profile],
             profile_in_use: default_profile_id,
         }
