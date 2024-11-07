@@ -38,7 +38,7 @@ function GuidesPage() {
   const [searchTerm, setSearchTerm] = useState('')
 
   const guidesWithCurrentProgression = guides.data.guides.map((guide) => {
-    const currentStep = profile.progresses.find((progress) => progress.id === guide.id)?.step ?? null
+    const currentStep = profile.progresses.find((progress) => progress.id === guide.id)?.currentStep ?? null
 
     return {
       ...guide,

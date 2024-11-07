@@ -1,50 +1,46 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useToggleGuideCheckbox } from '@/mutations/toggle-guide-checkbox.mutation'
+import parse from 'html-react-parser'
+import { useProgressStep } from '@/hooks/use_progress_step'
 
 export function GuideFrame({
   className,
-  text,
+  html,
+  guideId,
+  stepIndex,
 }: {
   className?: string
-  text: string
+  html: string
+  guideId: number
+  stepIndex: number
 }) {
-  const ref = useRef<HTMLDivElement>(null)
+  const toggleGuideCheckbox = useToggleGuideCheckbox()
+  const step = useProgressStep(guideId, stepIndex)
 
-  const checkForCheckboxes = useCallback((element: HTMLDivElement) => {
-    const checkboxes: Array<HTMLInputElement> = Array.from(element.querySelectorAll('input[type="checkbox"]'))
+  let checkboxesCount = 0
 
-    const checkboxesClean = checkboxes.map((checkbox, index) => {
-      const onChange = (evt: Event) => {
-        const input = evt.currentTarget as HTMLInputElement
-        console.log('checkbox changed', index, input)
+  return (
+    <div className={className}>
+      {parse(html, {
+        replace: (domNode) => {
+          if (domNode.type === 'tag' && domNode.name === 'input' && domNode.attribs.type === 'checkbox') {
+            const index = checkboxesCount++
 
-        // const parent = checkbox.parentElement
-        // if (parent) {
-        //   parent.classList.toggle('checked', checkbox.checked)
-        // }
-      }
-
-      checkbox.addEventListener('change', onChange)
-
-      return () => checkbox.removeEventListener('change', onChange)
-    })
-
-    return () => {
-      checkboxesClean.forEach((evt) => {
-        evt()
-      })
-    }
-  }, [])
-
-  useEffect(() => {
-    console.log(ref.current)
-
-    if (ref.current) {
-      checkForCheckboxes(ref.current)
-    }
-  }, [checkForCheckboxes])
-
-  {
-    /* dangerouslySetInnerHTML for now but keep in mind for script tags */
-  }
-  return <div ref={ref} className={className} dangerouslySetInnerHTML={{ __html: text }} />
+            return (
+              <input
+                {...domNode.attribs}
+                onChange={() => {
+                  toggleGuideCheckbox.mutate({
+                    guideId,
+                    checkboxIndex: index,
+                    stepIndex,
+                  })
+                }}
+                checked={step.checkboxes.includes(index)}
+              />
+            )
+          }
+        },
+      })}
+    </div>
+  )
 }

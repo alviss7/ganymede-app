@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use tauri::{Manager, Window, Wry};
 use tauri_plugin_http::reqwest;
 
-use crate::conf::Lang;
+use crate::conf::{Conf, Lang};
 use crate::error::Error;
 
 const REWARD_REDUCED_SCALE: f32 = 0.7;
@@ -177,7 +177,7 @@ pub async fn get_almanax(window: Window<Wry>) -> Result<AlmanaxReward, Error> {
         .quantities[0];
     let item = get_item_data(item_id).await?;
     let resolver = window.path();
-    let conf = crate::conf::Conf::get(resolver)?;
+    let conf = Conf::get_with_resolver(resolver)?;
 
     let name = match conf.lang {
         crate::conf::Lang::En => item.name.en,

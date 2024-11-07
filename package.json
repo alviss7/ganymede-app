@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.13",
+    "html-react-parser": "^5.1.18",
     "ky": "^1.7.2",
     "lucide-react": "^0.439.0",
     "neverthrow": "^8.0.0",

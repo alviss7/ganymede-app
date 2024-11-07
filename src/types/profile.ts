@@ -1,8 +1,14 @@
 import { z } from 'zod'
 
 export const GuideProgressZod = z.object({
+  // guideId
   id: z.number(),
-  step: z.number(),
+  currentStep: z.number(),
+  steps: z.record(
+    z.object({
+      checkboxes: z.array(z.number()),
+    }),
+  ),
 })
 
 export const ProfileZod = z.object({

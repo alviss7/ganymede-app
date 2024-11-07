@@ -1,19 +1,17 @@
 import { ChangeStep } from '@/components/change-step.tsx'
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { Position } from '@/components/position.tsx'
-import { Button } from '@/components/ui/button.tsx'
 import { cn } from '@/lib/utils'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
-import { guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { GuideProgress } from '@/types/profile.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, notFound } from '@tanstack/react-router'
-import { MapIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
 import { useLayoutEffect } from 'react'
 import { z } from 'zod'
-import { GuideFrame } from '../../components/guide-frame'
+import { GuideFrame } from '@/components/guide-frame'
+import { useGuide } from '@/hooks/use_guide'
 
 const ParamsZod = z.object({
   id: z.coerce.number(),
@@ -30,30 +28,6 @@ export const Route = createFileRoute('/guides/$id')({
     parse: ParamsZod.parse,
     stringify: (params) => ({ id: params.id.toString() }),
   },
-  loader: async ({ context, params }) => {
-    const [downloads, conf] = await Promise.all([
-      await context.queryClient.ensureQueryData(guidesQuery),
-      await context.queryClient.ensureQueryData(confQuery),
-    ])
-
-    const guide = downloads.guides.find((guide) => guide.id === params.id)
-
-    if (!guide) {
-      throw notFound({
-        data: 'guide not found',
-      })
-    }
-
-    const profile = conf.profiles.find((profile) => profile.id === conf.profileInUse)
-
-    if (!profile) {
-      throw notFound({
-        data: 'profile not found',
-      })
-    }
-
-    return guide
-  },
   pendingComponent: Pending,
 })
 
@@ -69,9 +43,10 @@ function Pending() {
 }
 
 function GuideIdPage() {
+  const params = Route.useParams()
   const index = Route.useSearch({ select: (s) => s.step })
-  const guide = Route.useLoaderData()
   const conf = useSuspenseQuery(confQuery)
+  const guide = useGuide(params.id)
   const setConf = useSetConf()
   const step = guide.steps[index]
   const navigate = Route.useNavigate()
@@ -81,7 +56,7 @@ function GuideIdPage() {
     window.scrollTo(0, 0)
   }, [step])
 
-  const changeStep = async (nextStep: (progress: Pick<GuideProgress, 'step'>) => number): Promise<number> => {
+  const changeStep = async (nextStep: (progress: Pick<GuideProgress, 'currentStep'>) => number): Promise<number> => {
     await setConf.mutateAsync({
       ...conf.data,
       profiles: conf.data.profiles.map((p) => {
@@ -97,7 +72,7 @@ function GuideIdPage() {
 
                     return {
                       ...progress,
-                      step: step < 0 ? 0 : step >= guide.steps.length ? guide.steps.length - 1 : step,
+                      currentStep: step < 0 ? 0 : step >= guide.steps.length ? guide.steps.length - 1 : step,
                     }
                   }
 
@@ -107,7 +82,8 @@ function GuideIdPage() {
                   ...p.progresses,
                   {
                     id: guide.id,
-                    step: 1, // 1 means the second step
+                    currentStep: 1, // 1 means the second step
+                    steps: {},
                   },
                 ],
           }
@@ -121,7 +97,7 @@ function GuideIdPage() {
       .find((p) => p.id === conf.data.profileInUse)
       ?.progresses.find((p) => p.id === guide.id)
 
-    const newStep = nextStep(progress ?? { step: 0 })
+    const newStep = nextStep(progress ?? { currentStep: 0 })
 
     await navigate({
       search: {
@@ -137,7 +113,7 @@ function GuideIdPage() {
       return
     }
 
-    await changeStep((progress) => progress.step - 1)
+    await changeStep((progress) => progress.currentStep - 1)
   }
 
   const onClickNext = async () => {
@@ -145,7 +121,7 @@ function GuideIdPage() {
       return
     }
 
-    await changeStep((progress) => progress.step + 1)
+    await changeStep((progress) => progress.currentStep + 1)
   }
 
   return (
@@ -176,7 +152,9 @@ function GuideIdPage() {
             conf.data.fontSize === 'Large' && 'text-md leading-5',
             conf.data.fontSize === 'Extra' && 'text-lg leading-6',
           )}
-          text={step.web_text}
+          guideId={guide.id}
+          html={step.web_text}
+          stepIndex={index}
         />
       )}
     </Page>

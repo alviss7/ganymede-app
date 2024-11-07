@@ -1,21 +1,29 @@
 use crate::error::Error;
 use crate::tauri_api::ConfPath;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fs;
 use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Profile {
     pub id: String,
     pub name: String,
     pub progresses: Vec<Progress>,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Step {
+    pub checkboxes: Vec<usize>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Progress {
     pub id: u32, // guide id
-    pub step: u32,
+    pub current_step: usize,
+    pub steps: HashMap<usize, Step>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -34,7 +42,7 @@ pub enum FontSize {
     Extra,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Conf {
     pub auto_travel_copy: bool,
@@ -47,9 +55,41 @@ pub struct Conf {
     pub profile_in_use: String,
 }
 
+impl Progress {
+    pub fn add_or_update_step(&mut self, step: Step, step_index: usize) {
+        match self.steps.get(&step_index) {
+            Some(s) => {
+                self.steps.insert(step_index, s.clone());
+            }
+            None => {
+                self.steps.insert(step_index, step.clone());
+            }
+        }
+    }
+}
+
+impl Profile {
+    pub fn get_progress_mut(&mut self, guide_id: u32) -> Option<&mut Progress> {
+        self.progresses.iter_mut().find(|p| p.id == guide_id)
+    }
+}
+
+impl Step {
+    pub fn toggle_checkbox(&mut self, checkbox_index: usize) {
+        match self.checkboxes.iter().position(|&i| i == checkbox_index) {
+            Some(index) => {
+                self.checkboxes.remove(index);
+            }
+            None => {
+                self.checkboxes.push(checkbox_index);
+            }
+        }
+    }
+}
+
 impl Conf {
     // Check when serde_json error, display a reset button?
-    pub fn get<R: Runtime>(resolver: &PathResolver<R>) -> Result<Conf, Error> {
+    pub fn get_with_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<Conf, Error> {
         let conf_path = resolver.app_conf_file();
 
         let file = fs::read_to_string(conf_path);
@@ -93,6 +133,18 @@ impl Conf {
 
         fs::write(conf_path, json).map_err(Error::from)
     }
+
+    pub fn get_profile_in_use_mut(&mut self) -> Option<&mut Profile> {
+        self.profiles
+            .iter_mut()
+            .find(|p| p.id == self.profile_in_use)
+    }
+}
+
+impl Default for Step {
+    fn default() -> Self {
+        Step { checkboxes: vec![] }
+    }
 }
 
 impl Default for Lang {
@@ -135,7 +187,7 @@ impl Default for Profile {
 
 #[tauri::command]
 pub fn get_conf(window: Window<Wry>) -> Result<Conf, Error> {
-    Conf::get(window.path())
+    Conf::get_with_resolver(window.path())
 }
 
 #[tauri::command]
@@ -143,4 +195,48 @@ pub fn set_conf(conf: Conf, window: Window<Wry>) -> Result<(), Error> {
     let resolver = window.path();
 
     conf.save(resolver)
+}
+
+#[tauri::command]
+pub fn toggle_guide_checkbox(
+    window: Window<Wry>,
+    guide_id: u32,
+    step_index: usize,
+    checkbox_index: usize,
+) -> Option<usize> {
+    let resolver = window.path();
+    let conf = &mut Conf::get_with_resolver(resolver).expect("Cannot find conf with resolver");
+    let profile = conf.get_profile_in_use_mut();
+
+    if profile.is_none() {
+        return None;
+    }
+
+    let profile = profile.unwrap();
+    let profile_name = profile.name.clone();
+    let profile_id = profile.id.clone();
+
+    let progress = profile.get_progress_mut(guide_id);
+    let progress = progress.expect(
+        format!(
+            "Cannot find progress with guide_id in {} profile {}_#{}",
+            guide_id, profile_name, profile_id
+        )
+        .as_str(),
+    );
+
+    let step = match progress.steps.get_mut(&step_index) {
+        Some(step) => step,
+        None => &mut Step::default(),
+    };
+
+    step.toggle_checkbox(checkbox_index);
+
+    let step = step.clone();
+
+    progress.add_or_update_step(step, step_index);
+
+    conf.save(resolver).expect("Cannot save conf");
+
+    Some(checkbox_index)
 }

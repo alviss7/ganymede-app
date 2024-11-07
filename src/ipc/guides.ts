@@ -20,6 +20,12 @@ export class OpenGuidesFolderError extends Error {
   }
 }
 
+export class ToggleGuideCheckboxError extends Error {
+  static from(error: unknown) {
+    return new ToggleGuideCheckboxError('Failed to toggle checkbox guide', { cause: error })
+  }
+}
+
 export function getGuides() {
   return fromPromise(invoke('get_guides'), GetGuidesError.from).map((response) => {
     return GuidesZod.parseAsync(response)
@@ -32,4 +38,11 @@ export async function downloadGuideFromServer(guideId: number) {
 
 export async function openGuidesFolder() {
   return fromPromise(invoke('open_guides_folder'), OpenGuidesFolderError.from)
+}
+
+export async function toggleGuideCheckbox(guideId: number, checkboxIndex: number, stepIndex: number) {
+  return fromPromise(
+    invoke<number | undefined>('toggle_guide_checkbox', { guideId, checkboxIndex, stepIndex }),
+    ToggleGuideCheckboxError.from,
+  )
 }

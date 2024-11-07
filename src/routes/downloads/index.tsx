@@ -3,7 +3,7 @@ import { Slot } from '@radix-ui/react-slot'
 import { Link, LinkProps, type RegisteredRouter, createFileRoute } from '@tanstack/react-router'
 import { BookOpenCheckIcon, BookOpenTextIcon, NotebookPenIcon, TrophyIcon } from 'lucide-react'
 import { type JSX, type PropsWithChildren } from 'react'
-import { Card } from '../../components/ui/card'
+import { Card } from '@/components/ui/card'
 
 export const Route = createFileRoute('/downloads/')({
   component: DownloadIndex,

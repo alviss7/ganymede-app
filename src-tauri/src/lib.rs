@@ -1,5 +1,5 @@
 use crate::almanax::get_almanax;
-use crate::conf::{get_conf, set_conf, Conf};
+use crate::conf::{get_conf, set_conf, toggle_guide_checkbox, Conf};
 use crate::guides::{
     download_guide_from_server, get_guides, get_guides_from_server, open_guides_folder, Guides,
 };
@@ -50,7 +50,8 @@ pub fn run() {
             get_guides,
             download_guide_from_server,
             get_almanax,
-            open_guides_folder
+            open_guides_folder,
+            toggle_guide_checkbox
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
