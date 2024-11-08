@@ -88,8 +88,15 @@ export function GuideFrame({
               {domToReact([domNode.children[0]] as DOMNode[], options)}
               <button
                 type="button"
-                onClick={async () => {
-                  await writeText(name)
+                onClick={async (evt) => {
+                  // open in browser if ctrl/cmd is pressed
+                  if (navigator.userAgent.includes('AppleWebKit') ? evt.metaKey : evt.ctrlKey) {
+                    openGuideLink.mutate(
+                      `https://dofusdb.fr/fr/database/${domNode.attribs.type}/${domNode.attribs.dofusdbid}`,
+                    )
+                  } else {
+                    await writeText(name)
+                  }
                 }}
               >
                 {name}
