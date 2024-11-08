@@ -1,6 +1,6 @@
 import { confQuery } from '@/queries/conf.query.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+import { copyPosition } from '../lib/copy-position'
 
 export function Position({
   pos_x,
@@ -12,13 +12,7 @@ export function Position({
   const conf = useSuspenseQuery(confQuery)
 
   const onClick = async () => {
-    let copy = `[${pos_x},${pos_y}]`
-
-    if (conf.data.autoTravelCopy) {
-      copy = `/travel ${pos_x},${pos_y}`
-    }
-
-    await writeText(copy)
+    await copyPosition(pos_x, pos_y, conf.data)
   }
 
   return (
