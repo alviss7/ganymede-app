@@ -14,6 +14,12 @@ export const ConfZod = z.object({
       position: z.string(),
     }),
   ),
+  notes: z.array(
+    z.object({
+      name: z.string(),
+      text: z.string(),
+    }),
+  ),
 })
 
 export type Conf = z.infer<typeof ConfZod>
@@ -23,3 +29,5 @@ export type Lang = Conf['lang']
 export type FontSize = Conf['fontSize']
 
 export type AutoPilot = Conf['autoPilots'][number]
+
+export type Note = Conf['notes'][number]

@@ -1,9 +1,10 @@
 import { AlmanaxFrame } from '@/components/almanax-frame'
 import { DiscordIcon } from '@/components/icons/discord-icon.tsx'
 import { TwitterIcon } from '@/components/icons/twitter-icon.tsx'
-import { PageTitle, PageTitleExtra, PageTitleText } from '@/components/page-title.tsx'
+import { PageTitleExtra } from '@/components/page-title.tsx'
 import { createFileRoute } from '@tanstack/react-router'
 import { GlobeIcon } from 'lucide-react'
+import { Page } from './-page'
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -11,12 +12,12 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className="flex grow flex-col">
-      <PageTitle>
-        <PageTitleText>Présentation</PageTitleText>
-        <PageTitleExtra>v0.28</PageTitleExtra>
-      </PageTitle>
-      <article className="prose-sm grow px-2 text-sm">
+    <Page
+      title="Présentation"
+      className="gap-2"
+      actions={<PageTitleExtra className="grow text-right">v0.28</PageTitleExtra>}
+    >
+      <article className="prose-sm px-2 text-xs">
         <p>
           Bienvenue sur <span className="text-orange-300">GANYMÈDE</span> !
         </p>
@@ -55,6 +56,6 @@ function Index() {
         </a>
       </div>
       <div className="text-center text-xs">Ganymède - Non affilié à Ankama Games</div>
-    </div>
+    </Page>
   )
 }

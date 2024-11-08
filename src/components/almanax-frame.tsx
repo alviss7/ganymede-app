@@ -9,7 +9,7 @@ export function AlmanaxFrame() {
 
   return (
     <div className="mx-4 flex grow items-center justify-center rounded border p-2">
-      {almanax.isLoading && <LoaderIcon className="size-8 text-blue-400" />}
+      {almanax.isLoading && <LoaderIcon className="size-8 animate-spin text-blue-400 duration-1000" />}
       {almanax.isSuccess && (
         <div className="flex flex-col gap-0.5">
           <div className="text-center text-lg">Almanax LVL: 200</div>

@@ -14,8 +14,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as AutoPilotImport } from './routes/auto-pilot'
 import { Route as IndexImport } from './routes/index'
+import { Route as NotesIndexImport } from './routes/notes.index'
 import { Route as GuidesIndexImport } from './routes/guides/index'
 import { Route as DownloadsIndexImport } from './routes/downloads/index'
+import { Route as NotesCreateImport } from './routes/notes.create'
 import { Route as GuidesIdImport } from './routes/guides/$id'
 import { Route as DownloadsStatusImport } from './routes/downloads/$status'
 
@@ -36,6 +38,11 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const NotesIndexRoute = NotesIndexImport.update({
+  path: '/notes/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const GuidesIndexRoute = GuidesIndexImport.update({
   path: '/guides/',
   getParentRoute: () => rootRoute,
@@ -43,6 +50,11 @@ const GuidesIndexRoute = GuidesIndexImport.update({
 
 const DownloadsIndexRoute = DownloadsIndexImport.update({
   path: '/downloads/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const NotesCreateRoute = NotesCreateImport.update({
+  path: '/notes/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesIdImport
       parentRoute: typeof rootRoute
     }
+    '/notes/create': {
+      id: '/notes/create'
+      path: '/notes/create'
+      fullPath: '/notes/create'
+      preLoaderRoute: typeof NotesCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/downloads/': {
       id: '/downloads/'
       path: '/downloads'
@@ -109,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesIndexImport
       parentRoute: typeof rootRoute
     }
+    '/notes/': {
+      id: '/notes/'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -120,8 +146,10 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/downloads/$status': typeof DownloadsStatusRoute
   '/guides/$id': typeof GuidesIdRoute
+  '/notes/create': typeof NotesCreateRoute
   '/downloads': typeof DownloadsIndexRoute
   '/guides': typeof GuidesIndexRoute
+  '/notes': typeof NotesIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -130,8 +158,10 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/downloads/$status': typeof DownloadsStatusRoute
   '/guides/$id': typeof GuidesIdRoute
+  '/notes/create': typeof NotesCreateRoute
   '/downloads': typeof DownloadsIndexRoute
   '/guides': typeof GuidesIndexRoute
+  '/notes': typeof NotesIndexRoute
 }
 
 export interface FileRoutesById {
@@ -141,8 +171,10 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/downloads/$status': typeof DownloadsStatusRoute
   '/guides/$id': typeof GuidesIdRoute
+  '/notes/create': typeof NotesCreateRoute
   '/downloads/': typeof DownloadsIndexRoute
   '/guides/': typeof GuidesIndexRoute
+  '/notes/': typeof NotesIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -153,8 +185,10 @@ export interface FileRouteTypes {
     | '/settings'
     | '/downloads/$status'
     | '/guides/$id'
+    | '/notes/create'
     | '/downloads'
     | '/guides'
+    | '/notes'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,8 +196,10 @@ export interface FileRouteTypes {
     | '/settings'
     | '/downloads/$status'
     | '/guides/$id'
+    | '/notes/create'
     | '/downloads'
     | '/guides'
+    | '/notes'
   id:
     | '__root__'
     | '/'
@@ -171,8 +207,10 @@ export interface FileRouteTypes {
     | '/settings'
     | '/downloads/$status'
     | '/guides/$id'
+    | '/notes/create'
     | '/downloads/'
     | '/guides/'
+    | '/notes/'
   fileRoutesById: FileRoutesById
 }
 
@@ -182,8 +220,10 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   DownloadsStatusRoute: typeof DownloadsStatusRoute
   GuidesIdRoute: typeof GuidesIdRoute
+  NotesCreateRoute: typeof NotesCreateRoute
   DownloadsIndexRoute: typeof DownloadsIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
+  NotesIndexRoute: typeof NotesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -192,8 +232,10 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   DownloadsStatusRoute: DownloadsStatusRoute,
   GuidesIdRoute: GuidesIdRoute,
+  NotesCreateRoute: NotesCreateRoute,
   DownloadsIndexRoute: DownloadsIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,
+  NotesIndexRoute: NotesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -213,8 +255,10 @@ export const routeTree = rootRoute
         "/settings",
         "/downloads/$status",
         "/guides/$id",
+        "/notes/create",
         "/downloads/",
-        "/guides/"
+        "/guides/",
+        "/notes/"
       ]
     },
     "/": {
@@ -232,11 +276,17 @@ export const routeTree = rootRoute
     "/guides/$id": {
       "filePath": "guides/$id.tsx"
     },
+    "/notes/create": {
+      "filePath": "notes.create.tsx"
+    },
     "/downloads/": {
       "filePath": "downloads/index.tsx"
     },
     "/guides/": {
       "filePath": "guides/index.tsx"
+    },
+    "/notes/": {
+      "filePath": "notes.index.tsx"
     }
   }
 }

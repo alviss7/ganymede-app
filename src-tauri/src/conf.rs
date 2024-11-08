@@ -49,6 +49,12 @@ pub struct AutoPilot {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct Note {
+    pub name: String,
+    pub text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Conf {
     pub auto_travel_copy: bool,
@@ -60,6 +66,7 @@ pub struct Conf {
     pub profiles: Vec<Profile>,
     pub profile_in_use: String,
     pub auto_pilots: Vec<AutoPilot>,
+    pub notes: Vec<Note>,
 }
 
 impl Progress {
@@ -179,6 +186,7 @@ impl Default for Conf {
             profiles: vec![default_profile],
             profile_in_use: default_profile_id,
             auto_pilots: vec![],
+            notes: vec![],
         }
     }
 }

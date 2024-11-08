@@ -13,6 +13,7 @@ import {
   MaximizeIcon,
   MenuIcon,
   MinusIcon,
+  NotebookPenIcon,
   NotebookTextIcon,
   SettingsIcon,
   XIcon,
@@ -50,6 +51,12 @@ export function TitleBar() {
             <Link to="/auto-pilot" draggable={false}>
               <LocateIcon />
               Autopilotage
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="gap-2" asChild>
+            <Link to="/notes" draggable={false}>
+              <NotebookPenIcon />
+              Notes
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

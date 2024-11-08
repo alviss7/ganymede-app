@@ -40,7 +40,7 @@ function AutoPilotPage() {
           const name = (data.get('name') as string).trim()
           const position = (data.get('position') as string).trim().replace(/\[?\]?/g, '')
 
-          const pilot = conf.data.autoPilots.find((pilot) => pilot.name === name)
+          const pilot = conf.data.notes.find((pilot) => pilot.name === name)
 
           setConf.mutate({
             ...conf.data,
@@ -85,14 +85,14 @@ function AutoPilotPage() {
         </Button>
       </form>
 
-      <ul>
+      <ul className="flex flex-col gap-2 p-2">
         {conf.data.autoPilots.map((autoPilot) => {
           return (
-            <li key={autoPilot.name} className="flex w-full justify-between gap-2 p-2">
+            <li key={autoPilot.name} className="flex w-full justify-between gap-2">
               <div className="flex items-center gap-1">
                 <Button
                   type="button"
-                  size="sm"
+                  size="icon"
                   onClick={async () => {
                     const [x, y] = autoPilot.position.split(',').map((n) => Number.parseInt(n, 10))
                     await copyPosition(x, y, conf.data.autoTravelCopy)
@@ -105,7 +105,7 @@ function AutoPilotPage() {
               </div>
               <Button
                 type="button"
-                size="sm"
+                size="icon"
                 variant="destructive"
                 onClick={() => {
                   setConf.mutate({
