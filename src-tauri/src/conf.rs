@@ -43,6 +43,12 @@ pub enum FontSize {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct AutoPilot {
+    pub name: String,
+    pub position: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Conf {
     pub auto_travel_copy: bool,
@@ -53,6 +59,7 @@ pub struct Conf {
     pub font_size: FontSize,
     pub profiles: Vec<Profile>,
     pub profile_in_use: String,
+    pub auto_pilots: Vec<AutoPilot>,
 }
 
 impl Progress {
@@ -171,6 +178,7 @@ impl Default for Conf {
             font_size: FontSize::default(),
             profiles: vec![default_profile],
             profile_in_use: default_profile_id,
+            auto_pilots: vec![],
         }
     }
 }

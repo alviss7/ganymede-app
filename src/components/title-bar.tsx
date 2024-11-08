@@ -9,6 +9,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import {
   CloudDownloadIcon,
   HomeIcon,
+  LocateIcon,
   MaximizeIcon,
   MenuIcon,
   MinusIcon,
@@ -43,6 +44,12 @@ export function TitleBar() {
             <Link to="/downloads" draggable={false}>
               <CloudDownloadIcon />
               Téléchargements
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="gap-2" asChild>
+            <Link to="/auto-pilot" draggable={false}>
+              <LocateIcon />
+              Autopilotage
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

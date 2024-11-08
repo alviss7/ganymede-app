@@ -12,7 +12,7 @@ export function Position({
   const conf = useSuspenseQuery(confQuery)
 
   const onClick = async () => {
-    await copyPosition(pos_x, pos_y, conf.data)
+    await copyPosition(pos_x, pos_y, conf.data.autoTravelCopy)
   }
 
   return (

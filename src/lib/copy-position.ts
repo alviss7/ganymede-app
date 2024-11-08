@@ -1,10 +1,9 @@
-import { Conf } from '@/types/conf'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 
-export async function copyPosition(posX: number, posY: number, conf: Conf): Promise<void> {
+export async function copyPosition(posX: number, posY: number, autoTravelCopy: boolean): Promise<void> {
   let copy = `[${posX},${posY}]`
 
-  if (conf.autoTravelCopy) {
+  if (autoTravelCopy) {
     copy = `/travel ${posX},${posY}`
   }
 

@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
+import { Route as AutoPilotImport } from './routes/auto-pilot'
 import { Route as IndexImport } from './routes/index'
 import { Route as GuidesIndexImport } from './routes/guides/index'
 import { Route as DownloadsIndexImport } from './routes/downloads/index'
@@ -22,6 +23,11 @@ import { Route as DownloadsStatusImport } from './routes/downloads/$status'
 
 const SettingsRoute = SettingsImport.update({
   path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AutoPilotRoute = AutoPilotImport.update({
+  path: '/auto-pilot',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -59,6 +65,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auto-pilot': {
+      id: '/auto-pilot'
+      path: '/auto-pilot'
+      fullPath: '/auto-pilot'
+      preLoaderRoute: typeof AutoPilotImport
       parentRoute: typeof rootRoute
     }
     '/settings': {
@@ -103,6 +116,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auto-pilot': typeof AutoPilotRoute
   '/settings': typeof SettingsRoute
   '/downloads/$status': typeof DownloadsStatusRoute
   '/guides/$id': typeof GuidesIdRoute
@@ -112,6 +126,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auto-pilot': typeof AutoPilotRoute
   '/settings': typeof SettingsRoute
   '/downloads/$status': typeof DownloadsStatusRoute
   '/guides/$id': typeof GuidesIdRoute
@@ -122,6 +137,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auto-pilot': typeof AutoPilotRoute
   '/settings': typeof SettingsRoute
   '/downloads/$status': typeof DownloadsStatusRoute
   '/guides/$id': typeof GuidesIdRoute
@@ -133,6 +149,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auto-pilot'
     | '/settings'
     | '/downloads/$status'
     | '/guides/$id'
@@ -141,6 +158,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auto-pilot'
     | '/settings'
     | '/downloads/$status'
     | '/guides/$id'
@@ -149,6 +167,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auto-pilot'
     | '/settings'
     | '/downloads/$status'
     | '/guides/$id'
@@ -159,6 +178,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AutoPilotRoute: typeof AutoPilotRoute
   SettingsRoute: typeof SettingsRoute
   DownloadsStatusRoute: typeof DownloadsStatusRoute
   GuidesIdRoute: typeof GuidesIdRoute
@@ -168,6 +188,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AutoPilotRoute: AutoPilotRoute,
   SettingsRoute: SettingsRoute,
   DownloadsStatusRoute: DownloadsStatusRoute,
   GuidesIdRoute: GuidesIdRoute,
@@ -188,6 +209,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auto-pilot",
         "/settings",
         "/downloads/$status",
         "/guides/$id",
@@ -197,6 +219,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/auto-pilot": {
+      "filePath": "auto-pilot.tsx"
     },
     "/settings": {
       "filePath": "settings.tsx"
