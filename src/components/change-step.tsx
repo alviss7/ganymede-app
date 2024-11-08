@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button.tsx'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function ChangeStep({
   current,
@@ -16,6 +16,14 @@ export function ChangeStep({
   setCurrent: (current: number) => Promise<number>
 }) {
   const [innerValue, setInnerValue] = useState(current.toString())
+  const [hadLostFocus, setHadLostFocus] = useState(true)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: no need for innerValue
+  useEffect(() => {
+    if (innerValue !== current.toString()) {
+      setInnerValue(current.toString())
+    }
+  }, [current])
 
   return (
     <div className="center-absolute flex items-center gap-1">
@@ -68,6 +76,17 @@ export function ChangeStep({
               setInnerValue(value)
             }}
             className="w-8 bg-transparent text-center outline-none"
+            onBlur={() => {
+              setHadLostFocus(true)
+            }}
+            onClick={(evt) => {
+              const input = evt.currentTarget
+
+              if (hadLostFocus) {
+                input.select()
+                setHadLostFocus(false)
+              }
+            }}
           />
         </form>
         <span>{max}</span>

@@ -7,17 +7,20 @@ import { copyPosition } from '@/lib/copy-position'
 import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { cn } from '@/lib/utils'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+import goToStepIcon from '@/assets/guide-go-to-step.png'
 
 export function GuideFrame({
   className,
   html,
   guideId,
   stepIndex,
+  setStep,
 }: {
   className?: string
   html: string
   guideId: number
   stepIndex: number
+  setStep: (step: number) => Promise<number>
 }) {
   const conf = useSuspenseQuery(confQuery)
   const toggleGuideCheckbox = useToggleGuideCheckbox()
@@ -30,6 +33,7 @@ export function GuideFrame({
     replace: (domNode) => {
       const posReg = /(.*)\[(-?\d+),\s?(-?\d+)\](\w*)/
 
+      // positions
       if (domNode.type === 'text') {
         const groups = posReg.exec(domNode.data)
 
@@ -55,6 +59,7 @@ export function GuideFrame({
       }
 
       if (domNode.type === 'tag') {
+        // empty p tags
         if (domNode.name === 'p' && domNode.children.length === 0) {
           const countEmptyP = (node: DOMNode | null): number => {
             if (!node) return 0
@@ -76,9 +81,34 @@ export function GuideFrame({
           return <br />
         }
 
+        // guide step go to
+        if (domNode.attribs['data-type'] === 'guide-step') {
+          const stepNumber = Number.parseInt(domNode.attribs['stepnumber'] ?? 0)
+
+          if (!Number.isNaN(stepNumber)) {
+            return (
+              <button
+                {...domNode.attribs}
+                draggable={false}
+                className={cn(
+                  'select-none hover:saturate-200 focus:saturate-[25%] data-[type=guide-step]:no-underline',
+                  domNode.attribs.class,
+                )}
+                onClick={() => {
+                  setStep(stepNumber)
+                }}
+              >
+                <img src={goToStepIcon} className="size-4 select-none" data-icon draggable={false} />
+                {domToReact(domNode.children as DOMNode[], options)}
+              </button>
+            )
+          }
+        }
+
+        // custom tags monster and quest
         if (
           domNode.attribs['data-type'] === 'custom-tag' &&
-          (domNode.attribs.type === 'monster' || domNode.attribs.type === 'quest')
+          (domNode.attribs.type === 'monster' || domNode.attribs.type === 'quest' || domNode.attribs.type === 'item')
         ) {
           const name = domNode.attribs.name ?? ''
           const { class: nodeClassName, ...restAttribs } = domNode.attribs
@@ -92,7 +122,7 @@ export function GuideFrame({
                   // open in browser if ctrl/cmd is pressed
                   if (navigator.userAgent.includes('AppleWebKit') ? evt.metaKey : evt.ctrlKey) {
                     openGuideLink.mutate(
-                      `https://dofusdb.fr/fr/database/${domNode.attribs.type}/${domNode.attribs.dofusdbid}`,
+                      `https://dofusdb.fr/fr/database/${domNode.attribs.type === 'item' ? 'object' : domNode.attribs.type}/${domNode.attribs.dofusdbid}`,
                     )
                   } else {
                     await writeText(name)

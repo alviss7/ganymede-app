@@ -155,6 +155,9 @@ function GuideIdPage() {
           guideId={guide.id}
           html={step.web_text}
           stepIndex={index}
+          setStep={async (current) => {
+            return changeStep(() => current - 1)
+          }}
         />
       )}
     </Page>

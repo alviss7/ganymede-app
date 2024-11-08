@@ -116,6 +116,10 @@
   margin-right: 0.2em;
 }
 
+.guide-step img[data-icon=true] {
+  margin-right: 0;
+}
+
 .guide {
   /* List styles */
   ul,
