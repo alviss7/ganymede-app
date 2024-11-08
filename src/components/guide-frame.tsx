@@ -7,7 +7,7 @@ import { copyPosition } from '@/lib/copy-position'
 import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { cn } from '@/lib/utils'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
-import goToStepIcon from '@/assets/guide-go-to-step.png'
+import goToStepIcon from '@/assets/guide-go-to-step.webp'
 
 export function GuideFrame({
   className,
