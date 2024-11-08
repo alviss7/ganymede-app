@@ -26,6 +26,12 @@ export class ToggleGuideCheckboxError extends Error {
   }
 }
 
+export class OpenGuidesLinkError extends Error {
+  static from(error: unknown) {
+    return new OpenGuidesLinkError('Failed to open guide link', { cause: error })
+  }
+}
+
 export function getGuides() {
   return fromPromise(invoke('get_guides'), GetGuidesError.from).map((response) => {
     return GuidesZod.parseAsync(response)
@@ -45,4 +51,8 @@ export async function toggleGuideCheckbox(guideId: number, checkboxIndex: number
     invoke<number | undefined>('toggle_guide_checkbox', { guideId, checkboxIndex, stepIndex }),
     ToggleGuideCheckboxError.from,
   )
+}
+
+export async function openGuideLink(href: string) {
+  return fromPromise(invoke<number | undefined>('open_in_shell', { href }), OpenGuidesLinkError.from)
 }

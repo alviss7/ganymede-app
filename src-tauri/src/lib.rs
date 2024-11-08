@@ -4,7 +4,8 @@ use crate::guides::{
     download_guide_from_server, get_guides, get_guides_from_server, open_guides_folder, Guides,
 };
 use crate::id::new_id;
-use tauri::Manager;
+use tauri::{Manager, Wry};
+use tauri_plugin_shell::ShellExt;
 
 mod almanax;
 mod api;
@@ -16,6 +17,14 @@ mod item;
 mod json;
 mod quest;
 mod tauri_api;
+
+#[tauri::command]
+async fn open_in_shell(
+    app: tauri::AppHandle<Wry>,
+    href: String,
+) -> Result<(), tauri_plugin_shell::Error> {
+    app.shell().open(href, None)
+}
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -51,7 +60,8 @@ pub fn run() {
             download_guide_from_server,
             get_almanax,
             open_guides_folder,
-            toggle_guide_checkbox
+            toggle_guide_checkbox,
+            open_in_shell
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
