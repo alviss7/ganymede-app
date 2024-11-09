@@ -33,7 +33,7 @@ export function ImageWithOrigin({ src, ...props }: Omit<ComponentProps<'img'>, '
 
   if (!enabled) return <img src={src} {...props} />
 
-  if (image.isLoading) return <GenericLoader className="mr-[0.2em] size-5" />
+  if (image.isLoading) return <GenericLoader className="-translate-y-0.5 mr-[0.2em] inline size-5" />
 
   if (image.isError) {
     console.error(image.error)
