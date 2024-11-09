@@ -185,10 +185,24 @@ pub fn get_guides(window: Window<Wry>) -> Result<Guides, Error> {
     Guides::get_with_resolver(window.path())
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-struct TestGuide {
-    id: u32,
-    updated_at: Option<String>,
+#[tauri::command]
+pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Error> {
+    println!("get_guide_from_server: {}", guide_id);
+
+    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API, guide_id)).await?;
+    let text = res.text().await?;
+    let guide = crate::json::from_str::<GuideWithSteps>(text.as_str()).map_err(Error::from);
+
+    match guide {
+        Err(err) => {
+            if let Error::JsonPath(json_error) = &err {
+                println!("JsonError: {:?}", json_error.path().to_string());
+            }
+
+            Err(err)
+        }
+        Ok(guide) => Ok(guide),
+    }
 }
 
 #[tauri::command]
@@ -222,10 +236,7 @@ pub async fn download_guide_from_server(
 ) -> Result<Guides, Error> {
     println!("download_guide_from_server");
 
-    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API, guide_id)).await?;
-    let text = res.text().await?;
-
-    let guide = crate::json::from_str::<GuideWithSteps>(text.as_str());
+    let guide = get_guide_from_server(guide_id).await;
 
     match guide {
         Ok(guide) => {

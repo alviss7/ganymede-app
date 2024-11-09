@@ -22,6 +22,9 @@
       "allow": [
         {
           "url": "https://ganymede-dofus.com"
+        },
+        {
+          "url": "https://dofusdb.fr"
         }
       ]
     },

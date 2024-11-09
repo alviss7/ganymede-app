@@ -1,17 +1,16 @@
 import { ChangeStep } from '@/components/change-step.tsx'
 import { GenericLoader } from '@/components/generic-loader.tsx'
+import { GuideFrame } from '@/components/guide-frame'
 import { Position } from '@/components/position.tsx'
+import { useGuide } from '@/hooks/use_guide'
 import { cn } from '@/lib/utils'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Page } from '@/routes/-page.tsx'
-import { GuideProgress } from '@/types/profile.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useLayoutEffect } from 'react'
 import { z } from 'zod'
-import { GuideFrame } from '@/components/guide-frame'
-import { useGuide } from '@/hooks/use_guide'
 
 const ParamsZod = z.object({
   id: z.coerce.number(),
@@ -50,13 +49,14 @@ function GuideIdPage() {
   const setConf = useSetConf()
   const step = guide.steps[index]
   const navigate = Route.useNavigate()
+  const stepMax = guide.steps.length - 1
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: want to scroll to top when step changes
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [step])
 
-  const changeStep = async (nextStep: (progress: Pick<GuideProgress, 'currentStep'>) => number): Promise<number> => {
+  const changeStep = async (nextStep: number) => {
     await setConf.mutateAsync({
       ...conf.data,
       profiles: conf.data.profiles.map((p) => {
@@ -68,11 +68,9 @@ function GuideIdPage() {
             progresses: existingProgress
               ? p.progresses.map((progress) => {
                   if (progress.id === guide.id) {
-                    const step = nextStep(progress)
-
                     return {
                       ...progress,
-                      currentStep: step < 0 ? 0 : step >= guide.steps.length ? guide.steps.length - 1 : step,
+                      currentStep: nextStep < 0 ? 0 : nextStep >= guide.steps.length ? stepMax : nextStep,
                     }
                   }
 
@@ -93,35 +91,31 @@ function GuideIdPage() {
       }),
     })
 
-    const progress = conf.data.profiles
-      .find((p) => p.id === conf.data.profileInUse)
-      ?.progresses.find((p) => p.id === guide.id)
-
-    const newStep = nextStep(progress ?? { currentStep: 0 })
-
     await navigate({
       search: {
-        step: newStep,
+        step: nextStep,
       },
     })
-
-    return newStep
   }
 
-  const onClickPrevious = async () => {
+  const onClickPrevious = async (): Promise<boolean> => {
     if (index === 0) {
-      return
+      return false
     }
 
-    await changeStep((progress) => progress.currentStep - 1)
+    await changeStep(index - 1)
+
+    return true
   }
 
-  const onClickNext = async () => {
-    if (index === guide.steps.length - 1) {
-      return
+  const onClickNext = async (): Promise<boolean> => {
+    if (index === stepMax) {
+      return false
     }
 
-    await changeStep((progress) => progress.currentStep + 1)
+    await changeStep(index + 1)
+
+    return true
   }
 
   return (
@@ -132,12 +126,12 @@ function GuideIdPage() {
             <>
               <Position pos_x={step.pos_x} pos_y={step.pos_y} />
               <ChangeStep
-                current={index + 1}
-                max={guide.steps.length}
+                currentIndex={index}
+                maxIndex={stepMax}
                 onPrevious={onClickPrevious}
                 onNext={onClickNext}
-                setCurrent={async (current) => {
-                  return changeStep(() => current - 1)
+                setCurrentIndex={async (currentIndex) => {
+                  return changeStep(currentIndex)
                 }}
               />
             </>
@@ -155,9 +149,6 @@ function GuideIdPage() {
           guideId={guide.id}
           html={step.web_text}
           stepIndex={index}
-          setStep={async (current) => {
-            return changeStep(() => current - 1)
-          }}
         />
       )}
     </Page>

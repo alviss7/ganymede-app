@@ -1,12 +1,12 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { confQuery } from '@/queries/conf.query'
-import { Page } from './-page'
 import { GenericLoader } from '@/components/generic-loader'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
-import { CopyIcon, EditIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { useSetConf } from '@/mutations/set-conf.mutation'
+import { confQuery } from '@/queries/conf.query'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+import { CopyIcon, PlusIcon, TrashIcon } from 'lucide-react'
+import { Page } from './-page'
 
 export const Route = createFileRoute('/notes/')({
   component: NotesPage,

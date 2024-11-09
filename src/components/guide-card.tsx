@@ -94,11 +94,13 @@ export function GuideDownloadButton({
         }}
         disabled={downloadGuideFromServer.isPending}
         className="relative"
+        variant={downloadGuideFromServer.isError ? 'destructive' : undefined}
       >
         {!downloadGuideFromServer.isPending &&
           (downloadGuideFromServer.isSuccess || guideInDownloads !== undefined) && <CircleCheckIcon />}
         {downloadGuideFromServer.isPending && <LoaderIcon className="animate-[spin_2s_linear_infinite]" />}
         {downloadGuideFromServer.isIdle && guideInDownloads === undefined && <ImportIcon />}
+        {downloadGuideFromServer.isError && <CircleAlertIcon className="size-5" />}
         {isGuideNew(guideInServer, guideInDownloads) && (
           <span
             className="-right-2 -top-3.5 absolute size-4 font-black text-2xl text-yellow-400"
@@ -108,7 +110,6 @@ export function GuideDownloadButton({
           </span>
         )}
       </Button>
-      {downloadGuideFromServer.isError && <CircleAlertIcon className="size-5 text-red-500" />}
     </>
   )
 }

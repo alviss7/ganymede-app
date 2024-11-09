@@ -12,20 +12,20 @@ name = "ganymede_app_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.0.0-rc", features = [] }
+tauri-build = { version = "2.0.2", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0-rc", features = [] }
-tauri-plugin-shell = "2.0.1"
+tauri = { version = "2.0.6", features = [] }
+tauri-plugin-shell = "2.0.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 uuid = { version = "1.10.0", features = ["v4", "fast-rng"] }
-tauri-plugin-http = "2.0.1"
+tauri-plugin-http = "2.0.3"
 serde_path_to_error = "0.1"
-tauri-plugin-clipboard-manager = "2.1.0-beta.7"
+tauri-plugin-clipboard-manager = "2.0.2"
 glob = "0.3.1"
 chrono = "0.4.38"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
-tauri-plugin-window-state = "2.0.0-rc"
+tauri-plugin-window-state = "2.0.2"
 

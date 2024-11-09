@@ -73,6 +73,22 @@
   }
 }
 
+body:has(.app-bg) {
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: url('@/assets/app-bg.webp') 50% 0 no-repeat;
+    background-size: cover;
+    opacity: 0.2;
+  }
+}
+
 .tag-quest,
 .tag-dungeon,
 .tag-monster,
@@ -81,7 +97,6 @@
   display: inline-flex;
   align-items: baseline;
   border-radius: 20px;
-  padding: 2px 2px;
 }
 
 .tag-quest {
@@ -171,12 +186,12 @@
   }
 
   .img-medium {
-    width: 30%;
+    width: 50%;
     margin: auto;
   }
 
   .img-large {
-    width: 45%;
+    width: 100%;
     margin: auto;
   }
 }

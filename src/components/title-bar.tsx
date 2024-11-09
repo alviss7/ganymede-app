@@ -10,7 +10,6 @@ import {
   CloudDownloadIcon,
   HomeIcon,
   LocateIcon,
-  MaximizeIcon,
   MenuIcon,
   MinusIcon,
   NotebookPenIcon,
@@ -79,15 +78,6 @@ export function TitleBar() {
           id="titlebar-minimize"
         >
           <MinusIcon className="size-4" />
-        </button>
-        <button
-          onClick={async () => {
-            await appWindow.toggleMaximize()
-          }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
-          id="titlebar-maximize"
-        >
-          <MaximizeIcon className="size-4" />
         </button>
         <button
           onClick={async () => {

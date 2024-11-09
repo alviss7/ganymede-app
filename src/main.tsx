@@ -7,6 +7,28 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './main.css'
 import { routeTree } from './routeTree.gen.ts'
 
+if (window.location.hostname === 'localhost' && window.location.port === '') {
+  document.addEventListener(
+    'contextmenu',
+    (evt) => {
+      evt.preventDefault()
+
+      return false
+    },
+    { capture: true },
+  )
+
+  document.addEventListener(
+    'selectstart',
+    (evt) => {
+      evt.preventDefault()
+
+      return false
+    },
+    { capture: true },
+  )
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

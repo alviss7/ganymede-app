@@ -16,6 +16,7 @@ import { z } from 'zod'
 
 const SearchZod = z.object({
   page: z.coerce.number(),
+  search: z.string().optional(),
 })
 
 export const Route = createFileRoute('/downloads/$status')({
@@ -76,7 +77,8 @@ function titleByStatus(status: string) {
 }
 
 function DownloadGuidePage() {
-  const [searchTerm, setSearchTerm] = useState('')
+  const baseSearch = Route.useSearch({ select: (s) => s.search })
+  const [searchTerm, setSearchTerm] = useState(baseSearch ?? '')
   const page = Route.useSearch({ select: (s) => s.page })
   const status = Route.useParams({ select: (p) => p.status })
   const debouncedTerm = useDebounce(searchTerm, 300)

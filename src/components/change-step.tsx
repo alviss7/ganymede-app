@@ -3,18 +3,19 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export function ChangeStep({
-  current,
-  max,
+  currentIndex,
+  maxIndex,
   onPrevious,
   onNext,
-  setCurrent,
+  setCurrentIndex,
 }: {
-  current: number
-  max: number
-  onPrevious: () => void
-  onNext: () => void
-  setCurrent: (current: number) => Promise<number>
+  currentIndex: number
+  maxIndex: number
+  onPrevious: () => Promise<boolean>
+  onNext: () => Promise<boolean>
+  setCurrentIndex: (index: number) => Promise<void>
 }) {
+  const current = currentIndex + 1
   const [innerValue, setInnerValue] = useState(current.toString())
   const [hadLostFocus, setHadLostFocus] = useState(true)
 
@@ -31,10 +32,10 @@ export function ChangeStep({
         size="icon"
         variant="secondary"
         className="size-8"
-        onClick={() => {
-          onPrevious()
+        onClick={async () => {
+          const canMove = await onPrevious()
 
-          if (current === 1) {
+          if (!canMove) {
             return
           }
 
@@ -57,13 +58,16 @@ export function ChangeStep({
 
             const number = parseInt(value)
 
-            if (isNaN(number) || number < 1) {
+            if (Number.isNaN(number) || number < 1) {
               return
             }
 
-            const newValue = await setCurrent(number > max ? max : number)
+            const numberIndex = number - 1
+            const nextStepIndex = numberIndex > maxIndex ? maxIndex : numberIndex
 
-            setInnerValue((newValue + 1).toString())
+            await setCurrentIndex(nextStepIndex)
+
+            setInnerValue((nextStepIndex + 1).toString())
           }}
         >
           <input
@@ -89,16 +93,16 @@ export function ChangeStep({
             }}
           />
         </form>
-        <span>{max}</span>
+        <span>{maxIndex + 1}</span>
       </div>
       <Button
         size="icon"
         variant="secondary"
         className="size-8"
-        onClick={() => {
-          onNext()
+        onClick={async () => {
+          const canMove = await onNext()
 
-          if (current === max) {
+          if (!canMove) {
             return
           }
 
