@@ -1,5 +1,7 @@
+import { BottomBar } from '@/components/bottom-bar'
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
+import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Card } from '@/components/ui/card.tsx'
 import { ClearInput } from '@/components/ui/clear-input'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination.tsx'
@@ -52,9 +54,11 @@ function Pending() {
 
   return (
     <Page key={`download-${status}`} to="/downloads" title={titleByStatus(status)}>
-      <div className="flex grow items-center justify-center">
-        <GenericLoader />
-      </div>
+      <PageScrollableContent className="flex items-center justify-center">
+        <div className="flex grow items-center justify-center">
+          <GenericLoader />
+        </div>
+      </PageScrollableContent>
     </Page>
   )
 }
@@ -101,46 +105,64 @@ function DownloadGuidePage() {
           items: filteredGuides,
         })
 
+  const hasPagination = term === '' && guides.data.length !== 0 && guides.data.length > itemsPerPage
+
   return (
     <Page key={`download-${status}`} to="/downloads" title={title}>
-      <div className="flex grow flex-col pb-8">
-        {guides.data.length === 0 ? (
-          <p className="p-4">Aucun guide trouvé</p>
-        ) : (
-          <div className="flex flex-col gap-2 p-4">
-            <ClearInput
-              value={searchTerm}
-              onChange={(evt) => setSearchTerm(evt.currentTarget.value)}
-              onValueChange={setSearchTerm}
-              autoComplete="off"
-              autoCorrect="off"
-              placeholder="Rechercher un guide"
-            />
+      <PageScrollableContent hasBottomBar={hasPagination} className="p-2">
+        <div className="flex grow flex-col">
+          {guides.data.length === 0 ? (
+            <p className="text-center">Aucun guide trouvé</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <ClearInput
+                value={searchTerm}
+                onChange={(evt) => setSearchTerm(evt.currentTarget.value)}
+                onValueChange={setSearchTerm}
+                autoComplete="off"
+                autoCorrect="off"
+                placeholder="Rechercher un guide"
+              />
 
-            {paginatedOrFilteredGuides.map((guide) => (
-              <Card key={guide.id}>
-                <GuideCardHeader guide={guide} />
-                <GuideCardFooter>
-                  <GuideDownloadButton guide={guide} />
-                </GuideCardFooter>
-              </Card>
-            ))}
-          </div>
+              {paginatedOrFilteredGuides.length === 0 && (
+                <p className="text-center">
+                  Aucun guide trouvé avec <strong>{term}</strong>
+                </p>
+              )}
+
+              {paginatedOrFilteredGuides.map((guide) => (
+                <Card key={guide.id}>
+                  <GuideCardHeader guide={guide} />
+                  <GuideCardFooter>
+                    <GuideDownloadButton guide={guide} />
+                  </GuideCardFooter>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+        {hasPagination && (
+          <BottomBar asChild>
+            <Pagination>
+              <PaginationContent>
+                {Array.from({ length: nextPages }).map((_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      size="sm"
+                      from={Route.fullPath}
+                      to="."
+                      params={{ status }}
+                      search={{ page: index + 1 }}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+              </PaginationContent>
+            </Pagination>
+          </BottomBar>
         )}
-      </div>
-      {term === '' && guides.data.length !== 0 && guides.data.length > itemsPerPage && (
-        <Pagination className="fixed right-0 bottom-0 left-0 h-10 bg-primary px-2 text-primary-foreground">
-          <PaginationContent>
-            {Array.from({ length: nextPages }).map((_, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink size="sm" from={Route.fullPath} to="." params={{ status }} search={{ page: index + 1 }}>
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-          </PaginationContent>
-        </Pagination>
-      )}
+      </PageScrollableContent>
     </Page>
   )
 }

@@ -1,0 +1,23 @@
+@font-face {
+  font-family: Lexend;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./LexendDeca.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: Lexend;
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(./Lexend-Light.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: Liberation;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./LiberationSans.ttf) format("truetype");
+}

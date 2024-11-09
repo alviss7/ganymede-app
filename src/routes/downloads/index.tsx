@@ -1,9 +1,10 @@
+import { PageScrollableContent } from '@/components/page-scrollable-content'
+import { Card } from '@/components/ui/card'
 import { Page } from '@/routes/-page.tsx'
 import { Slot } from '@radix-ui/react-slot'
 import { Link, LinkProps, type RegisteredRouter, createFileRoute } from '@tanstack/react-router'
 import { BookOpenCheckIcon, BookOpenTextIcon, NotebookPenIcon, TrophyIcon } from 'lucide-react'
 import { type JSX, type PropsWithChildren } from 'react'
-import { Card } from '@/components/ui/card'
 
 export const Route = createFileRoute('/downloads/')({
   component: DownloadIndex,
@@ -18,13 +19,13 @@ function GuideLink({
   icon: JSX.Element
 }>) {
   return (
-    <Card asChild className="flex flex-col rounded-md">
+    <Card asChild className="flex flex-col p-3">
       <li>
         <Link
           to="/downloads/$status"
           params={params}
           search={{ page: 1 }}
-          className="flex w-full items-center gap-x-2 px-2 py-4"
+          className="flex w-full items-center gap-x-2"
           draggable={false}
         >
           <span>
@@ -40,20 +41,22 @@ function GuideLink({
 function DownloadIndex() {
   return (
     <Page title="Catégories">
-      <ul className="flex flex-col gap-2 p-4">
-        <GuideLink params={{ status: 'gp' }} icon={<BookOpenTextIcon />}>
-          Guides principaux
-        </GuideLink>
-        <GuideLink params={{ status: 'certified' }} icon={<TrophyIcon />}>
-          Guides certifiés
-        </GuideLink>
-        <GuideLink params={{ status: 'public' }} icon={<BookOpenCheckIcon />}>
-          Guides publics
-        </GuideLink>
-        <GuideLink params={{ status: 'draft' }} icon={<NotebookPenIcon />}>
-          Guides draft
-        </GuideLink>
-      </ul>
+      <PageScrollableContent className="p-2">
+        <ul className="flex flex-col gap-2">
+          <GuideLink params={{ status: 'gp' }} icon={<BookOpenTextIcon />}>
+            Guides principaux
+          </GuideLink>
+          <GuideLink params={{ status: 'certified' }} icon={<TrophyIcon />}>
+            Guides certifiés
+          </GuideLink>
+          <GuideLink params={{ status: 'public' }} icon={<BookOpenCheckIcon />}>
+            Guides publics
+          </GuideLink>
+          <GuideLink params={{ status: 'draft' }} icon={<NotebookPenIcon />}>
+            Guides draft
+          </GuideLink>
+        </ul>
+      </PageScrollableContent>
     </Page>
   )
 }

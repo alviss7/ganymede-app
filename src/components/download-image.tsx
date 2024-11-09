@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { invoke } from '@tauri-apps/api/core'
 import { fromPromise } from 'neverthrow'
@@ -6,13 +7,17 @@ import { GenericLoader } from './generic-loader'
 
 class FetchImageError extends Error {}
 
-export function ImageWithOrigin({ src, ...props }: Omit<ComponentProps<'img'>, 'srcset'>) {
+export function DownloadImage({
+  src,
+  loaderClassName,
+  ...props
+}: Omit<ComponentProps<'img'>, 'srcset'> & {
+  loaderClassName?: string
+}) {
   const enabled = !!src && src.startsWith('http') && (src.includes('dofusdb.fr') || src.includes('ganymede-dofus.com'))
   const image = useQuery({
     queryKey: ['image', src],
     queryFn: async () => {
-      console.log(src)
-
       // should not happen with enabled: !!src
       if (!src) throw new Error('No image source provided')
 
@@ -33,7 +38,10 @@ export function ImageWithOrigin({ src, ...props }: Omit<ComponentProps<'img'>, '
 
   if (!enabled) return <img src={src} {...props} />
 
-  if (image.isLoading) return <GenericLoader className="-translate-y-0.5 mr-[0.2em] inline size-5" />
+  if (image.isLoading)
+    return (
+      <GenericLoader className={cn('-translate-y-0.5 mr-[0.2em] inline size-5', props.className, loaderClassName)} />
+    )
 
   if (image.isError) {
     console.error(image.error)

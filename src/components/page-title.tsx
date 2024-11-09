@@ -3,7 +3,7 @@ import { ComponentProps, PropsWithChildren } from 'react'
 
 export function PageTitle({ children }: PropsWithChildren) {
   return (
-    <h2 className="sticky top-[30px] z-10 flex w-full items-center justify-between bg-primary p-1 font-semibold text-primary-foreground">
+    <h2 className="sticky top-[30px] z-10 flex h-[36px] w-full items-center justify-between bg-primary px-2 py-1 font-semibold text-primary-foreground">
       {children}
     </h2>
   )

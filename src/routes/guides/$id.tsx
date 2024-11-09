@@ -1,6 +1,7 @@
 import { ChangeStep } from '@/components/change-step.tsx'
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideFrame } from '@/components/guide-frame'
+import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Position } from '@/components/position.tsx'
 import { useGuide } from '@/hooks/use_guide'
 import { cn } from '@/lib/utils'
@@ -33,10 +34,14 @@ export const Route = createFileRoute('/guides/$id')({
 function Pending() {
   return (
     <Page title="" key="guide" to="/guides">
-      <header className="flex h-10 items-center justify-between gap-2 bg-gray-500 p-2" />
-      <div className="flex grow items-center justify-center">
-        <GenericLoader />
-      </div>
+      <PageScrollableContent hasPageContentTitleBar className="flex items-center justify-center">
+        <header className="fixed inset-x-0 top-[66px] z-10 bg-primary">
+          <div className="relative flex h-10 items-center justify-between gap-2 p-1"></div>
+        </header>
+        <div className="flex grow items-center justify-center">
+          <GenericLoader />
+        </div>
+      </PageScrollableContent>
     </Page>
   )
 }
@@ -120,37 +125,39 @@ function GuideIdPage() {
 
   return (
     <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
-      <header className="sticky top-[62px] z-10 bg-primary">
-        <div className="relative flex h-10 items-center justify-between gap-2 p-1">
-          {step && (
-            <>
-              <Position pos_x={step.pos_x} pos_y={step.pos_y} />
-              <ChangeStep
-                currentIndex={index}
-                maxIndex={stepMax}
-                onPrevious={onClickPrevious}
-                onNext={onClickNext}
-                setCurrentIndex={async (currentIndex) => {
-                  return changeStep(currentIndex)
-                }}
-              />
-            </>
-          )}
-        </div>
-      </header>
-      {step && (
-        <GuideFrame
-          className={cn(
-            'guide p-2 leading-5',
-            conf.data.fontSize === 'Small' && 'text-sm leading-4',
-            conf.data.fontSize === 'Large' && 'text-md leading-5',
-            conf.data.fontSize === 'Extra' && 'text-lg leading-6',
-          )}
-          guideId={guide.id}
-          html={step.web_text}
-          stepIndex={index}
-        />
-      )}
+      <PageScrollableContent hasPageContentTitleBar>
+        <header className="fixed inset-x-0 top-[66px] z-10 bg-primary">
+          <div className="relative flex h-10 items-center justify-between gap-2 p-1">
+            {step && (
+              <>
+                <Position pos_x={step.pos_x} pos_y={step.pos_y} />
+                <ChangeStep
+                  currentIndex={index}
+                  maxIndex={stepMax}
+                  onPrevious={onClickPrevious}
+                  onNext={onClickNext}
+                  setCurrentIndex={async (currentIndex) => {
+                    return changeStep(currentIndex)
+                  }}
+                />
+              </>
+            )}
+          </div>
+        </header>
+        {step && (
+          <GuideFrame
+            className={cn(
+              'guide px-2 pt-2 leading-5',
+              conf.data.fontSize === 'Small' && 'text-sm leading-4',
+              conf.data.fontSize === 'Large' && 'text-md leading-5',
+              conf.data.fontSize === 'Extra' && 'text-lg leading-6',
+            )}
+            guideId={guide.id}
+            html={step.web_text}
+            stepIndex={index}
+          />
+        )}
+      </PageScrollableContent>
     </Page>
   )
 }

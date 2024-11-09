@@ -8,7 +8,7 @@ import { guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-
+import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { ClearInput } from '@/components/ui/clear-input'
 import { rankList } from '@/lib/rank'
 import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation'
@@ -22,10 +22,25 @@ export const Route = createFileRoute('/guides/')({
 
 function Pending() {
   return (
-    <Page title="Guides" key="guide-page">
-      <div className="flex grow items-center justify-center">
-        <GenericLoader />
-      </div>
+    <Page
+      title="Guides"
+      key="guide-page"
+      actions={
+        <div className="flex w-full items-center justify-end gap-1 text-sm">
+          <Button size="icon-sm" variant="secondary" disabled>
+            <FolderSyncIcon className="size-4" />
+          </Button>
+          <Button size="icon-sm" variant="secondary" disabled>
+            <FolderOpenIcon className="size-4" />
+          </Button>
+        </div>
+      }
+    >
+      <PageScrollableContent className="flex items-center justify-center">
+        <div className="flex items-center justify-center">
+          <GenericLoader />
+        </div>
+      </PageScrollableContent>
     </Page>
   )
 }
@@ -60,7 +75,9 @@ function GuidesPage() {
   }
 
   const onOpenExplorer = () => {
-    openGuidesFolder.mutate()
+    if (!openGuidesFolder.isPending) {
+      openGuidesFolder.mutate()
+    }
   }
 
   return (
@@ -70,56 +87,61 @@ function GuidesPage() {
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
           {guides.isFetched && guides.isFetching && <GenericLoader className="size-4" />}
-          <Button size="icon" variant="secondary" onClick={onRefresh}>
+          <Button size="icon-sm" variant="secondary" onClick={onRefresh}>
             <FolderSyncIcon className="size-4" />
           </Button>
-          <Button size="icon" variant="secondary" onClick={onOpenExplorer}>
+          <Button size="icon-sm" variant="secondary" onClick={onOpenExplorer}>
             <FolderOpenIcon className="size-4" />
           </Button>
         </div>
       }
     >
-      <div className="flex flex-col gap-2 p-4">
-        <ClearInput
-          value={searchTerm}
-          onChange={(evt) => setSearchTerm(evt.currentTarget.value)}
-          onValueChange={setSearchTerm}
-          autoComplete="off"
-          autoCorrect="off"
-          placeholder="Rechercher un guide"
-        />
+      <PageScrollableContent className="p-2">
+        <div className="flex flex-col gap-2">
+          <ClearInput
+            value={searchTerm}
+            onChange={(evt) => setSearchTerm(evt.currentTarget.value)}
+            onValueChange={setSearchTerm}
+            autoComplete="off"
+            autoCorrect="off"
+            placeholder="Rechercher un guide"
+          />
 
-        {filteredGuides.map((guide) => {
-          return (
-            <Card key={guide.id}>
-              <GuideCardHeader guide={guide} />
-              <CardContent className="px-3">
-                <p className="text-sm italic">
-                  <span>
-                    Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
-                  </span>
-                  <span>({(((guide.currentStep ?? 0) / (guide.steps.length - 1)) * 100).toFixed(1)}%)</span>
-                </p>
-              </CardContent>
-              <GuideCardFooter className="items-end justify-between">
-                <GuideDownloadButton guide={guide} />
-                {guide.steps.length > 0 && (
-                  <Button asChild>
-                    <Link
-                      to="/guides/$id"
-                      params={{ id: guide.id }}
-                      search={{ step: guide.currentStep ?? 0 }}
-                      draggable={false}
-                    >
-                      Ouvrir
-                    </Link>
-                  </Button>
-                )}
-              </GuideCardFooter>
-            </Card>
-          )
-        })}
-      </div>
+          {filteredGuides.map((guide) => {
+            return (
+              <Card key={guide.id}>
+                <GuideCardHeader guide={guide} />
+                <CardContent className="px-3">
+                  <p className="text-sm italic">
+                    <span>
+                      Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
+                    </span>
+                    <span>
+                      ({(((guide.currentStep ?? 0) / (guide.steps.length - 1)) * 100).toFixed(1)}
+                      %)
+                    </span>
+                  </p>
+                </CardContent>
+                <GuideCardFooter className="items-end justify-between">
+                  <GuideDownloadButton guide={guide} />
+                  {guide.steps.length > 0 && (
+                    <Button asChild>
+                      <Link
+                        to="/guides/$id"
+                        params={{ id: guide.id }}
+                        search={{ step: guide.currentStep ?? 0 }}
+                        draggable={false}
+                      >
+                        Ouvrir
+                      </Link>
+                    </Button>
+                  )}
+                </GuideCardFooter>
+              </Card>
+            )
+          })}
+        </div>
+      </PageScrollableContent>
     </Page>
   )
 }

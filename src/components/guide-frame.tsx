@@ -12,7 +12,7 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import parse, { DOMNode, domToReact, type HTMLReactParserOptions } from 'html-react-parser'
-import { ImageWithOrigin } from './image-with-origin'
+import { DownloadImage } from './download-image'
 
 export function GuideFrame({
   className,
@@ -194,8 +194,9 @@ export function GuideFrame({
                 type="button"
                 className="group contents"
                 onClick={async (evt) => {
+                  console.log(navigator.userAgent)
                   // open in browser if ctrl/cmd is pressed
-                  if (navigator.userAgent.includes('AppleWebKit') ? evt.metaKey : evt.ctrlKey) {
+                  if (navigator.userAgent.toLowerCase().includes('mac os x') ? evt.metaKey : evt.ctrlKey) {
                     openGuideLink.mutate(
                       `https://dofusdb.fr/fr/database/${domNode.attribs.type === 'item' ? 'object' : domNode.attribs.type}/${domNode.attribs.dofusdbid}`,
                     )
@@ -226,7 +227,7 @@ export function GuideFrame({
           const clickable = !isIcon && imgSrc !== '' && imgSrc.startsWith('http')
 
           return (
-            <ImageWithOrigin
+            <DownloadImage
               {...domNode.attribs}
               onClick={() => {
                 if (clickable) {
