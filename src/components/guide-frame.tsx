@@ -190,10 +190,9 @@ export function GuideFrame({
 
           return (
             <div {...restAttribs} className={cn('!contents', nodeClassName)}>
-              {domToReact([domNode.children[0]] as DOMNode[], options)}
               <button
                 type="button"
-                className="contents"
+                className="group contents"
                 onClick={async (evt) => {
                   // open in browser if ctrl/cmd is pressed
                   if (navigator.userAgent.includes('AppleWebKit') ? evt.metaKey : evt.ctrlKey) {
@@ -205,7 +204,12 @@ export function GuideFrame({
                   }
                 }}
               >
-                <span className="hover:saturate-150 focus:saturate-[25%]">{name}</span>
+                <span className="peer group-focus-within:saturate-[25%] group-hover:saturate-150">
+                  {domToReact([domNode.children[0]] as DOMNode[], options)}
+                </span>
+                <span className="hover:saturate-150 focus:saturate-[25%] group-focus-within:saturate-[25%] group-hover:saturate-150">
+                  {name}
+                </span>
               </button>
             </div>
           )

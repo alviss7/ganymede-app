@@ -120,7 +120,7 @@ function GuideIdPage() {
 
   return (
     <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
-      <header className="sticky top-[62px] bg-primary">
+      <header className="sticky top-[62px] z-10 bg-primary">
         <div className="relative flex h-10 items-center justify-between gap-2 p-1">
           {step && (
             <>

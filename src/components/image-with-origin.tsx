@@ -7,7 +7,7 @@ import { GenericLoader } from './generic-loader'
 class FetchImageError extends Error {}
 
 export function ImageWithOrigin({ src, ...props }: Omit<ComponentProps<'img'>, 'srcset'>) {
-  const enabled = !!src && src.startsWith('http') && src.includes('dofusdb.fr') && src.includes('ganymede-dofus.com')
+  const enabled = !!src && src.startsWith('http') && (src.includes('dofusdb.fr') || src.includes('ganymede-dofus.com'))
   const image = useQuery({
     queryKey: ['image', src],
     queryFn: async () => {
