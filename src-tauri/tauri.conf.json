@@ -18,7 +18,8 @@
         "minHeight": 450,
         "decorations": false,
         "alwaysOnTop": true,
-        "acceptFirstMouse": true
+        "acceptFirstMouse": true,
+        "transparent": true
       }
     ],
     "security": {

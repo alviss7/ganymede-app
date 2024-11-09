@@ -19,13 +19,13 @@ function GuideLink({
   icon: JSX.Element
 }>) {
   return (
-    <Card asChild className="flex flex-col p-3">
+    <Card asChild className="flex flex-col">
       <li>
         <Link
           to="/downloads/$status"
           params={params}
           search={{ page: 1 }}
-          className="flex w-full items-center gap-x-2"
+          className="flex w-full items-center gap-x-2 p-3"
           draggable={false}
         >
           <span>
