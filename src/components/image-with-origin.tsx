@@ -35,5 +35,11 @@ export function ImageWithOrigin({ src, ...props }: Omit<ComponentProps<'img'>, '
 
   if (image.isLoading) return <GenericLoader className="mr-[0.2em] size-5" />
 
+  if (image.isError) {
+    console.error(image.error)
+
+    return <img src={src} referrerPolicy="same-origin" {...props} />
+  }
+
   return <img src={`data:image/png;base64,${image.data}`} referrerPolicy="same-origin" {...props} />
 }
