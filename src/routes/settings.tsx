@@ -22,7 +22,9 @@ export const Route = createFileRoute('/settings')({
   pendingComponent: () => {
     return (
       <Page key="settings-page" title="Paramètres">
-        <GenericLoader />
+        <PageScrollableContent className="flex items-center justify-center">
+          <GenericLoader />
+        </PageScrollableContent>
       </Page>
     )
   },
