@@ -12,6 +12,7 @@ import { Page } from '@/routes/-page.tsx'
 import { FontSize, Lang } from '@/types/conf.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { PageScrollableContent } from '../components/page-scrollable-content'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -34,150 +35,152 @@ function Settings() {
 
   return (
     <Page key="settings-page" title="Paramètres">
-      <div className="container flex flex-col gap-4 pt-4 text-sm">
-        <section className="flex flex-col gap-2">
-          <p className="font-medium text-sm leading-none">Taille de texte des guides</p>
-          <RadioGroup
-            className="grid-cols-2"
-            orientation="horizontal"
-            value={conf.data.fontSize}
-            onValueChange={(value) => {
-              setConf.mutate({
-                ...conf.data,
-                fontSize: value as FontSize,
-              })
-            }}
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Small" id="text-sm" />
-              <Label htmlFor="text-sm">Small</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Base" id="text-base" />
-              <Label htmlFor="text-base">Base</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Large" id="text-md" />
-              <Label htmlFor="text-md">Large</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Extra" id="text-lg" />
-              <Label htmlFor="text-lg">Extra</Label>
-            </div>
-          </RadioGroup>
-        </section>
-        <section className="flex items-center justify-between gap-2">
-          <Label htmlFor="auto-travel-copy">Copie d'autopilote</Label>
-          <Switch
-            id="auto-travel-copy"
-            checked={conf.data.autoTravelCopy}
-            onCheckedChange={(checked) => {
-              setConf.mutate({
-                ...conf.data,
-                autoTravelCopy: checked,
-              })
-            }}
-          />
-        </section>
-        <section className="flex items-center justify-between gap-2">
-          <Label htmlFor="show-done-guides">Afficher les guides terminés</Label>
-          <Switch
-            id="show-done-guides"
-            checked={conf.data.showDoneGuides}
-            onCheckedChange={(checked) => {
-              setConf.mutate({
-                ...conf.data,
-                showDoneGuides: checked,
-              })
-            }}
-          />
-        </section>
-        <section className="space-y-2">
-          <Label htmlFor="lang-guides">Langue des guides</Label>
-          <Select
-            value={conf.data.lang}
-            onValueChange={(value) => {
-              setConf.mutate({
-                ...conf.data,
-                lang: value as Lang,
-              })
-            }}
-          >
-            <SelectTrigger id="lang-guides">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Fr">Français</SelectItem>
-              <SelectItem value="En">English</SelectItem>
-              <SelectItem value="Es">Español</SelectItem>
-              <SelectItem value="Pt">Português</SelectItem>
-            </SelectContent>
-          </Select>
-        </section>
-        <section className="space-y-2">
-          <Label htmlFor="profiles">Profils</Label>
-          <Select
-            value={conf.data.profileInUse}
-            onValueChange={(value) => {
-              setConf.mutate({
-                ...conf.data,
-                profileInUse: value,
-              })
-            }}
-          >
-            <SelectTrigger id="profiles">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {conf.data.profiles.map((profile) => {
-                return (
-                  <SelectItem key={profile.id} value={profile.id}>
-                    {profile.name}
-                  </SelectItem>
-                )
-              })}
-            </SelectContent>
-          </Select>
-        </section>
-        <section className="space-y-2">
-          <Label htmlFor="create-profile">Créer un profil</Label>
-          <form
-            className="space-y-2"
-            onSubmit={async (evt) => {
-              evt.preventDefault()
-              const form = evt.currentTarget
-
-              const profileName = form.newProfile.value as string
-
-              // Check if the profile name is not empty and if it doesn't already exist
-              if (profileName.trim() !== '' && !conf.data.profiles.find((p) => p.name === profileName.trim())) {
-                const id = await newId()
-
-                id.map((id) => {
-                  setConf.mutate({
-                    ...conf.data,
-                    profiles: [
-                      ...conf.data.profiles,
-                      {
-                        id,
-                        name: profileName.trim(),
-                        progresses: [],
-                      },
-                    ],
-                    profileInUse: id,
-                  })
-
-                  form.newProfile.value = ''
+      <PageScrollableContent className="py-2">
+        <div className="container flex flex-col gap-4 text-sm">
+          <section className="flex flex-col gap-2">
+            <p className="font-medium text-sm leading-none">Taille de texte des guides</p>
+            <RadioGroup
+              className="grid-cols-2"
+              orientation="horizontal"
+              value={conf.data.fontSize}
+              onValueChange={(value) => {
+                setConf.mutate({
+                  ...conf.data,
+                  fontSize: value as FontSize,
                 })
-                // TODO: handle error
-              }
-            }}
-          >
-            <Input id="create-profile" name="newProfile" autoCorrect="off" autoCapitalize="off" />
-            <Button type="submit">Créer</Button>
-          </form>
-        </section>
-      </div>
+              }}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Small" id="text-sm" />
+                <Label htmlFor="text-sm">Small</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Base" id="text-base" />
+                <Label htmlFor="text-base">Base</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Large" id="text-md" />
+                <Label htmlFor="text-md">Large</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Extra" id="text-lg" />
+                <Label htmlFor="text-lg">Extra</Label>
+              </div>
+            </RadioGroup>
+          </section>
+          <section className="flex items-center justify-between gap-2">
+            <Label htmlFor="auto-travel-copy">Copie d'autopilote</Label>
+            <Switch
+              id="auto-travel-copy"
+              checked={conf.data.autoTravelCopy}
+              onCheckedChange={(checked) => {
+                setConf.mutate({
+                  ...conf.data,
+                  autoTravelCopy: checked,
+                })
+              }}
+            />
+          </section>
+          <section className="flex items-center justify-between gap-2">
+            <Label htmlFor="show-done-guides">Afficher les guides terminés</Label>
+            <Switch
+              id="show-done-guides"
+              checked={conf.data.showDoneGuides}
+              onCheckedChange={(checked) => {
+                setConf.mutate({
+                  ...conf.data,
+                  showDoneGuides: checked,
+                })
+              }}
+            />
+          </section>
+          <section className="space-y-2">
+            <Label htmlFor="lang-guides">Langue des guides</Label>
+            <Select
+              value={conf.data.lang}
+              onValueChange={(value) => {
+                setConf.mutate({
+                  ...conf.data,
+                  lang: value as Lang,
+                })
+              }}
+            >
+              <SelectTrigger id="lang-guides">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Fr">Français</SelectItem>
+                <SelectItem value="En">English</SelectItem>
+                <SelectItem value="Es">Español</SelectItem>
+                <SelectItem value="Pt">Português</SelectItem>
+              </SelectContent>
+            </Select>
+          </section>
+          <section className="space-y-2">
+            <Label htmlFor="profiles">Profils</Label>
+            <Select
+              value={conf.data.profileInUse}
+              onValueChange={(value) => {
+                setConf.mutate({
+                  ...conf.data,
+                  profileInUse: value,
+                })
+              }}
+            >
+              <SelectTrigger id="profiles">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {conf.data.profiles.map((profile) => {
+                  return (
+                    <SelectItem key={profile.id} value={profile.id}>
+                      {profile.name}
+                    </SelectItem>
+                  )
+                })}
+              </SelectContent>
+            </Select>
+          </section>
+          <section className="space-y-2">
+            <Label htmlFor="create-profile">Créer un profil</Label>
+            <form
+              className="space-y-2"
+              onSubmit={async (evt) => {
+                evt.preventDefault()
+                const form = evt.currentTarget
+
+                const profileName = form.newProfile.value as string
+
+                // Check if the profile name is not empty and if it doesn't already exist
+                if (profileName.trim() !== '' && !conf.data.profiles.find((p) => p.name === profileName.trim())) {
+                  const id = await newId()
+
+                  id.map((id) => {
+                    setConf.mutate({
+                      ...conf.data,
+                      profiles: [
+                        ...conf.data.profiles,
+                        {
+                          id,
+                          name: profileName.trim(),
+                          progresses: [],
+                        },
+                      ],
+                      profileInUse: id,
+                    })
+
+                    form.newProfile.value = ''
+                  })
+                  // TODO: handle error
+                }
+              }}
+            >
+              <Input id="create-profile" name="newProfile" autoCorrect="off" autoCapitalize="off" />
+              <Button type="submit">Créer</Button>
+            </form>
+          </section>
+        </div>
+      </PageScrollableContent>
     </Page>
   )
 }
