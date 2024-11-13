@@ -1,17 +1,18 @@
 import goToStepIcon from '@/assets/guide-go-to-step.webp'
 import { useProgressStep } from '@/hooks/use_progress_step'
-import { getGuideFromServer } from '@/ipc/guide_from_server'
 import { copyPosition } from '@/lib/copy-position'
 import { getGuideById } from '@/lib/guide'
 import { cn } from '@/lib/utils'
+import { useDownloadGuideFromServer } from '@/mutations/download-guide-from-server.mutation'
 import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { useToggleGuideCheckbox } from '@/mutations/toggle-guide-checkbox.mutation'
 import { confQuery } from '@/queries/conf.query'
 import { guidesQuery } from '@/queries/guides.query'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import parse, { DOMNode, domToReact, type HTMLReactParserOptions } from 'html-react-parser'
+import { AlertCircleIcon } from 'lucide-react'
 import { DownloadImage } from './download-image'
 
 export function GuideFrame({
@@ -31,15 +32,7 @@ export function GuideFrame({
   const openGuideLink = useOpenGuideLink()
   const guides = useSuspenseQuery(guidesQuery)
   const navigate = useNavigate()
-  const getGuide = useMutation({
-    mutationFn: async (guideId: number) => {
-      const result = await getGuideFromServer(guideId)
-
-      if (result.isErr()) throw result.error
-
-      return result.value
-    },
-  })
+  const downloadGuide = useDownloadGuideFromServer()
 
   let checkboxesCount = 0
 
@@ -136,28 +129,26 @@ export function GuideFrame({
                     {...domNode.attribs}
                     className={cn(
                       '!contents group select-none data-[type=guide-step]:no-underline',
+                      downloadGuide.isError && '!text-destructive',
                       domNode.attribs.class,
                     )}
-                    disabled={getGuide.isPending}
+                    disabled={downloadGuide.isPending}
                     onClick={async () => {
-                      if (guide) {
-                        console.log('go to guide', domGuideId, stepNumber)
-                        await navigate({
-                          to: '/guides/$id',
-                          params: { id: domGuideId },
-                          search: { step: stepNumber - 1 },
-                        })
-                      } else {
-                        const guide = await getGuide.mutateAsync(domGuideId)
-
-                        await navigate({
-                          to: '/downloads/$status',
-                          params: { status: guide.status },
-                          search: { page: 1, search: guide?.name },
-                        })
+                      if (!guide) {
+                        await downloadGuide.mutateAsync({ id: domGuideId })
                       }
+
+                      console.log('go to guide', domGuideId, stepNumber - 1)
+                      await navigate({
+                        to: '/guides/$id',
+                        params: { id: domGuideId },
+                        search: { step: stepNumber - 1 },
+                      })
                     }}
                   >
+                    {downloadGuide.isError && (
+                      <AlertCircleIcon className="-translate-y-0.5 inline-flex size-5 text-destructive" />
+                    )}
                     {!hasGoToGuideIcon && (
                       <img
                         src={goToStepIcon}
