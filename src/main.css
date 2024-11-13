@@ -44,6 +44,7 @@
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji";
     --radius: 0.5rem;
+    --opacity: 0.9;
   }
 
   * {
@@ -71,6 +72,7 @@
   body,
   #root {
     min-height: 100vh;
+    background: rgb(0, 0, 0, clamp(0.0, var(--opacity), 0.9));
   }
 
   #root {

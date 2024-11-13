@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
+import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch.tsx'
 import { newId } from '@/ipc/id.ts'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
@@ -12,6 +13,8 @@ import { Page } from '@/routes/-page.tsx'
 import { FontSize, Lang } from '@/types/conf.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useDebounce } from '@uidotdev/usehooks'
+import { useEffect, useState } from 'react'
 import { PageScrollableContent } from '../components/page-scrollable-content'
 
 export const Route = createFileRoute('/settings')({
@@ -34,11 +37,37 @@ export const Route = createFileRoute('/settings')({
 function Settings() {
   const conf = useSuspenseQuery(confQuery)
   const setConf = useSetConf()
+  const [opacity, setOpacity] = useState(conf.data.opacity)
+  const opacityDebounced = useDebounce(opacity, 300)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: no need more deps
+  useEffect(() => {
+    setConf.mutate({
+      ...conf.data,
+      opacity: opacityDebounced,
+    })
+  }, [opacityDebounced])
+
+  useEffect(() => {
+    window.document.documentElement.style.setProperty('--opacity', `${opacity.toFixed(2)}`)
+  }, [opacity])
 
   return (
     <Page key="settings-page" title="Paramètres">
       <PageScrollableContent className="py-2">
         <div className="container flex flex-col gap-4 text-sm">
+          <section className="flex flex-col gap-2">
+            <Label htmlFor="opacity">Opacity</Label>
+            <Slider
+              id="opacity"
+              defaultValue={[conf.data.opacity * 100]}
+              step={1}
+              max={90}
+              onValueChange={(v) => {
+                setOpacity(v[0] / 100)
+              }}
+            />
+          </section>
           <section className="flex flex-col gap-2">
             <p className="font-medium text-sm leading-none">Taille de texte des guides</p>
             <RadioGroup

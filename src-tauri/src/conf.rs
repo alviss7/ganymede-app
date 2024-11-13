@@ -67,6 +67,7 @@ pub struct Conf {
     pub profile_in_use: String,
     pub auto_pilots: Vec<AutoPilot>,
     pub notes: Vec<Note>,
+    pub opacity: f32,
 }
 
 impl Progress {
@@ -187,6 +188,7 @@ impl Default for Conf {
             profile_in_use: default_profile_id,
             auto_pilots: vec![],
             notes: vec![],
+            opacity: 0.9,
         }
     }
 }

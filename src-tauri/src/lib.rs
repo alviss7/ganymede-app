@@ -62,6 +62,39 @@ pub fn run() {
                 Ok(_) => {}
             }
 
+            #[cfg(desktop)]
+            {
+                use std::str::FromStr;
+                use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, ShortcutState};
+
+                let ctrl_shift_d_shortcut = Shortcut::from_str("CommandOrControl+Shift+D").unwrap();
+
+                app.handle().plugin(
+                    tauri_plugin_global_shortcut::Builder::new()
+                        .with_handler(move |app, shortcut, event| {
+                            if shortcut == &ctrl_shift_d_shortcut
+                                && event.state() == ShortcutState::Pressed
+                            {
+                                Conf::default()
+                                    .save(app.path())
+                                    .expect("Failed to reset conf");
+                                println!("CtrlOrCmd+Shift+D pressed");
+
+                                let mut webview = app
+                                    .get_webview_window("main")
+                                    .expect("Failed to get webview window");
+
+                                let url = webview.url().unwrap();
+
+                                webview.navigate(url).expect("Failed to reload webview");
+                            }
+                        })
+                        .build(),
+                )?;
+
+                app.global_shortcut().register(ctrl_shift_d_shortcut)?;
+            }
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

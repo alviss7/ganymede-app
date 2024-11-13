@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 // Import the generated route tree
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './main.css'
+import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
 
 if (window.location.hostname === 'localhost' && window.location.port === '') {
@@ -38,8 +39,15 @@ const queryClient = new QueryClient({
   },
 })
 
+const conf = await queryClient.ensureQueryData(confQuery)
+
+window.document.documentElement.style.setProperty('--opacity', `${conf.opacity.toFixed(2)}`)
+
 // Create a new router instance
-const router = createRouter({ routeTree, context: { queryClient } })
+const router = createRouter({
+  routeTree,
+  context: { queryClient },
+})
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
