@@ -53,7 +53,7 @@ impl From<glob::GlobError> for Error {
 
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
-        println!("Error: {:?}", self);
+        eprintln!("Error: {:?}", self);
         match self {
             Error::Invoke(err) => err,
             Error::Json(err) => tauri::ipc::InvokeError::from(err.to_string()),

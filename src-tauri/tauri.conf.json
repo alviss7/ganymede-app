@@ -12,6 +12,7 @@
     "windows": [
       {
         "title": "Ganymède",
+        "label": "main",
         "width": 325,
         "height": 450,
         "minWidth": 325,

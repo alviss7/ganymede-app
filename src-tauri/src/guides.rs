@@ -196,7 +196,7 @@ pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Erro
     match guide {
         Err(err) => {
             if let Error::JsonPath(json_error) = &err {
-                println!("JsonError: {:?}", json_error.path().to_string());
+                eprintln!("JsonError: {:?}", json_error.path().to_string());
             }
 
             Err(err)
@@ -218,9 +218,9 @@ pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error>
     match guides {
         Err(err) => {
             if let Error::JsonPath(json_error) = &err {
-                println!("JsonError: {:?}", json_error.path().to_string());
+                eprintln!("JsonError: {:?}", json_error.path().to_string());
             } else {
-                println!("Error: {:?}", err);
+                eprintln!("Error: {:?}", err);
             }
 
             Ok(vec![])
@@ -256,7 +256,7 @@ pub async fn download_guide_from_server(
         }
         Err(err) => {
             if let Error::JsonPath(json_error) = &err {
-                println!("JsonError: {:?}", json_error.path().to_string());
+                eprintln!("JsonError: {:?}", json_error.path().to_string());
             }
 
             Err(err)
