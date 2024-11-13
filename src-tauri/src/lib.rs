@@ -78,7 +78,7 @@ pub fn run() {
                                 Conf::default()
                                     .save(app.path())
                                     .expect("Failed to reset conf");
-                                println!("Conf rest triggered");
+                                println!("Conf reset triggered");
 
                                 let mut webview = app
                                     .get_webview_window("main")

@@ -83,7 +83,7 @@ export function TitleBar() {
           onClick={async () => {
             await appWindow.close()
           }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
+          className="inline-flex size-[30px] items-center justify-center hover:bg-destructive"
           id="titlebar-close"
         >
           <XIcon className="size-4" />

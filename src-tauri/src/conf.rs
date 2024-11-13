@@ -1,6 +1,7 @@
 use crate::error::Error;
 use crate::tauri_api::ConfPath;
 use serde::{Deserialize, Serialize};
+use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fs;
 use tauri::path::PathResolver;
@@ -42,19 +43,19 @@ pub enum FontSize {
     Extra,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AutoPilot {
     pub name: String,
     pub position: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Note {
     pub name: String,
     pub text: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Conf {
     pub auto_travel_copy: bool,
@@ -133,7 +134,7 @@ impl Conf {
         if !conf_path.exists() {
             println!("Conf file does not exists, creating default one");
 
-            let default_conf = Conf::default();
+            let default_conf = &mut Conf::default();
 
             default_conf.save(resolver)?;
         }
@@ -141,8 +142,10 @@ impl Conf {
         Ok(())
     }
 
-    pub fn save<R: Runtime>(&self, resolver: &PathResolver<R>) -> Result<(), Error> {
+    pub fn save<R: Runtime>(&mut self, resolver: &PathResolver<R>) -> Result<(), Error> {
         let conf_path = resolver.app_conf_file();
+
+        self.normalize();
 
         let json = serde_json::to_string_pretty(self).expect("Failed to serialize conf");
 
@@ -153,6 +156,10 @@ impl Conf {
         self.profiles
             .iter_mut()
             .find(|p| p.id == self.profile_in_use)
+    }
+
+    pub fn normalize(&mut self) {
+        self.opacity = self.opacity.clamp(0.0, 0.94);
     }
 }
 
@@ -212,7 +219,7 @@ pub fn get_conf(window: Window<Wry>) -> Result<Conf, Error> {
 pub fn set_conf(conf: Conf, window: Window<Wry>) -> Result<(), Error> {
     let resolver = window.path();
 
-    conf.save(resolver)
+    conf.clone().borrow_mut().save(resolver)
 }
 
 #[tauri::command]

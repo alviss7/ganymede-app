@@ -15,7 +15,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useEffect, useState } from 'react'
-import { PageScrollableContent } from '../components/page-scrollable-content'
+import { PageScrollableContent } from '@/components/page-scrollable-content'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -62,7 +62,7 @@ function Settings() {
               id="opacity"
               defaultValue={[conf.data.opacity * 100]}
               step={1}
-              max={90}
+              max={93}
               onValueChange={(v) => {
                 setOpacity(v[0] / 100)
               }}

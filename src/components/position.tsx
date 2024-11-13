@@ -1,6 +1,6 @@
 import { confQuery } from '@/queries/conf.query.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { copyPosition } from '../lib/copy-position'
+import { copyPosition } from '@/lib/copy-position'
 
 export function Position({
   pos_x,
