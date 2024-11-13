@@ -125,7 +125,7 @@ function GuidesPage() {
                 <GuideCardFooter className="items-end justify-between">
                   <GuideDownloadButton guide={guide} />
                   {guide.steps.length > 0 && (
-                    <Button asChild>
+                    <Button asChild variant="secondary">
                       <Link
                         to="/guides/$id"
                         params={{ id: guide.id }}

@@ -94,7 +94,7 @@ export function GuideDownloadButton({
         }}
         disabled={downloadGuideFromServer.isPending}
         className="relative"
-        variant={downloadGuideFromServer.isError ? 'destructive' : undefined}
+        variant={downloadGuideFromServer.isError ? 'destructive' : 'secondary'}
       >
         {!downloadGuideFromServer.isPending &&
           (downloadGuideFromServer.isSuccess || guideInDownloads !== undefined) && <CircleCheckIcon />}

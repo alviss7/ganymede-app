@@ -12,7 +12,7 @@ const ClearInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, onValueChange, value, type, ...props }, ref) => {
     return (
       <div className="relative z-0 flex w-full">
-        <Input className={cn('peer', className)} type={type} {...props} value={value} ref={ref} />
+        <Input className={cn('peer bg-primary/80', className)} type={type} {...props} value={value} ref={ref} />
         <button
           type="button"
           className="center-y-absolute right-2 opacity-0 transition-opacity peer-has-value:opacity-100"
