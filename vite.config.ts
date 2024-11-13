@@ -20,6 +20,7 @@ export default defineConfig(async () => ({
 
   build: {
     chunkSizeWarningLimit: 2048,
+    target: 'es2022',
   },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
