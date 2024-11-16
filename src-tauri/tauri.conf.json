@@ -15,7 +15,7 @@
         "label": "main",
         "width": 325,
         "height": 450,
-        "minWidth": 325,
+        "minWidth": 250,
         "minHeight": 450,
         "decorations": false,
         "alwaysOnTop": true,

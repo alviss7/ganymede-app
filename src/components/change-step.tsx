@@ -44,7 +44,7 @@ export function ChangeStep({
       >
         <ChevronLeftIcon />
       </Button>
-      <div className="flex flex-col items-center rounded bg-primary px-1 font-semibold text-primary-foreground text-sm leading-4">
+      <div className="flex flex-col items-center rounded px-1 font-semibold text-primary-foreground text-sm leading-4">
         <form
           onSubmit={async (evt) => {
             evt.preventDefault()

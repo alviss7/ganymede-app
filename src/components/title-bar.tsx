@@ -8,6 +8,7 @@ import { Link } from '@tanstack/react-router'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import {
   CloudDownloadIcon,
+  CrosshairIcon,
   HomeIcon,
   LocateIcon,
   MenuIcon,
@@ -58,14 +59,22 @@ export function TitleBar() {
               Notes
             </Link>
           </DropdownMenuItem>
+          <DropdownMenuItem className="gap-2" asChild>
+            <a target="_blank" href="https://dofusdb.fr/fr/tools/treasure-hunt" draggable={false}>
+              <CrosshairIcon />
+              Chasses
+            </a>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <p className="center-absolute cursor-default select-none text-center font-semibold">Ganymède</p>
+      <p className="center-absolute cursor-default select-none text-center font-semibold text-sm xs:text-lg">
+        Ganymède
+      </p>
       <p data-tauri-drag-region="" className="relative z-10 size-full grow"></p>
       <div className="flex justify-end">
         <Link
           to="/settings"
-          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
+          className="inline-flex size-7 items-center justify-center hover:bg-primary-800"
           draggable={false}
         >
           <SettingsIcon className="size-4" />
@@ -74,7 +83,7 @@ export function TitleBar() {
           onClick={async () => {
             await appWindow.minimize()
           }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-primary-800"
+          className="inline-flex size-7 items-center justify-center hover:bg-primary-800"
           id="titlebar-minimize"
         >
           <MinusIcon className="size-4" />
@@ -83,7 +92,7 @@ export function TitleBar() {
           onClick={async () => {
             await appWindow.close()
           }}
-          className="inline-flex size-[30px] items-center justify-center hover:bg-destructive"
+          className="inline-flex size-7 items-center justify-center hover:bg-destructive"
           id="titlebar-close"
         >
           <XIcon className="size-4" />

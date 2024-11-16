@@ -25,7 +25,7 @@ function GuideLink({
           to="/downloads/$status"
           params={params}
           search={{ page: 1 }}
-          className="flex w-full items-center gap-x-2 p-3"
+          className="flex w-full items-center gap-x-2 p-3 text-sm xs:text-base"
           draggable={false}
         >
           <span>

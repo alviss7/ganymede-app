@@ -50,7 +50,7 @@ export function GuideCardHeader({
               <span>
                 de: <span className="font-semibold text-blue-400">{guide.user.name}</span>
               </span>
-              {guide.user.is_certified && <VerifiedIcon className="size-4 text-orange-300" />}
+              {guide.user.is_certified === 1 && <VerifiedIcon className="size-4 text-orange-300" />}
             </span>
           </div>
         </CardDescription>

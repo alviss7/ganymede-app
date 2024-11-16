@@ -126,7 +126,7 @@ function Settings() {
             />
           </section>
           <section className="space-y-2">
-            <Label htmlFor="lang-guides">Langue des guides</Label>
+            <Label htmlFor="lang-guides">Langue</Label>
             <Select
               value={conf.data.lang}
               onValueChange={(value) => {

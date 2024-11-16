@@ -16,7 +16,7 @@ export function Position({
   }
 
   return (
-    <button className="w-20 text-start font-semibold text-yellow-400" onClick={onClick}>
+    <button className="w-20 text-start text-yellow-400" onClick={onClick}>
       [{pos_x},{pos_y}]
     </button>
   )

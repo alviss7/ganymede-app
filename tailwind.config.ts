@@ -64,6 +64,12 @@ export default {
         sans: ['var(--font-sans)', '"Helvetica Neue"', 'sans-serif'],
         liberation: ['Liberation', 'var(--font-sans)', 'sans-serif'],
       },
+      fontSize: {
+        xxs: ['11px', '12px'],
+      },
+      screens: {
+        xs: '320px',
+      },
     },
   },
   plugins: [

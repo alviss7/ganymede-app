@@ -195,7 +195,7 @@ impl Default for Conf {
             profile_in_use: default_profile_id,
             auto_pilots: vec![],
             notes: vec![],
-            opacity: 0.9,
+            opacity: 0.93,
         }
     }
 }

@@ -126,7 +126,7 @@ function GuideIdPage() {
   return (
     <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
       <PageScrollableContent hasPageContentTitleBar>
-        <header className="fixed inset-x-0 top-[66px] z-10 bg-primary">
+        <header className="fixed inset-x-0 top-[66px] z-10 bg-primary-800">
           <div className="relative flex h-10 items-center justify-between gap-2 p-1">
             {step && (
               <>
