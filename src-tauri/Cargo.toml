@@ -1,6 +1,6 @@
 [package]
 name = "ganymede"
-version = "1.0.0"
+version = "1.0.1"
 description = "Dofus Ganymede app."
 authors = ["Kiyozz"]
 edition = "2021"
@@ -32,3 +32,4 @@ tauri-plugin-os = "2"
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-window-state = "2.0.2"
 machine-uid = "0.5.3"
+tauri-plugin-updater = "2"
