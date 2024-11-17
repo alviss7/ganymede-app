@@ -146,7 +146,7 @@ function GuideIdPage() {
         {step && (
           <GuideFrame
             className={cn(
-              'guide px-2 pt-2 leading-5',
+              'guide px-2 xs:px-3 pt-2 xs:pt-3 leading-5 sm:px-4 sm:pt-4',
               conf.data.fontSize === 'Small' && 'text-sm leading-4',
               conf.data.fontSize === 'Large' && 'text-md leading-5',
               conf.data.fontSize === 'Extra' && 'text-lg leading-6',
