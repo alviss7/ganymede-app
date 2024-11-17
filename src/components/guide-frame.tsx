@@ -1,5 +1,6 @@
 import goToStepIcon from '@/assets/guide-go-to-step.webp'
 import { useProgressStep } from '@/hooks/use_progress_step'
+import { clamp } from '@/lib/clamp'
 import { copyPosition } from '@/lib/copy-position'
 import { getGuideById } from '@/lib/guide'
 import { cn } from '@/lib/utils'
@@ -94,7 +95,7 @@ export function GuideFrame({
 
         // #region guide step go to
         if (domNode.attribs['data-type'] === 'guide-step') {
-          const stepNumber = Number.parseInt(domNode.attribs['stepnumber'] ?? 0)
+          let stepNumber = Number.parseInt(domNode.attribs['stepnumber'] ?? 0)
           const domGuideId = Number.parseInt(domNode.attribs['guideid'] ?? 0)
           const hasGoToGuideIcon = domNode.children.some(
             (child) =>
@@ -104,6 +105,7 @@ export function GuideFrame({
           )
 
           if (!Number.isNaN(domGuideId) || !Number.isNaN(stepNumber)) {
+            stepNumber = clamp(stepNumber, 1, guides.data.guides[domGuideId]?.steps.length ?? 1)
             const guide = guideId !== domGuideId ? getGuideById(guides.data.guides, domGuideId) : undefined
 
             return (
