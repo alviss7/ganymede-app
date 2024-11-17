@@ -10,9 +10,9 @@ import { t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { CopyIcon, PlusIcon, TrashIcon } from 'lucide-react'
-import { Page } from './-page'
+import { Page } from '@/routes/-page'
 
-export const Route = createFileRoute('/auto-pilot')({
+export const Route = createFileRoute('/_app/auto-pilot')({
   component: AutoPilotPage,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(confQuery)

@@ -1,7 +1,7 @@
 import { PageContent } from '@/components/page-content.tsx'
 import { PageTitle, PageTitleText } from '@/components/page-title.tsx'
 import { cn } from '@/lib/utils.ts'
-import { BackButtonLink } from '@/routes/downloads/-back-button-link.tsx'
+import { BackButtonLink } from '@/routes/_app/downloads/-back-button-link'
 import { type AnyRouter, LinkProps, type RegisteredRouter, type RoutePaths } from '@tanstack/react-router'
 import { PropsWithChildren, ReactNode } from 'react'
 

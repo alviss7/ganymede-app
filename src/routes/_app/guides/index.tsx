@@ -17,7 +17,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { ChevronRightIcon, FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
 import { useState } from 'react'
 
-export const Route = createFileRoute('/guides/')({
+export const Route = createFileRoute('/_app/guides/')({
   component: GuidesPage,
   pendingComponent: Pending,
 })

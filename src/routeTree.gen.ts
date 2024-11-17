@@ -11,178 +11,237 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SettingsImport } from './routes/settings'
-import { Route as AutoPilotImport } from './routes/auto-pilot'
-import { Route as IndexImport } from './routes/index'
-import { Route as NotesIndexImport } from './routes/notes.index'
-import { Route as GuidesIndexImport } from './routes/guides/index'
-import { Route as DownloadsIndexImport } from './routes/downloads/index'
-import { Route as NotesCreateImport } from './routes/notes.create'
-import { Route as GuidesIdImport } from './routes/guides/$id'
-import { Route as DownloadsStatusImport } from './routes/downloads/$status'
+import { Route as AppOldVersionImport } from './routes/app-old-version'
+import { Route as AppImport } from './routes/_app'
+import { Route as AppIndexImport } from './routes/_app/index'
+import { Route as AppSettingsImport } from './routes/_app/settings'
+import { Route as AppAutoPilotImport } from './routes/_app/auto-pilot'
+import { Route as AppNotesIndexImport } from './routes/_app/notes.index'
+import { Route as AppGuidesIndexImport } from './routes/_app/guides/index'
+import { Route as AppDownloadsIndexImport } from './routes/_app/downloads/index'
+import { Route as AppNotesCreateImport } from './routes/_app/notes.create'
+import { Route as AppGuidesIdImport } from './routes/_app/guides/$id'
+import { Route as AppDownloadsStatusImport } from './routes/_app/downloads/$status'
 
 // Create/Update Routes
 
-const SettingsRoute = SettingsImport.update({
-  path: '/settings',
+const AppOldVersionRoute = AppOldVersionImport.update({
+  path: '/app-old-version',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AutoPilotRoute = AutoPilotImport.update({
-  path: '/auto-pilot',
+const AppRoute = AppImport.update({
+  id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const AppIndexRoute = AppIndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const NotesIndexRoute = NotesIndexImport.update({
+const AppSettingsRoute = AppSettingsImport.update({
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAutoPilotRoute = AppAutoPilotImport.update({
+  path: '/auto-pilot',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppNotesIndexRoute = AppNotesIndexImport.update({
   path: '/notes/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const GuidesIndexRoute = GuidesIndexImport.update({
+const AppGuidesIndexRoute = AppGuidesIndexImport.update({
   path: '/guides/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const DownloadsIndexRoute = DownloadsIndexImport.update({
+const AppDownloadsIndexRoute = AppDownloadsIndexImport.update({
   path: '/downloads/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const NotesCreateRoute = NotesCreateImport.update({
+const AppNotesCreateRoute = AppNotesCreateImport.update({
   path: '/notes/create',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const GuidesIdRoute = GuidesIdImport.update({
+const AppGuidesIdRoute = AppGuidesIdImport.update({
   path: '/guides/$id',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const DownloadsStatusRoute = DownloadsStatusImport.update({
+const AppDownloadsStatusRoute = AppDownloadsStatusImport.update({
   path: '/downloads/$status',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
     }
-    '/auto-pilot': {
-      id: '/auto-pilot'
+    '/app-old-version': {
+      id: '/app-old-version'
+      path: '/app-old-version'
+      fullPath: '/app-old-version'
+      preLoaderRoute: typeof AppOldVersionImport
+      parentRoute: typeof rootRoute
+    }
+    '/_app/auto-pilot': {
+      id: '/_app/auto-pilot'
       path: '/auto-pilot'
       fullPath: '/auto-pilot'
-      preLoaderRoute: typeof AutoPilotImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppAutoPilotImport
+      parentRoute: typeof AppImport
     }
-    '/settings': {
-      id: '/settings'
+    '/_app/settings': {
+      id: '/_app/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppSettingsImport
+      parentRoute: typeof AppImport
     }
-    '/downloads/$status': {
-      id: '/downloads/$status'
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/downloads/$status': {
+      id: '/_app/downloads/$status'
       path: '/downloads/$status'
       fullPath: '/downloads/$status'
-      preLoaderRoute: typeof DownloadsStatusImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppDownloadsStatusImport
+      parentRoute: typeof AppImport
     }
-    '/guides/$id': {
-      id: '/guides/$id'
+    '/_app/guides/$id': {
+      id: '/_app/guides/$id'
       path: '/guides/$id'
       fullPath: '/guides/$id'
-      preLoaderRoute: typeof GuidesIdImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppGuidesIdImport
+      parentRoute: typeof AppImport
     }
-    '/notes/create': {
-      id: '/notes/create'
+    '/_app/notes/create': {
+      id: '/_app/notes/create'
       path: '/notes/create'
       fullPath: '/notes/create'
-      preLoaderRoute: typeof NotesCreateImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppNotesCreateImport
+      parentRoute: typeof AppImport
     }
-    '/downloads/': {
-      id: '/downloads/'
+    '/_app/downloads/': {
+      id: '/_app/downloads/'
       path: '/downloads'
       fullPath: '/downloads'
-      preLoaderRoute: typeof DownloadsIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppDownloadsIndexImport
+      parentRoute: typeof AppImport
     }
-    '/guides/': {
-      id: '/guides/'
+    '/_app/guides/': {
+      id: '/_app/guides/'
       path: '/guides'
       fullPath: '/guides'
-      preLoaderRoute: typeof GuidesIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppGuidesIndexImport
+      parentRoute: typeof AppImport
     }
-    '/notes/': {
-      id: '/notes/'
+    '/_app/notes/': {
+      id: '/_app/notes/'
       path: '/notes'
       fullPath: '/notes'
-      preLoaderRoute: typeof NotesIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppNotesIndexImport
+      parentRoute: typeof AppImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AppRouteChildren {
+  AppAutoPilotRoute: typeof AppAutoPilotRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppDownloadsStatusRoute: typeof AppDownloadsStatusRoute
+  AppGuidesIdRoute: typeof AppGuidesIdRoute
+  AppNotesCreateRoute: typeof AppNotesCreateRoute
+  AppDownloadsIndexRoute: typeof AppDownloadsIndexRoute
+  AppGuidesIndexRoute: typeof AppGuidesIndexRoute
+  AppNotesIndexRoute: typeof AppNotesIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAutoPilotRoute: AppAutoPilotRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppDownloadsStatusRoute: AppDownloadsStatusRoute,
+  AppGuidesIdRoute: AppGuidesIdRoute,
+  AppNotesCreateRoute: AppNotesCreateRoute,
+  AppDownloadsIndexRoute: AppDownloadsIndexRoute,
+  AppGuidesIndexRoute: AppGuidesIndexRoute,
+  AppNotesIndexRoute: AppNotesIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/auto-pilot': typeof AutoPilotRoute
-  '/settings': typeof SettingsRoute
-  '/downloads/$status': typeof DownloadsStatusRoute
-  '/guides/$id': typeof GuidesIdRoute
-  '/notes/create': typeof NotesCreateRoute
-  '/downloads': typeof DownloadsIndexRoute
-  '/guides': typeof GuidesIndexRoute
-  '/notes': typeof NotesIndexRoute
+  '': typeof AppRouteWithChildren
+  '/app-old-version': typeof AppOldVersionRoute
+  '/auto-pilot': typeof AppAutoPilotRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/downloads/$status': typeof AppDownloadsStatusRoute
+  '/guides/$id': typeof AppGuidesIdRoute
+  '/notes/create': typeof AppNotesCreateRoute
+  '/downloads': typeof AppDownloadsIndexRoute
+  '/guides': typeof AppGuidesIndexRoute
+  '/notes': typeof AppNotesIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/auto-pilot': typeof AutoPilotRoute
-  '/settings': typeof SettingsRoute
-  '/downloads/$status': typeof DownloadsStatusRoute
-  '/guides/$id': typeof GuidesIdRoute
-  '/notes/create': typeof NotesCreateRoute
-  '/downloads': typeof DownloadsIndexRoute
-  '/guides': typeof GuidesIndexRoute
-  '/notes': typeof NotesIndexRoute
+  '/app-old-version': typeof AppOldVersionRoute
+  '/auto-pilot': typeof AppAutoPilotRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/downloads/$status': typeof AppDownloadsStatusRoute
+  '/guides/$id': typeof AppGuidesIdRoute
+  '/notes/create': typeof AppNotesCreateRoute
+  '/downloads': typeof AppDownloadsIndexRoute
+  '/guides': typeof AppGuidesIndexRoute
+  '/notes': typeof AppNotesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/auto-pilot': typeof AutoPilotRoute
-  '/settings': typeof SettingsRoute
-  '/downloads/$status': typeof DownloadsStatusRoute
-  '/guides/$id': typeof GuidesIdRoute
-  '/notes/create': typeof NotesCreateRoute
-  '/downloads/': typeof DownloadsIndexRoute
-  '/guides/': typeof GuidesIndexRoute
-  '/notes/': typeof NotesIndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/app-old-version': typeof AppOldVersionRoute
+  '/_app/auto-pilot': typeof AppAutoPilotRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/downloads/$status': typeof AppDownloadsStatusRoute
+  '/_app/guides/$id': typeof AppGuidesIdRoute
+  '/_app/notes/create': typeof AppNotesCreateRoute
+  '/_app/downloads/': typeof AppDownloadsIndexRoute
+  '/_app/guides/': typeof AppGuidesIndexRoute
+  '/_app/notes/': typeof AppNotesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | ''
+    | '/app-old-version'
     | '/auto-pilot'
     | '/settings'
+    | '/'
     | '/downloads/$status'
     | '/guides/$id'
     | '/notes/create'
@@ -191,9 +250,10 @@ export interface FileRouteTypes {
     | '/notes'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/app-old-version'
     | '/auto-pilot'
     | '/settings'
+    | '/'
     | '/downloads/$status'
     | '/guides/$id'
     | '/notes/create'
@@ -202,40 +262,28 @@ export interface FileRouteTypes {
     | '/notes'
   id:
     | '__root__'
-    | '/'
-    | '/auto-pilot'
-    | '/settings'
-    | '/downloads/$status'
-    | '/guides/$id'
-    | '/notes/create'
-    | '/downloads/'
-    | '/guides/'
-    | '/notes/'
+    | '/_app'
+    | '/app-old-version'
+    | '/_app/auto-pilot'
+    | '/_app/settings'
+    | '/_app/'
+    | '/_app/downloads/$status'
+    | '/_app/guides/$id'
+    | '/_app/notes/create'
+    | '/_app/downloads/'
+    | '/_app/guides/'
+    | '/_app/notes/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AutoPilotRoute: typeof AutoPilotRoute
-  SettingsRoute: typeof SettingsRoute
-  DownloadsStatusRoute: typeof DownloadsStatusRoute
-  GuidesIdRoute: typeof GuidesIdRoute
-  NotesCreateRoute: typeof NotesCreateRoute
-  DownloadsIndexRoute: typeof DownloadsIndexRoute
-  GuidesIndexRoute: typeof GuidesIndexRoute
-  NotesIndexRoute: typeof NotesIndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AppOldVersionRoute: typeof AppOldVersionRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AutoPilotRoute: AutoPilotRoute,
-  SettingsRoute: SettingsRoute,
-  DownloadsStatusRoute: DownloadsStatusRoute,
-  GuidesIdRoute: GuidesIdRoute,
-  NotesCreateRoute: NotesCreateRoute,
-  DownloadsIndexRoute: DownloadsIndexRoute,
-  GuidesIndexRoute: GuidesIndexRoute,
-  NotesIndexRoute: NotesIndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AppOldVersionRoute: AppOldVersionRoute,
 }
 
 export const routeTree = rootRoute
@@ -250,43 +298,62 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/auto-pilot",
-        "/settings",
-        "/downloads/$status",
-        "/guides/$id",
-        "/notes/create",
-        "/downloads/",
-        "/guides/",
-        "/notes/"
+        "/_app",
+        "/app-old-version"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_app": {
+      "filePath": "_app.tsx",
+      "children": [
+        "/_app/auto-pilot",
+        "/_app/settings",
+        "/_app/",
+        "/_app/downloads/$status",
+        "/_app/guides/$id",
+        "/_app/notes/create",
+        "/_app/downloads/",
+        "/_app/guides/",
+        "/_app/notes/"
+      ]
     },
-    "/auto-pilot": {
-      "filePath": "auto-pilot.tsx"
+    "/app-old-version": {
+      "filePath": "app-old-version.tsx"
     },
-    "/settings": {
-      "filePath": "settings.tsx"
+    "/_app/auto-pilot": {
+      "filePath": "_app/auto-pilot.tsx",
+      "parent": "/_app"
     },
-    "/downloads/$status": {
-      "filePath": "downloads/$status.tsx"
+    "/_app/settings": {
+      "filePath": "_app/settings.tsx",
+      "parent": "/_app"
     },
-    "/guides/$id": {
-      "filePath": "guides/$id.tsx"
+    "/_app/": {
+      "filePath": "_app/index.tsx",
+      "parent": "/_app"
     },
-    "/notes/create": {
-      "filePath": "notes.create.tsx"
+    "/_app/downloads/$status": {
+      "filePath": "_app/downloads/$status.tsx",
+      "parent": "/_app"
     },
-    "/downloads/": {
-      "filePath": "downloads/index.tsx"
+    "/_app/guides/$id": {
+      "filePath": "_app/guides/$id.tsx",
+      "parent": "/_app"
     },
-    "/guides/": {
-      "filePath": "guides/index.tsx"
+    "/_app/notes/create": {
+      "filePath": "_app/notes.create.tsx",
+      "parent": "/_app"
     },
-    "/notes/": {
-      "filePath": "notes.index.tsx"
+    "/_app/downloads/": {
+      "filePath": "_app/downloads/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/guides/": {
+      "filePath": "_app/guides/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/notes/": {
+      "filePath": "_app/notes.index.tsx",
+      "parent": "/_app"
     }
   }
 }

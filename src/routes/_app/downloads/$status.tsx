@@ -28,7 +28,7 @@ const SearchZod = z.object({
   search: z.string().optional(),
 })
 
-export const Route = createFileRoute('/downloads/$status')({
+export const Route = createFileRoute('/_app/downloads/$status')({
   component: DownloadGuidePage,
   params: {
     parse: (status) => {

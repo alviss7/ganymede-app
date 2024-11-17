@@ -8,9 +8,9 @@ import { Trans, t } from '@lingui/macro'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { GlobeIcon } from 'lucide-react'
-import { Page } from './-page'
+import { Page } from '@/routes/-page'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_app/')({
   component: Index,
 })
 

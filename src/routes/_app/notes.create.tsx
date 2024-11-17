@@ -9,13 +9,13 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { SaveIcon } from 'lucide-react'
 import { z } from 'zod'
-import { Page } from './-page'
+import { Page } from '@/routes/-page'
 
 const SearchZod = z.object({
   name: z.string().optional(),
 })
 
-export const Route = createFileRoute('/notes/create')({
+export const Route = createFileRoute('/_app/notes/create')({
   component: CreateNotePage,
   validateSearch: (search) => SearchZod.parse(search),
 })

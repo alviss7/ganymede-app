@@ -18,7 +18,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useEffect, useState } from 'react'
 
-export const Route = createFileRoute('/settings')({
+export const Route = createFileRoute('/_app/settings')({
   component: Settings,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(confQuery)

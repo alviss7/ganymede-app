@@ -8,9 +8,9 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import { CopyIcon, PlusIcon, TrashIcon } from 'lucide-react'
-import { Page } from './-page'
+import { Page } from '@/routes/-page'
 
-export const Route = createFileRoute('/notes/')({
+export const Route = createFileRoute('/_app/notes/')({
   component: NotesPage,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(confQuery)

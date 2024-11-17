@@ -22,7 +22,7 @@ const SearchZod = z.object({
   step: z.coerce.number(),
 })
 
-export const Route = createFileRoute('/guides/$id')({
+export const Route = createFileRoute('/_app/guides/$id')({
   component: GuideIdPage,
   validateSearch: SearchZod.parse,
   params: {

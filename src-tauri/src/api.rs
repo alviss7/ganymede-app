@@ -1,4 +1,5 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use tauri::{AppHandle, Runtime};
 
 use crate::error::Error;
 
@@ -11,6 +12,7 @@ pub const GANYMEDE_API: &str = "https://ganymede-dofus.com/api";
 pub const GANYMEDE_API_V2: &str = "https://dev.ganymede-dofus.com/api/v2";
 #[cfg(not(debug_assertions))]
 pub const GANYMEDE_API_V2: &str = "https://ganymede-dofus.com/api/v2";
+const GITHUB_API: &str = "https://api.github.com/repos/GanymedeTeam/ganymede-app";
 
 #[derive(Serialize)]
 struct DownloadedBody {
@@ -83,4 +85,61 @@ pub async fn increment_app_download_count(
             err
         ))),
     }
+}
+
+#[derive(Deserialize)]
+struct AppRelease {
+    tag_name: String,
+}
+
+#[derive(Serialize)]
+pub enum AppVersionError {
+    GitHub,
+    Json,
+    Semver,
+}
+
+#[tauri::command]
+pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<bool, AppVersionError> {
+    let version = app.package_info().version.to_string();
+
+    let client = tauri_plugin_http::reqwest::ClientBuilder::new()
+        .user_agent("GANYMEDE_TAURI_APP")
+        .build()
+        .unwrap();
+
+    let res = client
+        .get(format!("{}/releases/latest", GITHUB_API))
+        .send()
+        .await;
+
+    if res.is_err() {
+        eprintln!("Failed to get latest version: {:?}", res.err().unwrap());
+
+        return Err(AppVersionError::GitHub);
+    }
+
+    let res = res.unwrap().json::<AppRelease>().await;
+
+    if res.is_err() {
+        return Err(AppVersionError::Json);
+    }
+
+    let res = res.unwrap();
+
+    let release_version = semver::VersionReq::parse(format!("<{}", res.tag_name).as_str());
+
+    if release_version.is_err() {
+        return Err(AppVersionError::Semver);
+    }
+
+    let release_version = release_version.unwrap();
+    let version = semver::Version::parse(&version).unwrap();
+
+    println!(
+        "version: {:?} - release_version: {:?}",
+        version, release_version
+    );
+
+    Ok(release_version.matches(&version))
 }

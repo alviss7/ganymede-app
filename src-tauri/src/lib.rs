@@ -1,4 +1,5 @@
 use crate::almanax::get_almanax;
+use crate::api::is_app_version_old;
 use crate::conf::{get_conf, set_conf, toggle_guide_checkbox, Conf};
 use crate::guides::{
     download_guide_from_server, get_guide_from_server, get_guides, get_guides_from_server,
@@ -43,6 +44,7 @@ async fn fetch_image(url: String) -> Result<Vec<u8>, String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
@@ -122,7 +124,8 @@ pub fn run() {
             toggle_guide_checkbox,
             open_in_shell,
             fetch_image,
-            get_guide_from_server
+            get_guide_from_server,
+            is_app_version_old
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

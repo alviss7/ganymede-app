@@ -7,7 +7,7 @@ import { Link, LinkProps, type RegisteredRouter, createFileRoute } from '@tansta
 import { BookOpenCheckIcon, BookOpenTextIcon, NotebookPenIcon, TrophyIcon } from 'lucide-react'
 import { type JSX, type PropsWithChildren } from 'react'
 
-export const Route = createFileRoute('/downloads/')({
+export const Route = createFileRoute('/_app/downloads/')({
   component: DownloadIndex,
 })
 
