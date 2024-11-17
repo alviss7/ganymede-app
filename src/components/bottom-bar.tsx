@@ -13,7 +13,7 @@ export function BottomBar({
   return (
     <Comp
       className={cn(
-        'fixed inset-x-0 bottom-0 flex h-[52px] gap-2 bg-primary px-6 py-2 text-primary-foreground',
+        'fixed inset-x-0 bottom-0 flex h-[38px] gap-2 bg-primary px-6 pt-2 pb-3 text-primary-foreground sm:h-[52px]',
         className,
       )}
       {...props}

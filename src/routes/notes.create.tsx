@@ -75,7 +75,7 @@ function CreateNotePage() {
           <Textarea
             placeholder={t`Contenu de la note.${linesBreak}Depuis le menu précédent, une fois créée, je peux la modifier en cliquant dessus, ou copier son contenu.`}
             name="text"
-            className="resize-none placeholder:italic"
+            className="grow resize-none placeholder:text-xs xs:placeholder:text-sm placeholder:italic"
             required
             autoComplete="off"
             autoCapitalize="off"
@@ -83,7 +83,7 @@ function CreateNotePage() {
           >
             {note?.text}
           </Textarea>
-          <Button type="submit" className="grow">
+          <Button type="submit">
             <SaveIcon />
             <Trans>Enregistrer la note</Trans>
           </Button>

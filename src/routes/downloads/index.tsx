@@ -20,19 +20,19 @@ function GuideLink({
   icon: JSX.Element
 }>) {
   return (
-    <Card asChild className="flex flex-col">
+    <Card asChild className="flex flex-col rounded-lg">
       <li>
         <Link
           to="/downloads/$status"
           params={params}
           search={{ page: 1 }}
-          className="flex w-full items-center gap-x-2 p-3 text-sm xs:text-base"
+          className="flex w-full items-center gap-x-2 p-2 text-sm xs:text-base"
           draggable={false}
         >
           <span>
             <Slot>{icon}</Slot>
           </span>
-          <span className="font-semibold">{children}</span>
+          <span>{children}</span>
         </Link>
       </li>
     </Card>
@@ -44,16 +44,16 @@ function DownloadIndex() {
     <Page title={t`Catégories`}>
       <PageScrollableContent className="p-2">
         <ul className="flex flex-col gap-2">
-          <GuideLink params={{ status: 'gp' }} icon={<BookOpenTextIcon />}>
+          <GuideLink params={{ status: 'gp' }} icon={<BookOpenTextIcon className="size-5" />}>
             <Trans>Guides principaux</Trans>
           </GuideLink>
-          <GuideLink params={{ status: 'certified' }} icon={<TrophyIcon />}>
+          <GuideLink params={{ status: 'certified' }} icon={<TrophyIcon className="size-5" />}>
             <Trans>Guides certifiés</Trans>
           </GuideLink>
-          <GuideLink params={{ status: 'public' }} icon={<BookOpenCheckIcon />}>
+          <GuideLink params={{ status: 'public' }} icon={<BookOpenCheckIcon className="size-5" />}>
             <Trans>Guides publics</Trans>
           </GuideLink>
-          <GuideLink params={{ status: 'draft' }} icon={<NotebookPenIcon />}>
+          <GuideLink params={{ status: 'draft' }} icon={<NotebookPenIcon className="size-5" />}>
             <Trans>Guides draft</Trans>
           </GuideLink>
         </ul>

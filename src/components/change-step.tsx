@@ -27,11 +27,10 @@ export function ChangeStep({
   }, [current])
 
   return (
-    <div className="center-absolute flex items-center gap-1">
+    <div className="center-absolute flex items-center gap-0.5">
       <Button
-        size="icon"
+        size="icon-sm"
         variant="secondary"
-        className="size-8"
         onClick={async () => {
           const canMove = await onPrevious()
 
@@ -44,7 +43,7 @@ export function ChangeStep({
       >
         <ChevronLeftIcon />
       </Button>
-      <div className="flex flex-col items-center rounded px-1 font-semibold text-primary-foreground text-sm leading-4">
+      <div className="flex flex-col items-center rounded px-0.5 font-semibold text-primary-foreground text-sm leading-4">
         <form
           onSubmit={async (evt) => {
             evt.preventDefault()
@@ -79,7 +78,7 @@ export function ChangeStep({
 
               setInnerValue(value)
             }}
-            className="w-8 bg-transparent text-center outline-none"
+            className="w-8 bg-transparent text-center text-xs outline-none"
             onBlur={() => {
               setHadLostFocus(true)
             }}
@@ -93,12 +92,11 @@ export function ChangeStep({
             }}
           />
         </form>
-        <span>{maxIndex + 1}</span>
+        <span className="text-xs">{maxIndex + 1}</span>
       </div>
       <Button
-        size="icon"
+        size="icon-sm"
         variant="secondary"
-        className="size-8"
         onClick={async () => {
           const canMove = await onNext()
 

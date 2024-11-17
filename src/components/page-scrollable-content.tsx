@@ -4,18 +4,23 @@ import { ComponentProps, forwardRef } from 'react'
 export const PageScrollableContent = forwardRef<
   HTMLDivElement,
   ComponentProps<'div'> & {
-    hasPageContentTitleBar?: boolean
+    hasTitleBar?: boolean
     hasBottomBar?: boolean
   }
->(({ children, hasPageContentTitleBar = false, hasBottomBar = false, className, ...props }, ref) => {
+>(({ children, hasTitleBar = false, hasBottomBar = false, className, ...props }, ref) => {
   return (
     <div
       ref={ref}
       className={cn(
         'scroller flex flex-col overflow-x-hidden overflow-y-scroll pb-2',
-        hasPageContentTitleBar && 'mt-[calc(40px)] h-[calc(100vh-30px-36px-40px)]',
-        !hasPageContentTitleBar && 'h-[calc(100vh-30px-36px)]',
-        hasBottomBar && 'mb-[52px] h-[calc(100vh-30px-36px-52px)]',
+        hasTitleBar && !hasBottomBar && 'mt-[36px] h-[calc(100vh-30px-36px-36px)] sm:h-[calc(100vh-30px-36px-40px)]',
+        !hasTitleBar && 'h-[calc(100vh-30px-36px)]',
+        hasBottomBar &&
+          !hasTitleBar &&
+          'mb-[38px] h-[calc(100vh-30px-30px-38px)] sm:mb-[52px] sm:h-[calc(100vh-30px-36px-52px)]',
+        hasBottomBar &&
+          hasTitleBar &&
+          'mt-[36px] mb-[38px] h-[calc(100vh-30px-30px-36px-38px)] sm:mb-[52px] sm:h-[calc(100vh-30px-36px-40px-52px)]',
         className,
       )}
       {...props}

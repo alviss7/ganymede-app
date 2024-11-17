@@ -5,7 +5,7 @@ export const ConfZod = z.object({
   autoTravelCopy: z.boolean().default(true),
   showDoneGuides: z.boolean().default(true),
   lang: z.enum(['En', 'Fr', 'Es', 'Pt']).default('Fr'),
-  fontSize: z.enum(['Small', 'Base', 'Large', 'Extra']).default('Base'),
+  fontSize: z.enum(['ExtraSmall', 'Small', 'Normal', 'Large', 'ExtraLarge']).default('Normal'),
   profiles: z.array(ProfileZod),
   profileInUse: z.string(),
   autoPilots: z.array(

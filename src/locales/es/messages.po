@@ -13,15 +13,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/routes/guides/index.tsx:127
-msgid "<0>Progression : {0}/{1} </0><1>({2}%)</1>"
-msgstr "<0>Progresión: {0}/{1} </0><1>({2}%)</1>"
-
 #: src/components/title-bar.tsx:36
 msgid "Accueil"
 msgstr "Inicio"
 
-#: src/routes/settings.tsx:133
+#: src/routes/settings.tsx:127
 msgid "Afficher les guides terminés"
 msgstr "Mostrar las guías terminadas"
 
@@ -29,11 +25,11 @@ msgstr "Mostrar las guías terminadas"
 msgid "Ajouter"
 msgstr "Añadir"
 
-#: src/routes/downloads/$status.tsx:126
+#: src/routes/downloads/$status.tsx:128
 msgid "Aucun guides trouvé"
 msgstr "No se encontraron guías"
 
-#: src/routes/downloads/$status.tsx:142
+#: src/routes/downloads/$status.tsx:144
 msgid "Aucun guides trouvé avec {term}"
 msgstr "No se encontraron guías con {term}"
 
@@ -100,7 +96,7 @@ msgstr "Haz clic para abrir en el navegador"
 msgid "Contenu de la note.{linesBreak}Depuis le menu précédent, une fois créée, je peux la modifier en cliquant dessus, ou copier son contenu."
 msgstr "Contenido de la nota.{linesBreak}Desde el menú anterior, una vez creada, puedo modificarla haciendo clic sobre ella o copiar su contenido."
 
-#: src/routes/settings.tsx:118
+#: src/routes/settings.tsx:112
 msgid "Copie d'autopilote"
 msgstr "Copia del piloto automático"
 
@@ -109,7 +105,7 @@ msgstr "Copia del piloto automático"
 msgid "Copier la commande autopilote"
 msgstr "Copiar el comando del piloto automático"
 
-#: src/routes/notes.index.tsx:74
+#: src/routes/notes.index.tsx:80
 msgid "Copier la note"
 msgstr "Copiar la nota"
 
@@ -118,11 +114,11 @@ msgstr "Copiar la nota"
 msgid "Copier la position"
 msgstr "Copiar la posición"
 
-#: src/routes/settings.tsx:236
+#: src/routes/settings.tsx:230
 msgid "Créer"
 msgstr "Crear"
 
-#: src/routes/settings.tsx:200
+#: src/routes/settings.tsx:194
 msgid "Créer un profil"
 msgstr "Crear un perfil"
 
@@ -130,7 +126,7 @@ msgstr "Crear un perfil"
 msgid "Créer une note"
 msgstr "Crear una nota"
 
-#: src/routes/notes.index.tsx:50
+#: src/routes/notes.index.tsx:54
 msgid "Créer une nouvelle note"
 msgstr "Crear una nueva nota"
 
@@ -138,7 +134,7 @@ msgstr "Crear una nueva nota"
 msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 msgstr "¡Crea tus guías en el sitio oficial y descarga las de otros!"
 
-#: src/components/guide-card.tsx:54
+#: src/routes/downloads/$status.tsx:167
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
 
@@ -154,10 +150,6 @@ msgstr "Editar una nota"
 msgid "Enregistrer la note"
 msgstr "Guardar la nota"
 
-#: src/routes/settings.tsx:111
-msgid "Extra"
-msgstr "Extra"
-
 #: src/components/title-bar.tsx:100
 msgid "Fermer"
 msgstr "Cerrar"
@@ -166,54 +158,55 @@ msgstr "Cerrar"
 msgid "Ganymède - Non affilié à Ankama Games"
 msgstr "Ganymede - No afiliado a Ankama Games"
 
+#: src/routes/settings.tsx:102
+msgid "Grande"
+msgstr "Grande"
+
 #: src/components/title-bar.tsx:42
-#: src/routes/downloads/$status.tsx:84
-#: src/routes/guides/index.tsx:27
-#: src/routes/guides/index.tsx:87
+#: src/routes/downloads/$status.tsx:86
+#: src/routes/guides/index.tsx:28
+#: src/routes/guides/index.tsx:88
 msgid "Guides"
 msgstr "Guías"
 
-#: src/routes/downloads/$status.tsx:82
+#: src/routes/downloads/$status.tsx:84
 #: src/routes/downloads/index.tsx:51
 msgid "Guides certifiés"
 msgstr "Guías certificadas"
 
-#: src/routes/downloads/$status.tsx:78
+#: src/routes/downloads/$status.tsx:80
 #: src/routes/downloads/index.tsx:57
 msgid "Guides draft"
 msgstr "Borradores de guías"
 
-#: src/routes/downloads/$status.tsx:80
+#: src/routes/downloads/$status.tsx:82
 #: src/routes/downloads/index.tsx:48
 msgid "Guides principaux"
 msgstr "Guías principales"
 
-#: src/routes/downloads/$status.tsx:76
+#: src/routes/downloads/$status.tsx:78
 msgid "Guides privés"
 msgstr "Guías privadas"
 
-#: src/routes/downloads/$status.tsx:74
+#: src/routes/downloads/$status.tsx:76
 #: src/routes/downloads/index.tsx:54
 msgid "Guides publics"
 msgstr "Guías públicas"
 
-#: src/components/guide-card.tsx:49
-msgid "id {0}"
-msgstr "id {0}"
+#: src/routes/downloads/$status.tsx:158
+#: src/routes/guides/index.tsx:135
+msgid "id <0>{0}</0>"
+msgstr "id <0>{0}</0>"
 
-#: src/routes/settings.tsx:148
+#: src/routes/settings.tsx:142
 msgid "Langue"
 msgstr "Idioma"
 
-#: src/routes/settings.tsx:105
-msgid "Large"
-msgstr "Grande"
-
-#: src/components/guide-card.tsx:105
+#: src/components/guide-card.tsx:42
 msgid "Mettre à jour le guide"
 msgstr "Actualizar la guía"
 
-#: src/routes/notes.index.tsx:63
+#: src/routes/notes.index.tsx:69
 msgid "Modifier la note"
 msgstr "Modificar la nota"
 
@@ -240,12 +233,7 @@ msgstr "Notas"
 msgid "Opacité"
 msgstr "Opacidad"
 
-#: src/routes/downloads/$status.tsx:157
-#: src/routes/guides/index.tsx:148
-msgid "Ouvrir"
-msgstr "Abrir"
-
-#: src/routes/guides/index.tsx:103
+#: src/routes/guides/index.tsx:105
 msgid "Ouvrir le dossier des guides téléchargés"
 msgstr "Abrir la carpeta de guías descargadas"
 
@@ -255,7 +243,7 @@ msgstr "Abrir la carpeta de guías descargadas"
 msgid "Paramètres"
 msgstr "Configuraciones"
 
-#: src/routes/settings.tsx:93
+#: src/routes/settings.tsx:96
 msgid "Petite"
 msgstr "Pequeña"
 
@@ -263,16 +251,16 @@ msgstr "Pequeña"
 msgid "Présentation"
 msgstr "Presentación"
 
-#: src/routes/settings.tsx:173
+#: src/routes/settings.tsx:167
 msgid "Profils"
 msgstr "Perfiles"
 
-#: src/routes/guides/index.tsx:95
+#: src/routes/guides/index.tsx:96
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Actualizar la carpeta de guías descargadas"
 
-#: src/routes/downloads/$status.tsx:137
-#: src/routes/guides/index.tsx:118
+#: src/routes/downloads/$status.tsx:139
+#: src/routes/guides/index.tsx:121
 msgid "Rechercher un guide"
 msgstr "Buscar una guía"
 
@@ -285,7 +273,7 @@ msgid "Site officiel"
 msgstr "Sitio oficial"
 
 #: src/routes/auto-pilot.tsx:76
-#: src/routes/notes.index.tsx:88
+#: src/routes/notes.index.tsx:94
 msgid "Supprimer de la liste"
 msgstr "Eliminar de la lista"
 
@@ -297,9 +285,17 @@ msgstr "Tamaño del texto de las guías"
 msgid "Téléchargements"
 msgstr "Descargas"
 
-#: src/components/guide-card.tsx:105
+#: src/components/guide-card.tsx:42
 msgid "Télécharger le guide"
 msgstr "Descargar la guía"
+
+#: src/routes/settings.tsx:105
+msgid "Très grande"
+msgstr "Extra grande"
+
+#: src/routes/settings.tsx:93
+msgid "Très petite"
+msgstr "Extra pequeña"
 
 #: src/routes/index.tsx:58
 msgid "Twitter de Ganymède"

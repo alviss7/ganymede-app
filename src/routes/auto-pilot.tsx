@@ -26,7 +26,7 @@ export const Route = createFileRoute('/auto-pilot')({
           <BottomBar>
             <Input placeholder={t`Nom`} name="name" className="bg-secondary placeholder:italic" disabled />
             <Input placeholder="2,-30" name="position" className="bg-secondary placeholder:italic" disabled />
-            <Button type="button" size="icon" className="min-w-9" variant="secondary" disabled>
+            <Button type="button" size="icon" className="min-w-6 sm:min-w-9" variant="secondary" disabled>
               <PlusIcon />
             </Button>
           </BottomBar>
@@ -126,7 +126,7 @@ function AutoPilotPage() {
               required
               maxLength={11}
             />
-            <Button type="submit" size="icon" className="min-w-9" variant="secondary" title={t`Ajouter`}>
+            <Button type="submit" size="icon" className="min-w-6 sm:min-w-9" variant="secondary" title={t`Ajouter`}>
               <PlusIcon />
             </Button>
           </form>

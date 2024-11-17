@@ -35,7 +35,7 @@ export const Route = createFileRoute('/guides/$id')({
 function Pending() {
   return (
     <Page title="" key="guide" to="/guides">
-      <PageScrollableContent hasPageContentTitleBar className="flex items-center justify-center">
+      <PageScrollableContent hasTitleBar className="flex items-center justify-center">
         <header className="fixed inset-x-0 top-[66px] z-10 bg-primary">
           <div className="relative flex h-10 items-center justify-between gap-2 p-1"></div>
         </header>
@@ -123,10 +123,10 @@ function GuideIdPage() {
   }
 
   return (
-    <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
-      <PageScrollableContent hasPageContentTitleBar ref={scrollableRef}>
-        <header className="fixed inset-x-0 top-[66px] z-10 bg-primary-800">
-          <div className="relative flex h-10 items-center justify-between gap-2 p-1">
+    <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="leading-5 line-clamp-1">
+      <PageScrollableContent hasTitleBar ref={scrollableRef}>
+        <header className="fixed inset-x-0 top-[60px] z-10 bg-primary-800 sm:top-[66px]">
+          <div className="relative flex h-9 items-center justify-between gap-2 p-1">
             {step && (
               <>
                 <Position pos_x={step.pos_x} pos_y={step.pos_y} />
@@ -147,9 +147,10 @@ function GuideIdPage() {
           <GuideFrame
             className={cn(
               'guide px-2 xs:px-3 pt-2 xs:pt-3 leading-5 sm:px-4 sm:pt-4',
+              conf.data.fontSize === 'ExtraSmall' && 'text-xs',
               conf.data.fontSize === 'Small' && 'text-sm leading-4',
               conf.data.fontSize === 'Large' && 'text-md leading-5',
-              conf.data.fontSize === 'Extra' && 'text-lg leading-6',
+              conf.data.fontSize === 'ExtraLarge' && 'text-lg leading-6',
             )}
             guideId={guide.id}
             html={step.web_text}

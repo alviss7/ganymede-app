@@ -34,14 +34,18 @@ export function DownloadImage({
     },
     enabled,
     staleTime: Infinity,
+    retry: 2,
   })
 
   if (!enabled) return <img src={src} {...props} />
 
-  if (image.isLoading)
+  if (image.isLoading) {
     return (
-      <GenericLoader className={cn('-translate-y-0.5 mr-[0.2em] inline size-5', props.className, loaderClassName)} />
+      <span className="mr-[0.17em] inline-block">
+        <GenericLoader className={cn('inline-block size-[1.05rem]', props.className, loaderClassName)} />
+      </span>
     )
+  }
 
   if (image.isError) {
     console.error(image.error)

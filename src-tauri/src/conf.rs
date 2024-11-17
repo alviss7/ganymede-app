@@ -37,10 +37,11 @@ pub enum Lang {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FontSize {
+    ExtraSmall,
     Small,
-    Base,
+    Normal,
     Large,
-    Extra,
+    ExtraLarge,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -177,7 +178,7 @@ impl Default for Lang {
 
 impl Default for FontSize {
     fn default() -> Self {
-        FontSize::Base
+        FontSize::Normal
     }
 }
 

@@ -59,7 +59,7 @@ function Settings() {
       <PageScrollableContent className="py-2">
         <div className="container flex flex-col gap-4 text-sm">
           <section className="flex flex-col gap-2">
-            <Label htmlFor="opacity">
+            <Label htmlFor="opacity" className="text-xs">
               <Trans>Opacité</Trans>
             </Label>
             <Slider
@@ -73,12 +73,10 @@ function Settings() {
             />
           </section>
           <section className="flex flex-col gap-2">
-            <p className="font-medium text-sm leading-none">
+            <p className="font-medium text-xs leading-none">
               <Trans>Taille de texte des guides</Trans>
             </p>
-            <RadioGroup
-              className="grid-cols-2"
-              orientation="horizontal"
+            <Select
               value={conf.data.fontSize}
               onValueChange={(value) => {
                 setConf.mutate({
@@ -87,34 +85,30 @@ function Settings() {
                 })
               }}
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Small" id="text-sm" />
-                <Label htmlFor="text-sm">
+              <SelectTrigger id="lang-guides" className="text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ExtraSmall">
+                  <Trans>Très petite</Trans>
+                </SelectItem>
+                <SelectItem value="Small">
                   <Trans>Petite</Trans>
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Base" id="text-base" />
-                <Label htmlFor="text-base">
+                </SelectItem>
+                <SelectItem value="Normal">
                   <Trans>Normal</Trans>
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Large" id="text-md" />
-                <Label htmlFor="text-md">
-                  <Trans>Large</Trans>
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Extra" id="text-lg" />
-                <Label htmlFor="text-lg">
-                  <Trans>Extra</Trans>
-                </Label>
-              </div>
-            </RadioGroup>
+                </SelectItem>
+                <SelectItem value="Large">
+                  <Trans>Grande</Trans>
+                </SelectItem>
+                <SelectItem value="ExtraLarge">
+                  <Trans>Très grande</Trans>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </section>
           <section className="flex items-center justify-between gap-2">
-            <Label htmlFor="auto-travel-copy">
+            <Label htmlFor="auto-travel-copy" className="text-xs">
               <Trans>Copie d'autopilote</Trans>
             </Label>
             <Switch
@@ -129,7 +123,7 @@ function Settings() {
             />
           </section>
           <section className="flex items-center justify-between gap-2">
-            <Label htmlFor="show-done-guides">
+            <Label htmlFor="show-done-guides" className="text-xs">
               <Trans>Afficher les guides terminés</Trans>
             </Label>
             <Switch
@@ -144,7 +138,7 @@ function Settings() {
             />
           </section>
           <section className="space-y-2">
-            <Label htmlFor="lang-guides">
+            <Label htmlFor="lang-guides" className="text-xs">
               <Trans>Langue</Trans>
             </Label>
             <Select
@@ -157,7 +151,7 @@ function Settings() {
                 await dynamicActiveLocale(value.toLowerCase())
               }}
             >
-              <SelectTrigger id="lang-guides">
+              <SelectTrigger id="lang-guides" className="text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -169,7 +163,7 @@ function Settings() {
             </Select>
           </section>
           <section className="space-y-2">
-            <Label htmlFor="profiles">
+            <Label htmlFor="profiles" className="text-xs">
               <Trans>Profils</Trans>
             </Label>
             <Select
@@ -181,7 +175,7 @@ function Settings() {
                 })
               }}
             >
-              <SelectTrigger id="profiles">
+              <SelectTrigger id="profiles" className="text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -196,7 +190,7 @@ function Settings() {
             </Select>
           </section>
           <section className="space-y-2">
-            <Label htmlFor="create-profile">
+            <Label htmlFor="create-profile" className="text-xs">
               <Trans>Créer un profil</Trans>
             </Label>
             <form

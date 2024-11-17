@@ -1,25 +1,27 @@
 import { BottomBar } from '@/components/bottom-bar'
+import { FlagPerLang } from '@/components/flag-per-lang'
 import { GenericLoader } from '@/components/generic-loader.tsx'
-import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
+import { GuideDownloadButton } from '@/components/guide-card.tsx'
 import { PageScrollableContent } from '@/components/page-scrollable-content'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card.tsx'
 import { ClearInput } from '@/components/ui/clear-input'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination.tsx'
 import { useScrollToTop } from '@/hooks/use_scroll_to_top'
+import { getGuideById } from '@/lib/guide'
 import { rankList } from '@/lib/rank'
 import { paginate } from '@/lib/search'
 import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
+import { guidesQuery } from '@/queries/guides.query'
 import { Page } from '@/routes/-page.tsx'
 import { StatusZod } from '@/types/status.ts'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
+import { ChevronRightIcon, VerifiedIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
-import { getGuideById } from '@/lib/guide'
-import { Button } from '@/components/ui/button'
-import { guidesQuery } from '@/queries/guides.query'
 
 const SearchZod = z.object({
   page: z.coerce.number(),
@@ -120,7 +122,7 @@ function DownloadGuidePage() {
   return (
     <Page key={`download-${status}`} to="/downloads" title={title}>
       <PageScrollableContent hasBottomBar={hasPagination} className="p-2" ref={scrollableRef}>
-        <div className="flex grow flex-col">
+        <div className="flex grow flex-col text-xs sm:text-sm">
           {guides.data.length === 0 ? (
             <p className="text-center">
               <Trans>Aucun guides trouvé</Trans>
@@ -146,19 +148,37 @@ function DownloadGuidePage() {
               {paginatedOrFilteredGuides.map((guide) => {
                 const isGuideDownloaded = getGuideById(downloads.data.guides, guide.id)
 
+                console.log(guide)
+
                 return (
-                  <Card key={guide.id}>
-                    <GuideCardHeader guide={guide} />
-                    <GuideCardFooter className="items-end justify-between">
+                  <Card key={guide.id} className="flex gap-2 p-2 xs:px-3 text-xxs xs:text-sm sm:text-base">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <FlagPerLang lang={guide.lang} />
+                      <span className="whitespace-nowrap text-xxs">
+                        <Trans>
+                          id <span className="text-yellow-300">{guide.id}</span>
+                        </Trans>
+                      </span>
+                    </div>
+                    <div className="flex grow flex-col gap-1">
+                      <h3 className="grow text-balance">{guide.name}</h3>
+                      <p className="inline-flex items-center gap-1 self-end">
+                        <span>
+                          <Trans>
+                            de <span className="font-semibold text-blue-400">{guide.user.name}</span>
+                          </Trans>
+                        </span>
+                        {guide.user.is_certified === 1 && <VerifiedIcon className="size-3 xs:size-4 text-orange-300" />}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      <Button variant="secondary" size="icon" disabled={!isGuideDownloaded} asChild>
+                        <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: 0 }} draggable={false}>
+                          <ChevronRightIcon />
+                        </Link>
+                      </Button>
                       <GuideDownloadButton guide={guide} />
-                      {isGuideDownloaded && (
-                        <Button asChild variant="secondary">
-                          <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: 0 }} draggable={false}>
-                            <Trans>Ouvrir</Trans>
-                          </Link>
-                        </Button>
-                      )}
-                    </GuideCardFooter>
+                    </div>
                   </Card>
                 )
               })}
@@ -172,7 +192,7 @@ function DownloadGuidePage() {
                 {Array.from({ length: nextPages }).map((_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
-                      size="sm"
+                      size="icon"
                       from={Route.fullPath}
                       to="."
                       params={{ status }}

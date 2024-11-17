@@ -68,7 +68,7 @@ export function TitleBar() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <p className="center-absolute cursor-default select-none text-center font-semibold text-sm xs:text-lg">
+      <p className="center-absolute cursor-default select-none text-center font-semibold text-sm sm:text-base">
         Ganymède
       </p>
       <p data-tauri-drag-region="" className="relative z-10 size-full grow"></p>

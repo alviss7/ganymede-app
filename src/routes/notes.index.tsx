@@ -47,7 +47,13 @@ function NotesPage() {
       title={t`Notes`}
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
-          <Button size="icon-sm" variant="secondary" asChild title={t`Créer une nouvelle note`}>
+          <Button
+            size="icon-sm"
+            variant="secondary"
+            asChild
+            title={t`Créer une nouvelle note`}
+            className="size-6 min-h-6 min-w-6 sm:size-7 sm:min-h-7 sm:min-w-7"
+          >
             <Link to="/notes/create" search={{}} draggable={false}>
               <PlusIcon />
             </Link>

@@ -16,7 +16,7 @@
         "width": 325,
         "height": 450,
         "minWidth": 250,
-        "minHeight": 450,
+        "minHeight": 300,
         "decorations": false,
         "alwaysOnTop": true,
         "acceptFirstMouse": true,

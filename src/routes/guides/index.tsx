@@ -1,8 +1,8 @@
 import { GenericLoader } from '@/components/generic-loader.tsx'
-import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
+import { GuideDownloadButton } from '@/components/guide-card.tsx'
 import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Button } from '@/components/ui/button.tsx'
-import { Card, CardContent } from '@/components/ui/card.tsx'
+import { Card } from '@/components/ui/card.tsx'
 import { ClearInput } from '@/components/ui/clear-input'
 import { useProfile } from '@/hooks/use_profile'
 import { rankList } from '@/lib/rank'
@@ -13,8 +13,9 @@ import { Page } from '@/routes/-page.tsx'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
+import { ChevronRightIcon, FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
 import { useState } from 'react'
+import { FlagPerLang } from '../../components/flag-per-lang'
 
 export const Route = createFileRoute('/guides/')({
   component: GuidesPage,
@@ -93,6 +94,7 @@ function GuidesPage() {
             variant="secondary"
             onClick={onRefresh}
             title={t`Rafraichir le dossier des guides téléchargés`}
+            className="size-6 min-h-6 min-w-6 sm:size-7 sm:min-h-7 sm:min-w-7"
           >
             <FolderSyncIcon className="size-4" />
           </Button>
@@ -101,6 +103,7 @@ function GuidesPage() {
             variant="secondary"
             onClick={onOpenExplorer}
             title={t`Ouvrir le dossier des guides téléchargés`}
+            className="size-6 min-h-6 min-w-6 sm:size-7 sm:min-h-7 sm:min-w-7"
           >
             <FolderOpenIcon className="size-4" />
           </Button>
@@ -119,37 +122,43 @@ function GuidesPage() {
           />
 
           {filteredGuides.map((guide) => {
+            const step = (guide.currentStep ?? 0) + 1
+            const totalSteps = guide.steps.length
+            const percentage = (((step - 1) / (totalSteps - 1)) * 100).toFixed(1)
+            const hasOpenButton = guide.steps.length > 0
+
             return (
-              <Card key={guide.id}>
-                <GuideCardHeader guide={guide} />
-                <CardContent className="px-3">
-                  <p className="text-sm italic">
+              <Card key={guide.id} className="flex gap-2 p-2 xs:px-3 text-xxs xs:text-sm sm:text-base">
+                <div className="flex flex-col items-center gap-0.5">
+                  <FlagPerLang lang={guide.lang} />
+                  <span className="whitespace-nowrap text-xxs">
                     <Trans>
-                      <span>
-                        Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
-                      </span>
-                      <span>
-                        ({(((guide.currentStep ?? 0) / (guide.steps.length - 1)) * 100).toFixed(1)}
-                        %)
-                      </span>
+                      id <span className="text-yellow-300">{guide.id}</span>
                     </Trans>
+                  </span>
+                </div>
+                <div className="flex grow flex-col gap-1">
+                  <h3 className="grow text-balance">{guide.name}</h3>
+                  <p className="inline-flex gap-1 self-end">
+                    <span>
+                      <span className="text-yellow-300">{step}</span>/{totalSteps}
+                    </span>
+                    <span>({percentage}%)</span>
                   </p>
-                </CardContent>
-                <GuideCardFooter className="items-end justify-between">
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <Button asChild variant="secondary" size="icon" disabled={!hasOpenButton}>
+                    <Link
+                      to="/guides/$id"
+                      params={{ id: guide.id }}
+                      search={{ step: guide.currentStep ?? 0 }}
+                      draggable={false}
+                    >
+                      <ChevronRightIcon />
+                    </Link>
+                  </Button>
                   <GuideDownloadButton guide={guide} />
-                  {guide.steps.length > 0 && (
-                    <Button asChild variant="secondary">
-                      <Link
-                        to="/guides/$id"
-                        params={{ id: guide.id }}
-                        search={{ step: guide.currentStep ?? 0 }}
-                        draggable={false}
-                      >
-                        <Trans>Ouvrir</Trans>
-                      </Link>
-                    </Button>
-                  )}
-                </GuideCardFooter>
+                </div>
               </Card>
             )
           })}
