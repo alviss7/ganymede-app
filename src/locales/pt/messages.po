@@ -29,11 +29,11 @@ msgstr "Exibir os guias concluídos"
 msgid "Ajouter"
 msgstr "Adicionar"
 
-#: src/routes/downloads/$status.tsx:122
+#: src/routes/downloads/$status.tsx:126
 msgid "Aucun guides trouvé"
 msgstr "Nenhum guia encontrado"
 
-#: src/routes/downloads/$status.tsx:137
+#: src/routes/downloads/$status.tsx:142
 msgid "Aucun guides trouvé avec {term}"
 msgstr "Nenhum guia encontrado com {term}"
 
@@ -167,32 +167,32 @@ msgid "Ganymède - Non affilié à Ankama Games"
 msgstr "Ganimedes - Não afiliado à Ankama Games"
 
 #: src/components/title-bar.tsx:42
-#: src/routes/downloads/$status.tsx:81
+#: src/routes/downloads/$status.tsx:84
 #: src/routes/guides/index.tsx:27
 #: src/routes/guides/index.tsx:87
 msgid "Guides"
 msgstr "Guias"
 
-#: src/routes/downloads/$status.tsx:79
+#: src/routes/downloads/$status.tsx:82
 #: src/routes/downloads/index.tsx:51
 msgid "Guides certifiés"
 msgstr "Guias certificados"
 
-#: src/routes/downloads/$status.tsx:75
+#: src/routes/downloads/$status.tsx:78
 #: src/routes/downloads/index.tsx:57
 msgid "Guides draft"
 msgstr "Guias rascunho"
 
-#: src/routes/downloads/$status.tsx:77
+#: src/routes/downloads/$status.tsx:80
 #: src/routes/downloads/index.tsx:48
 msgid "Guides principaux"
 msgstr "Guias principais"
 
-#: src/routes/downloads/$status.tsx:73
+#: src/routes/downloads/$status.tsx:76
 msgid "Guides privés"
 msgstr "Guias privados"
 
-#: src/routes/downloads/$status.tsx:71
+#: src/routes/downloads/$status.tsx:74
 #: src/routes/downloads/index.tsx:54
 msgid "Guides publics"
 msgstr "Guias públicos"
@@ -240,6 +240,7 @@ msgstr "Notas"
 msgid "Opacité"
 msgstr "Opacidade"
 
+#: src/routes/downloads/$status.tsx:157
 #: src/routes/guides/index.tsx:148
 msgid "Ouvrir"
 msgstr "Abrir"
@@ -270,7 +271,7 @@ msgstr "Perfis"
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Atualizar a pasta dos guias baixados"
 
-#: src/routes/downloads/$status.tsx:132
+#: src/routes/downloads/$status.tsx:137
 #: src/routes/guides/index.tsx:118
 msgid "Rechercher un guide"
 msgstr "Pesquisar um guia"

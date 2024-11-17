@@ -13,10 +13,13 @@ import { Page } from '@/routes/-page.tsx'
 import { StatusZod } from '@/types/status.ts'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
+import { getGuideById } from '@/lib/guide'
+import { Button } from '@/components/ui/button'
+import { guidesQuery } from '@/queries/guides.query'
 
 const SearchZod = z.object({
   page: z.coerce.number(),
@@ -89,6 +92,7 @@ function DownloadGuidePage() {
   const status = Route.useParams({ select: (p) => p.status })
   const debouncedTerm = useDebounce(searchTerm, 300)
   const guides = useSuspenseQuery(guidesFromServerQuery({ status }))
+  const downloads = useSuspenseQuery(guidesQuery)
 
   const scrollableRef = useRef<HTMLDivElement>(null)
 
@@ -129,6 +133,7 @@ function DownloadGuidePage() {
                 onValueChange={setSearchTerm}
                 autoComplete="off"
                 autoCorrect="off"
+                autoCapitalize="off"
                 placeholder={t`Rechercher un guide`}
               />
 
@@ -138,14 +143,25 @@ function DownloadGuidePage() {
                 </p>
               )}
 
-              {paginatedOrFilteredGuides.map((guide) => (
-                <Card key={guide.id}>
-                  <GuideCardHeader guide={guide} />
-                  <GuideCardFooter>
-                    <GuideDownloadButton guide={guide} />
-                  </GuideCardFooter>
-                </Card>
-              ))}
+              {paginatedOrFilteredGuides.map((guide) => {
+                const isGuideDownloaded = getGuideById(downloads.data.guides, guide.id)
+
+                return (
+                  <Card key={guide.id}>
+                    <GuideCardHeader guide={guide} />
+                    <GuideCardFooter className="items-end justify-between">
+                      <GuideDownloadButton guide={guide} />
+                      {isGuideDownloaded && (
+                        <Button asChild variant="secondary">
+                          <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: 0 }} draggable={false}>
+                            <Trans>Ouvrir</Trans>
+                          </Link>
+                        </Button>
+                      )}
+                    </GuideCardFooter>
+                  </Card>
+                )
+              })}
             </div>
           )}
         </div>
