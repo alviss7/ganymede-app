@@ -3,7 +3,9 @@ import { DiscordIcon } from '@/components/icons/discord-icon.tsx'
 import { TwitterIcon } from '@/components/icons/twitter-icon.tsx'
 import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { PageTitleExtra } from '@/components/page-title.tsx'
+import { versionQuery } from '@/queries/version.query'
 import { Trans, t } from '@lingui/macro'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { GlobeIcon } from 'lucide-react'
 import { Page } from './-page'
@@ -13,8 +15,17 @@ export const Route = createFileRoute('/')({
 })
 
 function Index() {
+  const version = useQuery(versionQuery)
+
   return (
-    <Page title={t`Présentation`} actions={<PageTitleExtra className="grow text-right">v1.0</PageTitleExtra>}>
+    <Page
+      title={t`Présentation`}
+      actions={
+        <PageTitleExtra className="grow text-right" hidden={!version.isSuccess}>
+          v{version.data}
+        </PageTitleExtra>
+      }
+    >
       <PageScrollableContent className="p-2">
         <div className="app-bg flex grow flex-col gap-1">
           <article className="prose-sm text-xxs xs:text-xs">

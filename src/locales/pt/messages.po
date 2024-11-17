@@ -39,7 +39,7 @@ msgstr "Nenhum guia encontrado com {term}"
 msgid "Autopilotage"
 msgstr "Piloto automático"
 
-#: src/routes/index.tsx:22
+#: src/routes/index.tsx:33
 msgid "Bienvenue sur <0>GANYMÈDE</0> !"
 msgstr "Bem-vindo ao <0>GANYMÈDE</0>!"
 
@@ -47,7 +47,7 @@ msgstr "Bem-vindo ao <0>GANYMÈDE</0>!"
 msgid "Catégories"
 msgstr "Categorias"
 
-#: src/routes/index.tsx:27
+#: src/routes/index.tsx:38
 msgid "Cet outil a pour but de vous assister tout au long de votre aventure sur <0>Dofus</0> !"
 msgstr "Esta ferramenta foi projetada para ajudá-lo ao longo de sua aventura em <0>Dofus</0>!"
 
@@ -55,40 +55,40 @@ msgstr "Esta ferramenta foi projetada para ajudá-lo ao longo de sua aventura em
 msgid "Chasse au trésor"
 msgstr "Caça ao tesouro"
 
-#: src/components/guide-frame.tsx:209
+#: src/components/guide-frame.tsx:211
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do item. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:210
+#: src/components/guide-frame.tsx:212
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do item. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:217
+#: src/components/guide-frame.tsx:219
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome da missão. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:218
+#: src/components/guide-frame.tsx:220
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome da missão. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:205
+#: src/components/guide-frame.tsx:207
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do calabouço. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:206
+#: src/components/guide-frame.tsx:208
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do calabouço. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:213
+#: src/components/guide-frame.tsx:215
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do monstro. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:214
+#: src/components/guide-frame.tsx:216
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do monstro. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:252
-#: src/components/guide-frame.tsx:280
+#: src/components/guide-frame.tsx:254
+#: src/components/guide-frame.tsx:282
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Clique para abrir no navegador"
 
@@ -130,7 +130,7 @@ msgstr "Criar uma nota"
 msgid "Créer une nouvelle note"
 msgstr "Criar uma nova nota"
 
-#: src/routes/index.tsx:38
+#: src/routes/index.tsx:49
 msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 msgstr "Crie seus guias no site oficial e baixe os de outros usuários!"
 
@@ -138,7 +138,7 @@ msgstr "Crie seus guias no site oficial e baixe os de outros usuários!"
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
 
-#: src/routes/index.tsx:49
+#: src/routes/index.tsx:60
 msgid "Discord de Ganymède"
 msgstr "Discord do Ganimedes"
 
@@ -154,7 +154,7 @@ msgstr "Salvar a nota"
 msgid "Fermer"
 msgstr "Fechar"
 
-#: src/routes/index.tsx:73
+#: src/routes/index.tsx:84
 msgid "Ganymède - Non affilié à Ankama Games"
 msgstr "Ganimedes - Não afiliado à Ankama Games"
 
@@ -247,7 +247,7 @@ msgstr "Configurações"
 msgid "Petite"
 msgstr "Pequena"
 
-#: src/routes/index.tsx:17
+#: src/routes/index.tsx:22
 msgid "Présentation"
 msgstr "Apresentação"
 
@@ -268,7 +268,7 @@ msgstr "Pesquisar um guia"
 msgid "Réduire"
 msgstr "Minimizar"
 
-#: src/routes/index.tsx:67
+#: src/routes/index.tsx:78
 msgid "Site officiel"
 msgstr "Site oficial"
 
@@ -297,10 +297,10 @@ msgstr "Extra grande"
 msgid "Très petite"
 msgstr "Extra pequena"
 
-#: src/routes/index.tsx:58
+#: src/routes/index.tsx:69
 msgid "Twitter de Ganymède"
 msgstr "Twitter do Ganimedes"
 
-#: src/routes/index.tsx:33
+#: src/routes/index.tsx:44
 msgid "Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure."
 msgstr "Você pode criar, usar e compartilhar guias que ajudam a otimizar sua aventura."

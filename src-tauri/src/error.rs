@@ -1,5 +1,6 @@
 #[derive(Debug)]
 pub enum Error {
+    String(String),
     Io(std::io::Error),
     Json(serde_json::Error),
     Tauri(tauri::Error),
@@ -7,6 +8,13 @@ pub enum Error {
     Http(tauri_plugin_http::reqwest::Error),
     JsonPath(serde_path_to_error::Error<serde_json::Error>),
     Glob(glob::GlobError),
+    EarlyReturn,
+}
+
+impl From<String> for Error {
+    fn from(err: String) -> Self {
+        Error::String(err)
+    }
 }
 
 impl From<std::io::Error> for Error {
@@ -55,6 +63,7 @@ impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         eprintln!("Error: {:?}", self);
         match self {
+            Error::String(err) => tauri::ipc::InvokeError::from(err),
             Error::Invoke(err) => err,
             Error::Json(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::Io(err) => tauri::ipc::InvokeError::from(err.to_string()),
@@ -62,6 +71,7 @@ impl Into<tauri::ipc::InvokeError> for Error {
             Error::Http(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::JsonPath(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::Glob(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::EarlyReturn => tauri::ipc::InvokeError::from("Early return".to_string()),
         }
     }
 }

@@ -1,3 +1,4 @@
+use crate::api::GANYMEDE_API_V2;
 use crate::error::Error;
 use crate::tauri_api::GuidesPath;
 use serde::{Deserialize, Serialize};
@@ -7,8 +8,6 @@ use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
 use tauri_plugin_http::reqwest;
 use tauri_plugin_shell::ShellExt;
-
-const GANYMEDE_API: &str = "https://ganymede-dofus.com/api/v2";
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct User {
@@ -189,7 +188,7 @@ pub fn get_guides(window: Window<Wry>) -> Result<Guides, Error> {
 pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Error> {
     println!("get_guide_from_server: {}", guide_id);
 
-    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API, guide_id)).await?;
+    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API_V2, guide_id)).await?;
     let text = res.text().await?;
     let guide = crate::json::from_str::<GuideWithSteps>(text.as_str()).map_err(Error::from);
 
@@ -209,7 +208,7 @@ pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Erro
 pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error> {
     println!("get_guides_from_server");
 
-    let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API, status)).await?;
+    let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API_V2, status)).await?;
 
     let text = res.text().await?;
 

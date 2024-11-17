@@ -1,3 +1,4 @@
+import { FlagPerLang } from '@/components/flag-per-lang'
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideDownloadButton } from '@/components/guide-card.tsx'
 import { PageScrollableContent } from '@/components/page-scrollable-content'
@@ -15,7 +16,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ChevronRightIcon, FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
 import { useState } from 'react'
-import { FlagPerLang } from '../../components/flag-per-lang'
 
 export const Route = createFileRoute('/guides/')({
   component: GuidesPage,
