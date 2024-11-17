@@ -139,16 +139,8 @@ msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !
 msgstr "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 
 #: src/components/guide-card.tsx:54
-#~ msgid "de : <0>{0}</0>"
-#~ msgstr "de : <0>{0}</0>"
-
-#: src/components/guide-card.tsx:54
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
-
-#: src/components/guide-card.tsx:54
-#~ msgid "de: <0>{0}</0>"
-#~ msgstr "de: <0>{0}</0>"
 
 #: src/routes/index.tsx:49
 msgid "Discord de Ganymède"
@@ -206,16 +198,8 @@ msgid "Guides publics"
 msgstr "Guides publics"
 
 #: src/components/guide-card.tsx:49
-#~ msgid "id : {0}"
-#~ msgstr "id : {0}"
-
-#: src/components/guide-card.tsx:49
 msgid "id {0}"
 msgstr "id {0}"
-
-#: src/components/guide-card.tsx:49
-#~ msgid "id: {0}"
-#~ msgstr "id: {0}"
 
 #: src/routes/settings.tsx:148
 msgid "Langue"
@@ -228,10 +212,6 @@ msgstr "Large"
 #: src/components/guide-card.tsx:105
 msgid "Mettre à jour le guide"
 msgstr "Mettre à jour le guide"
-
-#: src/routes/notes.index.tsx:63
-#~ msgid "Modifer la note"
-#~ msgstr "Modifer la note"
 
 #: src/routes/notes.index.tsx:63
 msgid "Modifier la note"
