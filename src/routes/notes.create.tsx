@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useSetConf } from '@/mutations/set-conf.mutation'
 import { confQuery } from '@/queries/conf.query'
+import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { SaveIcon } from 'lucide-react'
@@ -19,6 +20,8 @@ export const Route = createFileRoute('/notes/create')({
   validateSearch: (search) => SearchZod.parse(search),
 })
 
+const linesBreak = '\n\n'
+
 function CreateNotePage() {
   const conf = useSuspenseQuery(confQuery)
   const setConf = useSetConf()
@@ -28,7 +31,7 @@ function CreateNotePage() {
   const note = noteName ? conf.data.notes.find((note) => note.name === noteName) : undefined
 
   return (
-    <Page key="create-or-edit-notes-page" title={noteName ? 'Éditer une note' : 'Créer une note'} to="/notes">
+    <Page key="create-or-edit-notes-page" title={noteName ? t`Éditer une note` : t`Créer une note`} to="/notes">
       <PageScrollableContent className="p-2">
         <form
           className="flex grow flex-col gap-2"
@@ -61,19 +64,16 @@ function CreateNotePage() {
           }}
         >
           <Input
-            placeholder="Nom"
+            placeholder={t`Nom de la note`}
             name="name"
             className="placeholder:italic"
             required
             minLength={2}
             maxLength={20}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
             defaultValue={note?.name}
           />
           <Textarea
-            placeholder={`Contenu de la note.\n\nDepuis le menu précédent, une fois créée, je peux la modifier en cliquant dessus, ou copier son contenu.`}
+            placeholder={t`Contenu de la note.${linesBreak}Depuis le menu précédent, une fois créée, je peux la modifier en cliquant dessus, ou copier son contenu.`}
             name="text"
             className="resize-none placeholder:italic"
             required
@@ -85,7 +85,7 @@ function CreateNotePage() {
           </Textarea>
           <Button type="submit" className="grow">
             <SaveIcon />
-            Enregistrer la note
+            <Trans>Enregistrer la note</Trans>
           </Button>
         </form>
       </PageScrollableContent>

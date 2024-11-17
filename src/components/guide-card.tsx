@@ -6,6 +6,7 @@ import { useDownloadGuideFromServer } from '@/mutations/download-guide-from-serv
 import { guidesFromServerQuery } from '@/queries/guides-from-server.query.ts'
 import { guidesQuery } from '@/queries/guides.query.ts'
 import { Guide } from '@/types/guide.ts'
+import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import * as Flag from 'country-flag-icons/react/3x2'
 import { CircleAlertIcon, CircleCheckIcon, ImportIcon, LoaderIcon, VerifiedIcon } from 'lucide-react'
@@ -44,11 +45,15 @@ export function GuideCardHeader({
           <div>
             <div>
               <FlagPerLang lang={guide.lang} />
-              <span>id: {guide.id}</span>
+              <span>
+                <Trans>id {guide.id}</Trans>
+              </span>
             </div>
             <span className="flex items-center gap-1">
               <span>
-                de: <span className="font-semibold text-blue-400">{guide.user.name}</span>
+                <Trans>
+                  de <span className="font-semibold text-blue-400">{guide.user.name}</span>
+                </Trans>
               </span>
               {guide.user.is_certified === 1 && <VerifiedIcon className="size-4 text-orange-300" />}
             </span>
@@ -83,6 +88,8 @@ export function GuideDownloadButton({
   const guideInServer = getGuideById(guides.data, guide.id)
   const guideInDownloads = getGuideById(downloads.data.guides, guide.id)
 
+  const isGuideNeedUpdate = isGuideNew(guideInServer, guideInDownloads)
+
   // show a button to download the guide, checkmark if already downloaded, and alert icon if the guide has an update
 
   return (
@@ -95,13 +102,14 @@ export function GuideDownloadButton({
         disabled={downloadGuideFromServer.isPending}
         className="relative"
         variant={downloadGuideFromServer.isError ? 'destructive' : 'secondary'}
+        title={isGuideNeedUpdate ? t`Mettre à jour le guide` : t`Télécharger le guide`}
       >
         {!downloadGuideFromServer.isPending &&
           (downloadGuideFromServer.isSuccess || guideInDownloads !== undefined) && <CircleCheckIcon />}
         {downloadGuideFromServer.isPending && <LoaderIcon className="animate-[spin_2s_linear_infinite]" />}
         {downloadGuideFromServer.isIdle && guideInDownloads === undefined && <ImportIcon />}
         {downloadGuideFromServer.isError && <CircleAlertIcon className="size-5" />}
-        {isGuideNew(guideInServer, guideInDownloads) && (
+        {isGuideNeedUpdate && (
           <span
             className="-right-2 -top-3.5 absolute size-4 font-black text-2xl text-yellow-400"
             title="Update available"

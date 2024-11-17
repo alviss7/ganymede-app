@@ -2,6 +2,7 @@ import * as path from 'node:path'
 import * as url from 'node:url'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
+import { lingui } from '@lingui/vite-plugin'
 import { defineConfig } from 'vite'
 
 const dirname = path.dirname(url.fileURLToPath(import.meta.url))
@@ -10,7 +11,15 @@ const host = process.env.TAURI_DEV_HOST
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [TanStackRouterVite(), react()],
+  plugins: [
+    TanStackRouterVite(),
+    react({
+      babel: {
+        plugins: ['macros'],
+      },
+    }),
+    lingui(),
+  ],
 
   resolve: {
     alias: {

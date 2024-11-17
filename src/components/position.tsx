@@ -1,6 +1,7 @@
-import { confQuery } from '@/queries/conf.query.ts'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { copyPosition } from '@/lib/copy-position'
+import { confQuery } from '@/queries/conf.query.ts'
+import { t } from '@lingui/macro'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export function Position({
   pos_x,
@@ -16,7 +17,11 @@ export function Position({
   }
 
   return (
-    <button className="w-20 text-start text-yellow-400" onClick={onClick}>
+    <button
+      className="w-20 text-start text-yellow-400"
+      onClick={onClick}
+      title={conf.data.autoTravelCopy ? t`Copier la commande autopilote` : t`Copier la position`}
+    >
       [{pos_x},{pos_y}]
     </button>
   )

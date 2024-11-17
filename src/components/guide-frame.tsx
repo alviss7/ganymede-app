@@ -8,6 +8,7 @@ import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { useToggleGuideCheckbox } from '@/mutations/toggle-guide-checkbox.mutation'
 import { confQuery } from '@/queries/conf.query'
 import { guidesQuery } from '@/queries/guides.query'
+import { t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
@@ -57,6 +58,7 @@ export function GuideFrame({
               onClick={async () => {
                 await copyPosition(Number.parseInt(posX, 10), Number.parseInt(posY, 10), conf.data.autoTravelCopy)
               }}
+              title={conf.data.autoTravelCopy ? 'Copier la commande autopilote' : 'Copier la position'}
             >
               [{posX},{posY}]
             </button>{' '}
@@ -178,6 +180,7 @@ export function GuideFrame({
         ) {
           const name = domNode.attribs.name ?? ''
           const { class: nodeClassName, ...restAttribs } = domNode.attribs
+          const isMacOs = navigator.userAgent.toLowerCase().includes('mac os x')
 
           return (
             <div {...restAttribs} className={cn('!contents', nodeClassName)}>
@@ -187,7 +190,7 @@ export function GuideFrame({
                 onClick={async (evt) => {
                   console.log(navigator.userAgent)
                   // open in browser if ctrl/cmd is pressed
-                  if (navigator.userAgent.toLowerCase().includes('mac os x') ? evt.metaKey : evt.ctrlKey) {
+                  if (isMacOs ? evt.metaKey : evt.ctrlKey) {
                     openGuideLink.mutate(
                       `https://dofusdb.fr/fr/database/${domNode.attribs.type === 'item' ? 'object' : domNode.attribs.type}/${domNode.attribs.dofusdbid}`,
                     )
@@ -195,6 +198,26 @@ export function GuideFrame({
                     await writeText(name)
                   }
                 }}
+                title={(() => {
+                  switch (domNode.attribs.type) {
+                    case 'dungeon':
+                      return isMacOs
+                        ? t`Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb`
+                        : t`Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb`
+                    case 'item':
+                      return isMacOs
+                        ? t`Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb`
+                        : t`Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb`
+                    case 'monster':
+                      return isMacOs
+                        ? t`Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb`
+                        : t`Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb`
+                    case 'quest':
+                      return isMacOs
+                        ? t`Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb`
+                        : t`Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb`
+                  }
+                })()}
               >
                 <span className="peer group-focus-within:saturate-[25%] group-hover:saturate-150">
                   {domToReact([domNode.children[0]] as DOMNode[], options)}
@@ -226,6 +249,7 @@ export function GuideFrame({
                 }
               }}
               draggable={false}
+              title={clickable ? t`Cliquez pour ouvrir dans le navigateur` : undefined}
               role="button"
               className={cn(
                 'inline-flex select-none',
@@ -241,6 +265,7 @@ export function GuideFrame({
         // #region a
         if (domNode.name === 'a') {
           const href = domNode.attribs.href ?? ''
+          const isHrefHttp = href !== '' && href.startsWith('http')
 
           return (
             <button
@@ -248,10 +273,11 @@ export function GuideFrame({
               type="button"
               className="inline-flex"
               onClick={() => {
-                if (href !== '' && href.startsWith('http')) {
+                if (isHrefHttp) {
                   openGuideLink.mutate(href)
                 }
               }}
+              title={isHrefHttp ? t`Cliquez pour ouvrir dans le navigateur` : undefined}
             >
               {domToReact(domNode.children as DOMNode[], options)}
             </button>

@@ -13,6 +13,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
         className,
       )}
       ref={ref}
+      autoCorrect="off"
+      autoCapitalize="off"
+      autoComplete="off"
       {...props}
     />
   )

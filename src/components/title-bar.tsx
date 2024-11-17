@@ -4,6 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
+import { Trans, t } from '@lingui/macro'
 import { Link } from '@tanstack/react-router'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import {
@@ -32,37 +33,37 @@ export function TitleBar() {
           <DropdownMenuItem className="gap-2" asChild>
             <Link to="/" draggable={false}>
               <HomeIcon />
-              Accueil
+              <Trans>Accueil</Trans>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
             <Link to="/guides" draggable={false}>
               <NotebookTextIcon />
-              Guides
+              <Trans>Guides</Trans>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
             <Link to="/downloads" draggable={false}>
               <CloudDownloadIcon />
-              Téléchargements
+              <Trans>Téléchargements</Trans>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
             <Link to="/auto-pilot" draggable={false}>
               <LocateIcon />
-              Autopilotage
+              <Trans>Autopilotage</Trans>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
             <Link to="/notes" draggable={false}>
               <NotebookPenIcon />
-              Notes
+              <Trans>Notes</Trans>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="gap-2" asChild>
             <a target="_blank" href="https://dofusdb.fr/fr/tools/treasure-hunt" draggable={false}>
               <CrosshairIcon />
-              Chasses
+              <Trans>Chasse au trésor</Trans>
             </a>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -76,6 +77,7 @@ export function TitleBar() {
           to="/settings"
           className="inline-flex size-7 items-center justify-center hover:bg-primary-800"
           draggable={false}
+          title={t`Paramètres`}
         >
           <SettingsIcon className="size-4" />
         </Link>
@@ -85,6 +87,7 @@ export function TitleBar() {
           }}
           className="inline-flex size-7 items-center justify-center hover:bg-primary-800"
           id="titlebar-minimize"
+          title={t`Réduire`}
         >
           <MinusIcon className="size-4" />
         </button>
@@ -94,6 +97,7 @@ export function TitleBar() {
           }}
           className="inline-flex size-7 items-center justify-center hover:bg-destructive"
           id="titlebar-close"
+          title={t`Fermer`}
         >
           <XIcon className="size-4" />
         </button>

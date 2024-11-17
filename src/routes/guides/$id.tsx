@@ -4,13 +4,14 @@ import { GuideFrame } from '@/components/guide-frame'
 import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Position } from '@/components/position.tsx'
 import { useGuide } from '@/hooks/use_guide'
+import { useScrollToTop } from '@/hooks/use_scroll_to_top'
 import { cn } from '@/lib/utils'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { useLayoutEffect } from 'react'
+import { useRef } from 'react'
 import { z } from 'zod'
 
 const ParamsZod = z.object({
@@ -54,12 +55,10 @@ function GuideIdPage() {
   const setConf = useSetConf()
   const step = guide.steps[index]
   const navigate = Route.useNavigate()
+  const scrollableRef = useRef<HTMLDivElement>(null)
   const stepMax = guide.steps.length - 1
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: want to scroll to top when step changes
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0)
-  }, [step])
+  useScrollToTop(scrollableRef, [step])
 
   const changeStep = async (nextStep: number) => {
     await setConf.mutateAsync({
@@ -125,7 +124,7 @@ function GuideIdPage() {
 
   return (
     <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="text-md leading-5 line-clamp-1">
-      <PageScrollableContent hasPageContentTitleBar>
+      <PageScrollableContent hasPageContentTitleBar ref={scrollableRef}>
         <header className="fixed inset-x-0 top-[66px] z-10 bg-primary-800">
           <div className="relative flex h-10 items-center justify-between gap-2 p-1">
             {step && (

@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { copyPosition } from '@/lib/copy-position'
 import { useSetConf } from '@/mutations/set-conf.mutation'
 import { confQuery } from '@/queries/conf.query'
+import { t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { CopyIcon, PlusIcon, TrashIcon } from 'lucide-react'
@@ -18,12 +19,12 @@ export const Route = createFileRoute('/auto-pilot')({
   },
   pendingComponent: () => {
     return (
-      <Page key="auto-pilot-page" title="Autopilotage">
+      <Page key="auto-pilot-page" title={t`Autopilotage`}>
         <PageScrollableContent hasBottomBar className="flex items-center justify-center">
           <GenericLoader />
 
           <BottomBar>
-            <Input placeholder="Nom" name="name" className="bg-secondary placeholder:italic" disabled />
+            <Input placeholder={t`Nom`} name="name" className="bg-secondary placeholder:italic" disabled />
             <Input placeholder="2,-30" name="position" className="bg-secondary placeholder:italic" disabled />
             <Button type="button" size="icon" className="min-w-9" variant="secondary" disabled>
               <PlusIcon />
@@ -41,7 +42,7 @@ function AutoPilotPage() {
   const setConf = useSetConf()
 
   return (
-    <Page key="auto-pilot-page" title="Autopilotage">
+    <Page key="auto-pilot-page" title={t`Autopilotage`}>
       <PageScrollableContent className="p-2" hasBottomBar>
         <ul className="flex flex-col gap-2">
           {conf.data.autoPilots.map((autoPilot) => {
@@ -55,6 +56,7 @@ function AutoPilotPage() {
                       const [x, y] = autoPilot.position.split(',').map((n) => Number.parseInt(n, 10))
                       await copyPosition(x, y, conf.data.autoTravelCopy)
                     }}
+                    title={conf.data.autoTravelCopy ? t`Copier la commande autopilote` : t`Copier la position`}
                   >
                     <CopyIcon />
                   </Button>
@@ -71,6 +73,7 @@ function AutoPilotPage() {
                       autoPilots: conf.data.autoPilots.filter((pilot) => pilot.name !== autoPilot.name),
                     })
                   }}
+                  title={t`Supprimer de la liste`}
                 >
                   <TrashIcon />
                 </Button>
@@ -108,15 +111,12 @@ function AutoPilotPage() {
             }}
           >
             <Input
-              placeholder="Nom"
+              placeholder={t`Nom`}
               name="name"
               className="bg-secondary placeholder:italic"
               required
               minLength={2}
               maxLength={20}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
             />
             <Input
               placeholder="2,-30"
@@ -124,12 +124,9 @@ function AutoPilotPage() {
               className="bg-secondary placeholder:italic"
               pattern="\[?-?\d+,-?\d+\]?"
               required
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
               maxLength={11}
             />
-            <Button type="submit" size="icon" className="min-w-9" variant="secondary">
+            <Button type="submit" size="icon" className="min-w-9" variant="secondary" title={t`Ajouter`}>
               <PlusIcon />
             </Button>
           </form>

@@ -1,0 +1,309 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2024-11-16 17:54+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: es\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/routes/guides/index.tsx:127
+msgid "<0>Progression : {0}/{1} </0><1>({2}%)</1>"
+msgstr "<0>Progresión: {0}/{1} </0><1>({2}%)</1>"
+
+#: src/components/title-bar.tsx:36
+msgid "Accueil"
+msgstr "Inicio"
+
+#: src/routes/settings.tsx:133
+msgid "Afficher les guides terminés"
+msgstr "Mostrar las guías terminadas"
+
+#: src/routes/auto-pilot.tsx:129
+msgid "Ajouter"
+msgstr "Añadir"
+
+#: src/routes/downloads/$status.tsx:122
+msgid "Aucun guides trouvé"
+msgstr "No se encontraron guías"
+
+#: src/routes/downloads/$status.tsx:137
+msgid "Aucun guides trouvé avec {term}"
+msgstr "No se encontraron guías con {term}"
+
+#: src/components/title-bar.tsx:54
+#: src/routes/auto-pilot.tsx:22
+#: src/routes/auto-pilot.tsx:45
+msgid "Autopilotage"
+msgstr "Piloto automático"
+
+#: src/routes/index.tsx:22
+msgid "Bienvenue sur <0>GANYMÈDE</0> !"
+msgstr "¡Bienvenido a <0>GÁNYMEDE</0>!"
+
+#: src/routes/downloads/index.tsx:44
+msgid "Catégories"
+msgstr "Categorías"
+
+#: src/routes/index.tsx:27
+msgid "Cet outil a pour but de vous assister tout au long de votre aventure sur <0>Dofus</0> !"
+msgstr "¡Esta herramienta tiene como objetivo asistirte durante toda tu aventura en <0>Dofus</0>!"
+
+#: src/components/title-bar.tsx:66
+msgid "Chasse au trésor"
+msgstr "Búsqueda del tesoro"
+
+#: src/components/guide-frame.tsx:209
+msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre del objeto. Cmd+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:210
+msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre del objeto. Ctrl+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:217
+msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre de la misión. Cmd+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:218
+msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre de la misión. Ctrl+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:205
+msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre del calabozo. Cmd+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:206
+msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre del calabozo. Ctrl+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:213
+msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre del monstruo. Cmd+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:214
+msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
+msgstr "Haz clic para copiar el nombre del monstruo. Ctrl+clic para abrir en dofusdb"
+
+#: src/components/guide-frame.tsx:252
+#: src/components/guide-frame.tsx:280
+msgid "Cliquez pour ouvrir dans le navigateur"
+msgstr "Haz clic para abrir en el navegador"
+
+#: src/routes/notes.create.tsx:76
+msgid "Contenu de la note.{linesBreak}Depuis le menu précédent, une fois créée, je peux la modifier en cliquant dessus, ou copier son contenu."
+msgstr "Contenido de la nota.{linesBreak}Desde el menú anterior, una vez creada, puedo modificarla haciendo clic sobre ella o copiar su contenido."
+
+#: src/routes/settings.tsx:118
+msgid "Copie d'autopilote"
+msgstr "Copia del piloto automático"
+
+#: src/components/position.tsx:23
+#: src/routes/auto-pilot.tsx:59
+msgid "Copier la commande autopilote"
+msgstr "Copiar el comando del piloto automático"
+
+#: src/routes/notes.index.tsx:74
+msgid "Copier la note"
+msgstr "Copiar la nota"
+
+#: src/components/position.tsx:23
+#: src/routes/auto-pilot.tsx:59
+msgid "Copier la position"
+msgstr "Copiar la posición"
+
+#: src/routes/settings.tsx:236
+msgid "Créer"
+msgstr "Crear"
+
+#: src/routes/settings.tsx:200
+msgid "Créer un profil"
+msgstr "Crear un perfil"
+
+#: src/routes/notes.create.tsx:34
+msgid "Créer une note"
+msgstr "Crear una nota"
+
+#: src/routes/notes.index.tsx:50
+msgid "Créer une nouvelle note"
+msgstr "Crear una nueva nota"
+
+#: src/routes/index.tsx:38
+msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
+msgstr "¡Crea tus guías en el sitio oficial y descarga las de otros!"
+
+#: src/components/guide-card.tsx:54
+msgid "de <0>{0}</0>"
+msgstr "de <0>{0}</0>"
+
+#: src/routes/index.tsx:49
+msgid "Discord de Ganymède"
+msgstr "Discord de Ganymede"
+
+#: src/routes/notes.create.tsx:34
+msgid "Éditer une note"
+msgstr "Editar una nota"
+
+#: src/routes/notes.create.tsx:88
+msgid "Enregistrer la note"
+msgstr "Guardar la nota"
+
+#: src/routes/settings.tsx:111
+msgid "Extra"
+msgstr "Extra"
+
+#: src/components/title-bar.tsx:100
+msgid "Fermer"
+msgstr "Cerrar"
+
+#: src/routes/index.tsx:73
+msgid "Ganymède - Non affilié à Ankama Games"
+msgstr "Ganymede - No afiliado a Ankama Games"
+
+#: src/components/title-bar.tsx:42
+#: src/routes/downloads/$status.tsx:81
+#: src/routes/guides/index.tsx:27
+#: src/routes/guides/index.tsx:87
+msgid "Guides"
+msgstr "Guías"
+
+#: src/routes/downloads/$status.tsx:79
+#: src/routes/downloads/index.tsx:51
+msgid "Guides certifiés"
+msgstr "Guías certificadas"
+
+#: src/routes/downloads/$status.tsx:75
+#: src/routes/downloads/index.tsx:57
+msgid "Guides draft"
+msgstr "Borradores de guías"
+
+#: src/routes/downloads/$status.tsx:77
+#: src/routes/downloads/index.tsx:48
+msgid "Guides principaux"
+msgstr "Guías principales"
+
+#: src/routes/downloads/$status.tsx:73
+msgid "Guides privés"
+msgstr "Guías privadas"
+
+#: src/routes/downloads/$status.tsx:71
+#: src/routes/downloads/index.tsx:54
+msgid "Guides publics"
+msgstr "Guías públicas"
+
+#: src/components/guide-card.tsx:49
+msgid "id {0}"
+msgstr "id {0}"
+
+#: src/routes/settings.tsx:148
+msgid "Langue"
+msgstr "Idioma"
+
+#: src/routes/settings.tsx:105
+msgid "Large"
+msgstr "Grande"
+
+#: src/components/guide-card.tsx:105
+msgid "Mettre à jour le guide"
+msgstr "Actualizar la guía"
+
+#: src/routes/notes.index.tsx:63
+msgid "Modifier la note"
+msgstr "Modificar la nota"
+
+#: src/routes/auto-pilot.tsx:27
+#: src/routes/auto-pilot.tsx:114
+msgid "Nom"
+msgstr "Nombre"
+
+#: src/routes/notes.create.tsx:67
+msgid "Nom de la note"
+msgstr "Nombre de la nota"
+
+#: src/routes/settings.tsx:99
+msgid "Normal"
+msgstr "Normal"
+
+#: src/components/title-bar.tsx:60
+#: src/routes/notes.index.tsx:22
+#: src/routes/notes.index.tsx:47
+msgid "Notes"
+msgstr "Notas"
+
+#: src/routes/settings.tsx:63
+msgid "Opacité"
+msgstr "Opacidad"
+
+#: src/routes/guides/index.tsx:148
+msgid "Ouvrir"
+msgstr "Abrir"
+
+#: src/routes/guides/index.tsx:103
+msgid "Ouvrir le dossier des guides téléchargés"
+msgstr "Abrir la carpeta de guías descargadas"
+
+#: src/components/title-bar.tsx:80
+#: src/routes/settings.tsx:29
+#: src/routes/settings.tsx:58
+msgid "Paramètres"
+msgstr "Configuraciones"
+
+#: src/routes/settings.tsx:93
+msgid "Petite"
+msgstr "Pequeña"
+
+#: src/routes/index.tsx:17
+msgid "Présentation"
+msgstr "Presentación"
+
+#: src/routes/settings.tsx:173
+msgid "Profils"
+msgstr "Perfiles"
+
+#: src/routes/guides/index.tsx:95
+msgid "Rafraichir le dossier des guides téléchargés"
+msgstr "Actualizar la carpeta de guías descargadas"
+
+#: src/routes/downloads/$status.tsx:132
+#: src/routes/guides/index.tsx:118
+msgid "Rechercher un guide"
+msgstr "Buscar una guía"
+
+#: src/components/title-bar.tsx:90
+msgid "Réduire"
+msgstr "Minimizar"
+
+#: src/routes/index.tsx:67
+msgid "Site officiel"
+msgstr "Sitio oficial"
+
+#: src/routes/auto-pilot.tsx:76
+#: src/routes/notes.index.tsx:88
+msgid "Supprimer de la liste"
+msgstr "Eliminar de la lista"
+
+#: src/routes/settings.tsx:77
+msgid "Taille de texte des guides"
+msgstr "Tamaño del texto de las guías"
+
+#: src/components/title-bar.tsx:48
+msgid "Téléchargements"
+msgstr "Descargas"
+
+#: src/components/guide-card.tsx:105
+msgid "Télécharger le guide"
+msgstr "Descargar la guía"
+
+#: src/routes/index.tsx:58
+msgid "Twitter de Ganymède"
+msgstr "Twitter de Ganymede"
+
+#: src/routes/index.tsx:33
+msgid "Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure."
+msgstr "Puedes crear, usar y compartir guías que te permitirán optimizar tu aventura."

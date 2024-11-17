@@ -1,17 +1,18 @@
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideCardFooter, GuideCardHeader, GuideDownloadButton } from '@/components/guide-card.tsx'
+import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Button } from '@/components/ui/button.tsx'
 import { Card, CardContent } from '@/components/ui/card.tsx'
+import { ClearInput } from '@/components/ui/clear-input'
 import { useProfile } from '@/hooks/use_profile'
+import { rankList } from '@/lib/rank'
+import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation'
 import { confQuery } from '@/queries/conf.query.ts'
 import { guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
+import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { PageScrollableContent } from '@/components/page-scrollable-content'
-import { ClearInput } from '@/components/ui/clear-input'
-import { rankList } from '@/lib/rank'
-import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation'
 import { FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
 import { useState } from 'react'
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute('/guides/')({
 function Pending() {
   return (
     <Page
-      title="Guides"
+      title={t`Guides`}
       key="guide-page"
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
@@ -83,14 +84,24 @@ function GuidesPage() {
   return (
     <Page
       key="guide-page"
-      title="Guides"
+      title={t`Guides`}
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
           {guides.isFetched && guides.isFetching && <GenericLoader className="size-4" />}
-          <Button size="icon-sm" variant="secondary" onClick={onRefresh}>
+          <Button
+            size="icon-sm"
+            variant="secondary"
+            onClick={onRefresh}
+            title={t`Rafraichir le dossier des guides téléchargés`}
+          >
             <FolderSyncIcon className="size-4" />
           </Button>
-          <Button size="icon-sm" variant="secondary" onClick={onOpenExplorer}>
+          <Button
+            size="icon-sm"
+            variant="secondary"
+            onClick={onOpenExplorer}
+            title={t`Ouvrir le dossier des guides téléchargés`}
+          >
             <FolderOpenIcon className="size-4" />
           </Button>
         </div>
@@ -104,7 +115,7 @@ function GuidesPage() {
             onValueChange={setSearchTerm}
             autoComplete="off"
             autoCorrect="off"
-            placeholder="Rechercher un guide"
+            placeholder={t`Rechercher un guide`}
           />
 
           {filteredGuides.map((guide) => {
@@ -113,13 +124,15 @@ function GuidesPage() {
                 <GuideCardHeader guide={guide} />
                 <CardContent className="px-3">
                   <p className="text-sm italic">
-                    <span>
-                      Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
-                    </span>
-                    <span>
-                      ({(((guide.currentStep ?? 0) / (guide.steps.length - 1)) * 100).toFixed(1)}
-                      %)
-                    </span>
+                    <Trans>
+                      <span>
+                        Progression : {(guide.currentStep ?? 0) + 1}/{guide.steps.length}{' '}
+                      </span>
+                      <span>
+                        ({(((guide.currentStep ?? 0) / (guide.steps.length - 1)) * 100).toFixed(1)}
+                        %)
+                      </span>
+                    </Trans>
                   </p>
                 </CardContent>
                 <GuideCardFooter className="items-end justify-between">
@@ -132,7 +145,7 @@ function GuidesPage() {
                         search={{ step: guide.currentStep ?? 0 }}
                         draggable={false}
                       >
-                        Ouvrir
+                        <Trans>Ouvrir</Trans>
                       </Link>
                     </Button>
                   )}

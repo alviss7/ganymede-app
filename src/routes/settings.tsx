@@ -1,4 +1,5 @@
 import { GenericLoader } from '@/components/generic-loader.tsx'
+import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
@@ -6,16 +7,17 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch.tsx'
+import { dynamicActiveLocale } from '@/i18n'
 import { newId } from '@/ipc/id.ts'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { FontSize, Lang } from '@/types/conf.ts'
+import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useEffect, useState } from 'react'
-import { PageScrollableContent } from '@/components/page-scrollable-content'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -24,7 +26,7 @@ export const Route = createFileRoute('/settings')({
   },
   pendingComponent: () => {
     return (
-      <Page key="settings-page" title="Paramètres">
+      <Page key="settings-page" title={t`Paramètres`}>
         <PageScrollableContent className="flex items-center justify-center">
           <GenericLoader />
         </PageScrollableContent>
@@ -53,11 +55,13 @@ function Settings() {
   }, [opacity])
 
   return (
-    <Page key="settings-page" title="Paramètres">
+    <Page key="settings-page" title={t`Paramètres`}>
       <PageScrollableContent className="py-2">
         <div className="container flex flex-col gap-4 text-sm">
           <section className="flex flex-col gap-2">
-            <Label htmlFor="opacity">Opacity</Label>
+            <Label htmlFor="opacity">
+              <Trans>Opacité</Trans>
+            </Label>
             <Slider
               id="opacity"
               defaultValue={[conf.data.opacity * 100]}
@@ -69,7 +73,9 @@ function Settings() {
             />
           </section>
           <section className="flex flex-col gap-2">
-            <p className="font-medium text-sm leading-none">Taille de texte des guides</p>
+            <p className="font-medium text-sm leading-none">
+              <Trans>Taille de texte des guides</Trans>
+            </p>
             <RadioGroup
               className="grid-cols-2"
               orientation="horizontal"
@@ -83,24 +89,34 @@ function Settings() {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="Small" id="text-sm" />
-                <Label htmlFor="text-sm">Small</Label>
+                <Label htmlFor="text-sm">
+                  <Trans>Petite</Trans>
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="Base" id="text-base" />
-                <Label htmlFor="text-base">Base</Label>
+                <Label htmlFor="text-base">
+                  <Trans>Normal</Trans>
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="Large" id="text-md" />
-                <Label htmlFor="text-md">Large</Label>
+                <Label htmlFor="text-md">
+                  <Trans>Large</Trans>
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="Extra" id="text-lg" />
-                <Label htmlFor="text-lg">Extra</Label>
+                <Label htmlFor="text-lg">
+                  <Trans>Extra</Trans>
+                </Label>
               </div>
             </RadioGroup>
           </section>
           <section className="flex items-center justify-between gap-2">
-            <Label htmlFor="auto-travel-copy">Copie d'autopilote</Label>
+            <Label htmlFor="auto-travel-copy">
+              <Trans>Copie d'autopilote</Trans>
+            </Label>
             <Switch
               id="auto-travel-copy"
               checked={conf.data.autoTravelCopy}
@@ -113,7 +129,9 @@ function Settings() {
             />
           </section>
           <section className="flex items-center justify-between gap-2">
-            <Label htmlFor="show-done-guides">Afficher les guides terminés</Label>
+            <Label htmlFor="show-done-guides">
+              <Trans>Afficher les guides terminés</Trans>
+            </Label>
             <Switch
               id="show-done-guides"
               checked={conf.data.showDoneGuides}
@@ -126,14 +144,17 @@ function Settings() {
             />
           </section>
           <section className="space-y-2">
-            <Label htmlFor="lang-guides">Langue</Label>
+            <Label htmlFor="lang-guides">
+              <Trans>Langue</Trans>
+            </Label>
             <Select
               value={conf.data.lang}
-              onValueChange={(value) => {
+              onValueChange={async (value) => {
                 setConf.mutate({
                   ...conf.data,
                   lang: value as Lang,
                 })
+                await dynamicActiveLocale(value.toLowerCase())
               }}
             >
               <SelectTrigger id="lang-guides">
@@ -148,7 +169,9 @@ function Settings() {
             </Select>
           </section>
           <section className="space-y-2">
-            <Label htmlFor="profiles">Profils</Label>
+            <Label htmlFor="profiles">
+              <Trans>Profils</Trans>
+            </Label>
             <Select
               value={conf.data.profileInUse}
               onValueChange={(value) => {
@@ -173,7 +196,9 @@ function Settings() {
             </Select>
           </section>
           <section className="space-y-2">
-            <Label htmlFor="create-profile">Créer un profil</Label>
+            <Label htmlFor="create-profile">
+              <Trans>Créer un profil</Trans>
+            </Label>
             <form
               className="space-y-2"
               onSubmit={async (evt) => {
@@ -202,12 +227,14 @@ function Settings() {
 
                     form.newProfile.value = ''
                   })
-                  // TODO: handle error
+                  // TODO: handle error, but should not happen
                 }
               }}
             >
-              <Input id="create-profile" name="newProfile" autoCorrect="off" autoCapitalize="off" />
-              <Button type="submit">Créer</Button>
+              <Input id="create-profile" name="newProfile" className="" />
+              <Button type="submit">
+                <Trans>Créer</Trans>
+              </Button>
             </form>
           </section>
         </div>

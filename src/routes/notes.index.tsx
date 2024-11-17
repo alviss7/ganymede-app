@@ -3,6 +3,7 @@ import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Button } from '@/components/ui/button'
 import { useSetConf } from '@/mutations/set-conf.mutation'
 import { confQuery } from '@/queries/conf.query'
+import { t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
@@ -18,7 +19,7 @@ export const Route = createFileRoute('/notes/')({
     return (
       <Page
         key="notes-page"
-        title="Notes"
+        title={t`Notes`}
         actions={
           <div className="flex w-full items-center justify-end gap-1 text-sm">
             <Button size="icon-sm" variant="secondary" disabled>
@@ -43,10 +44,10 @@ function NotesPage() {
   return (
     <Page
       key="notes-page"
-      title="Notes"
+      title={t`Notes`}
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
-          <Button size="icon-sm" variant="secondary" asChild>
+          <Button size="icon-sm" variant="secondary" asChild title={t`Créer une nouvelle note`}>
             <Link to="/notes/create" search={{}} draggable={false}>
               <PlusIcon />
             </Link>
@@ -59,7 +60,7 @@ function NotesPage() {
           {conf.data.notes.map((note) => {
             return (
               <li key={note.name} className="flex w-full justify-between gap-2">
-                <Button asChild className="grow">
+                <Button asChild className="grow" title={t`Modifier la note`}>
                   <Link to="/notes/create" search={{ name: note.name }} draggable={false}>
                     <p className="text-slate-300">{note.name}</p>
                   </Link>
@@ -70,6 +71,7 @@ function NotesPage() {
                   onClick={async () => {
                     await writeText(note.text)
                   }}
+                  title={t`Copier la note`}
                 >
                   <CopyIcon />
                 </Button>
@@ -83,6 +85,7 @@ function NotesPage() {
                       notes: conf.data.notes.filter((pilot) => pilot.name !== note.name),
                     })
                   }}
+                  title={t`Supprimer de la liste`}
                 >
                   <TrashIcon />
                 </Button>

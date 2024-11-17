@@ -3,7 +3,10 @@ import * as React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // Import the generated route tree
+import { i18n } from '@lingui/core'
+import { I18nProvider } from '@lingui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
 import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
@@ -43,6 +46,8 @@ const conf = await queryClient.ensureQueryData(confQuery)
 
 window.document.documentElement.style.setProperty('--opacity', `${conf.opacity.toFixed(2)}`)
 
+await dynamicActiveLocale(conf.lang.toLowerCase())
+
 // Create a new router instance
 const router = createRouter({
   routeTree,
@@ -63,9 +68,11 @@ if (!rootElement.innerHTML) {
 
   root.render(
     <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <I18nProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </I18nProvider>
     </React.StrictMode>,
   )
 }

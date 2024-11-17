@@ -1,6 +1,7 @@
 import { PageScrollableContent } from '@/components/page-scrollable-content'
 import { Card } from '@/components/ui/card'
 import { Page } from '@/routes/-page.tsx'
+import { Trans, t } from '@lingui/macro'
 import { Slot } from '@radix-ui/react-slot'
 import { Link, LinkProps, type RegisteredRouter, createFileRoute } from '@tanstack/react-router'
 import { BookOpenCheckIcon, BookOpenTextIcon, NotebookPenIcon, TrophyIcon } from 'lucide-react'
@@ -40,20 +41,20 @@ function GuideLink({
 
 function DownloadIndex() {
   return (
-    <Page title="Catégories">
+    <Page title={t`Catégories`}>
       <PageScrollableContent className="p-2">
         <ul className="flex flex-col gap-2">
           <GuideLink params={{ status: 'gp' }} icon={<BookOpenTextIcon />}>
-            Guides principaux
+            <Trans>Guides principaux</Trans>
           </GuideLink>
           <GuideLink params={{ status: 'certified' }} icon={<TrophyIcon />}>
-            Guides certifiés
+            <Trans>Guides certifiés</Trans>
           </GuideLink>
           <GuideLink params={{ status: 'public' }} icon={<BookOpenCheckIcon />}>
-            Guides publics
+            <Trans>Guides publics</Trans>
           </GuideLink>
           <GuideLink params={{ status: 'draft' }} icon={<NotebookPenIcon />}>
-            Guides draft
+            <Trans>Guides draft</Trans>
           </GuideLink>
         </ul>
       </PageScrollableContent>
