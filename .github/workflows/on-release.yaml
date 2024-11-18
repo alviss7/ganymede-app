@@ -99,6 +99,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ steps.tauri.outputs.releaseId }}
+          tag_name: ${{ steps.tauri.outputs.appVersion }}
           files: |
             src-tauri/target/release/bundle/nsis/Ganymede_x64-setup.exe
