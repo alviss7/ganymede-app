@@ -46,7 +46,7 @@ async fn fetch_image(url: String) -> Result<Vec<u8>, String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let sentry_client = sentry::init((
-        env!("SENTRY_DSN").parse().unwrap(),
+        env!("SENTRY_DSN"),
         sentry::ClientOptions {
             release: sentry::release_name!(),
             ..Default::default()
