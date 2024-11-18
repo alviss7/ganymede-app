@@ -11,7 +11,10 @@ import './main.css'
 import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
 
-if (window.location.hostname === 'localhost' && window.location.port === '') {
+if (
+  (window.location.hostname === 'localhost' && window.location.port === '') ||
+  (window.location.hostname === 'tauri.localhost' && window.location.port === '')
+) {
   document.addEventListener(
     'contextmenu',
     (evt) => {

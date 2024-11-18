@@ -29,10 +29,10 @@ function Pending() {
       key="guide-page"
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
-          <Button size="icon-sm" variant="secondary" disabled>
+          <Button size="icon-sm" variant="secondary" className="size-6 min-h-6 min-w-6 sm:size-7 sm:min-h-7 sm:min-w-7">
             <FolderSyncIcon className="size-4" />
           </Button>
-          <Button size="icon-sm" variant="secondary" disabled>
+          <Button size="icon-sm" variant="secondary" className="size-6 min-h-6 min-w-6 sm:size-7 sm:min-h-7 sm:min-w-7">
             <FolderOpenIcon className="size-4" />
           </Button>
         </div>
