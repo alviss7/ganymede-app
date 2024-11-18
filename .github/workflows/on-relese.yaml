@@ -97,4 +97,4 @@ jobs:
         name: upload setup
         with:
           name: Ganymede_x64-setup.exe
-          path: ./src-tauri/target/release/nsis/Ganymede_x64-setup.exe
+          path: ./src-tauri/target/release/bundle/nsis/Ganymede_x64-setup.exe
