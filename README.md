@@ -1,6 +1,5 @@
 ---
 changeset
-sentry
 ---
 
 # Tauri + React + Typescript

@@ -8,6 +8,7 @@ use crate::guides::{
 use crate::id::new_id;
 use tauri::{Manager, Wry};
 use tauri_plugin_http::reqwest;
+use tauri_plugin_sentry::{minidump, sentry};
 use tauri_plugin_shell::ShellExt;
 use tauri_plugin_updater::UpdaterExt;
 
@@ -44,6 +45,15 @@ async fn fetch_image(url: String) -> Result<Vec<u8>, String> {
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let sentry_client = sentry::init((
+        env!("SENTRY_DSN").parse().unwrap(),
+        sentry::ClientOptions {
+            release: sentry::release_name!(),
+            ..Default::default()
+        },
+    ));
+    let _guard = minidump::init(&sentry_client);
+
     tauri::Builder::default()
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
@@ -51,6 +61,7 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_sentry::init(&sentry_client))
         .setup(|app| {
             match Conf::ensure(&app.path()) {
                 Err(err) => {

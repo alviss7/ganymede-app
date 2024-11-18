@@ -83,3 +83,11 @@ jobs:
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
+      - name: 'copy setup'
+        run: |
+            cp src-tauri/target/release/nsis/Ganymede_*_x64-setup.exe src-tauri/target/release/nsis/Ganymede_x64-setup.exe
+      - uses: actions/upload-artifact@v4
+        name: upload setup
+        with:
+          name: Ganymede_x64-setup.exe
+          path: src-tauri/target/release/nsis/Ganymede_x64-setup.exe
