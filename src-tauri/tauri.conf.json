@@ -35,8 +35,7 @@
     "windows": {
       "nsis": {
         "languages": ["French", "English", "Portuguese", "Spanish"]
-      },
-      "wix": null
+      }
     }
   },
   "plugins": {
