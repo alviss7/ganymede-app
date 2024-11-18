@@ -34,7 +34,8 @@
     "createUpdaterArtifacts": true,
     "windows": {
       "nsis": {
-        "languages": ["French", "English", "Portuguese", "Spanish"]
+        "languages": ["French", "English", "Portuguese", "Spanish"],
+        "installerIcon": "icons/icon.ico"
       }
     }
   },
