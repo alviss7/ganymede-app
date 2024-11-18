@@ -66,18 +66,20 @@ pub fn run() {
                 Ok(_) => {}
             }
 
-            let version = app.package_info().version.to_string();
+            #[cfg(not(debug_assertions))]
+            {
+                let version = app.package_info().version.to_string();
 
-            #[cfg(debug_assertions)]
-            tauri::async_runtime::spawn(async {
-                let res = api::increment_app_download_count(version).await;
+                tauri::async_runtime::spawn(async {
+                    let res = api::increment_app_download_count(version).await;
 
-                if let Err(err) = &res {
-                    eprintln!("{:?}", err);
-                } else {
-                    println!("App download count incremented");
-                }
-            });
+                    if let Err(err) = &res {
+                        eprintln!("{:?}", err);
+                    } else {
+                        println!("App download count incremented");
+                    }
+                });
+            }
 
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {

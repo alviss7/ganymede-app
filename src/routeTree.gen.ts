@@ -22,6 +22,7 @@ import { Route as AppDownloadsIndexImport } from './routes/_app/downloads/index'
 import { Route as AppNotesCreateImport } from './routes/_app/notes.create'
 import { Route as AppGuidesIdImport } from './routes/_app/guides/$id'
 import { Route as AppDownloadsStatusImport } from './routes/_app/downloads/$status'
+import { Route as AppDofusdbHuntImport } from './routes/_app/dofusdb/hunt'
 
 // Create/Update Routes
 
@@ -80,6 +81,11 @@ const AppDownloadsStatusRoute = AppDownloadsStatusImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppDofusdbHuntRoute = AppDofusdbHuntImport.update({
+  path: '/dofusdb/hunt',
+  getParentRoute: () => AppRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -117,6 +123,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/dofusdb/hunt': {
+      id: '/_app/dofusdb/hunt'
+      path: '/dofusdb/hunt'
+      fullPath: '/dofusdb/hunt'
+      preLoaderRoute: typeof AppDofusdbHuntImport
       parentRoute: typeof AppImport
     }
     '/_app/downloads/$status': {
@@ -170,6 +183,7 @@ interface AppRouteChildren {
   AppAutoPilotRoute: typeof AppAutoPilotRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppDofusdbHuntRoute: typeof AppDofusdbHuntRoute
   AppDownloadsStatusRoute: typeof AppDownloadsStatusRoute
   AppGuidesIdRoute: typeof AppGuidesIdRoute
   AppNotesCreateRoute: typeof AppNotesCreateRoute
@@ -182,6 +196,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAutoPilotRoute: AppAutoPilotRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppDofusdbHuntRoute: AppDofusdbHuntRoute,
   AppDownloadsStatusRoute: AppDownloadsStatusRoute,
   AppGuidesIdRoute: AppGuidesIdRoute,
   AppNotesCreateRoute: AppNotesCreateRoute,
@@ -198,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/auto-pilot': typeof AppAutoPilotRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
+  '/dofusdb/hunt': typeof AppDofusdbHuntRoute
   '/downloads/$status': typeof AppDownloadsStatusRoute
   '/guides/$id': typeof AppGuidesIdRoute
   '/notes/create': typeof AppNotesCreateRoute
@@ -211,6 +227,7 @@ export interface FileRoutesByTo {
   '/auto-pilot': typeof AppAutoPilotRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
+  '/dofusdb/hunt': typeof AppDofusdbHuntRoute
   '/downloads/$status': typeof AppDownloadsStatusRoute
   '/guides/$id': typeof AppGuidesIdRoute
   '/notes/create': typeof AppNotesCreateRoute
@@ -226,6 +243,7 @@ export interface FileRoutesById {
   '/_app/auto-pilot': typeof AppAutoPilotRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/dofusdb/hunt': typeof AppDofusdbHuntRoute
   '/_app/downloads/$status': typeof AppDownloadsStatusRoute
   '/_app/guides/$id': typeof AppGuidesIdRoute
   '/_app/notes/create': typeof AppNotesCreateRoute
@@ -242,6 +260,7 @@ export interface FileRouteTypes {
     | '/auto-pilot'
     | '/settings'
     | '/'
+    | '/dofusdb/hunt'
     | '/downloads/$status'
     | '/guides/$id'
     | '/notes/create'
@@ -254,6 +273,7 @@ export interface FileRouteTypes {
     | '/auto-pilot'
     | '/settings'
     | '/'
+    | '/dofusdb/hunt'
     | '/downloads/$status'
     | '/guides/$id'
     | '/notes/create'
@@ -267,6 +287,7 @@ export interface FileRouteTypes {
     | '/_app/auto-pilot'
     | '/_app/settings'
     | '/_app/'
+    | '/_app/dofusdb/hunt'
     | '/_app/downloads/$status'
     | '/_app/guides/$id'
     | '/_app/notes/create'
@@ -308,6 +329,7 @@ export const routeTree = rootRoute
         "/_app/auto-pilot",
         "/_app/settings",
         "/_app/",
+        "/_app/dofusdb/hunt",
         "/_app/downloads/$status",
         "/_app/guides/$id",
         "/_app/notes/create",
@@ -329,6 +351,10 @@ export const routeTree = rootRoute
     },
     "/_app/": {
       "filePath": "_app/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/dofusdb/hunt": {
+      "filePath": "_app/dofusdb/hunt.tsx",
       "parent": "/_app"
     },
     "/_app/downloads/$status": {

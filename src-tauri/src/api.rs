@@ -1,19 +1,20 @@
 use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Runtime};
 
+#[cfg(not(debug_assertions))]
 use crate::error::Error;
 
 pub const DOFUSDB_API: &str = "https://api.dofusdb.fr";
-#[cfg(debug_assertions)]
-pub const GANYMEDE_API: &str = "https://dev.ganymede-dofus.com/api";
 #[cfg(not(debug_assertions))]
 pub const GANYMEDE_API: &str = "https://ganymede-dofus.com/api";
 #[cfg(debug_assertions)]
 pub const GANYMEDE_API_V2: &str = "https://dev.ganymede-dofus.com/api/v2";
 #[cfg(not(debug_assertions))]
 pub const GANYMEDE_API_V2: &str = "https://ganymede-dofus.com/api/v2";
+
 const GITHUB_API: &str = "https://api.github.com/repos/GanymedeTeam/ganymede-app";
 
+#[cfg(not(debug_assertions))]
 #[derive(Serialize)]
 struct DownloadedBody {
     #[serde(rename = "uniqueID")]
@@ -22,6 +23,7 @@ struct DownloadedBody {
     os: String,
 }
 
+#[cfg(not(debug_assertions))]
 fn os_to_string(os: String) -> Option<String> {
     match os.as_str() {
         "windows" => Some("Windows".into()),
@@ -31,6 +33,7 @@ fn os_to_string(os: String) -> Option<String> {
     }
 }
 
+#[cfg(not(debug_assertions))]
 pub async fn increment_app_download_count(
     version: String,
 ) -> Result<tauri_plugin_http::reqwest::Response, Error> {

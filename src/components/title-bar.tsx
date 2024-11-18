@@ -66,10 +66,10 @@ export function TitleBar() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="gap-2" asChild>
-              <a target="_blank" href="https://dofusdb.fr/fr/tools/treasure-hunt" draggable={false}>
+              <Link to="/dofusdb/hunt" draggable={false}>
                 <CrosshairIcon />
                 <Trans>Chasse au trésor</Trans>
-              </a>
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -8,6 +8,7 @@ pub enum Error {
     Http(tauri_plugin_http::reqwest::Error),
     JsonPath(serde_path_to_error::Error<serde_json::Error>),
     Glob(glob::GlobError),
+    #[cfg(not(debug_assertions))]
     EarlyReturn,
 }
 
@@ -71,6 +72,7 @@ impl Into<tauri::ipc::InvokeError> for Error {
             Error::Http(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::JsonPath(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::Glob(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            #[cfg(not(debug_assertions))]
             Error::EarlyReturn => tauri::ipc::InvokeError::from("Early return".to_string()),
         }
     }
