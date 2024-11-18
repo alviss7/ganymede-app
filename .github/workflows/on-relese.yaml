@@ -90,6 +90,8 @@ jobs:
             $file = Get-ChildItem src-tauri/target/release/bundle/nsis/ -Filter Ganymede_*_x64-setup.exe | Select-Object -First 1 -Expand FullName
             $setup = [string]::Join("", ((Get-ChildItem src-tauri/target/release/bundle/ -Recurse).fullname | Select-Object -First 1), "\Ganymede_x64-setup.exe")
             Copy-Item $file $setup
+            Write-Host $file
+            Write-Host $setup
       - uses: actions/upload-artifact@v4
         name: upload setup
         with:
