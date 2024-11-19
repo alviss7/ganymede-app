@@ -100,4 +100,4 @@ jobs:
           draft: true
           files: |
             src-tauri/target/release/bundle/nsis/Ganymede_x64-setup.exe
-            src-tauri/target/release/bundle/aarch64-apple-darwin/Ganymede.app
+            src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Ganymede.app
