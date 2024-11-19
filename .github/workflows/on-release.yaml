@@ -17,8 +17,8 @@ jobs:
         include:
           - platform: 'macos-latest' # for Arm based macs (M1 and above).
             args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest' # for Intel based macs.
-            args: '--target x86_64-apple-darwin'
+#          - platform: 'macos-latest' # for Intel based macs.
+#            args: '--target x86_64-apple-darwin'
           - platform: 'windows-latest'
             args: ''
 
@@ -53,7 +53,7 @@ jobs:
         with:
           key: ${{ runner.os }}-tauri-${{ hashFiles('src-tauri/Cargo.lock', 'src-tauri/Cargo.toml', 'src-tauri/target/release') }}
           restore-keys: |
-            ${{ runner.os }}-tauri
+            ${{ runner.os }}-tauri-
           path: |
             ~/.cargo
             src-tauri/target/release/build
@@ -64,9 +64,6 @@ jobs:
             src-tauri/target/release/nsis
             src-tauri/target/release/resources
             src-tauri/target/release/.cargo-lock
-            src-tauri/target/release/ganymede.d
-            src-tauri/target/release/ganymede.exe
-            src-tauri/target/release/ganymede.pdb
 
       - name: install frontend dependencies
         run: pnpm install
@@ -100,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.tauri.outputs.appVersion }}
+          draft: true
           files: |
             src-tauri/target/release/bundle/nsis/Ganymede_x64-setup.exe
             src-tauri/target/release/bundle/macos/Ganymede.app
-
