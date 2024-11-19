@@ -190,7 +190,6 @@ export function GuideFrame({
                 type="button"
                 className="group contents"
                 onClick={async (evt) => {
-                  console.log(navigator.userAgent)
                   // open in browser if ctrl/cmd is pressed
                   if (isMacOs ? evt.metaKey : evt.ctrlKey) {
                     openGuideLink.mutate(

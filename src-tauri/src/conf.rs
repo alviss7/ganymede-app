@@ -83,11 +83,29 @@ impl Progress {
             }
         }
     }
+
+    pub fn new(id: u32) -> Self {
+        Progress {
+            id,
+            current_step: 0,
+            steps: HashMap::new(),
+        }
+    }
 }
 
 impl Profile {
-    pub fn get_progress_mut(&mut self, guide_id: u32) -> Option<&mut Progress> {
-        self.progresses.iter_mut().find(|p| p.id == guide_id)
+    pub fn get_progress_mut(&mut self, guide_id: u32) -> &mut Progress {
+        if let Some(index) = self.progresses.iter().position(|p| p.id == guide_id) {
+            return &mut self.progresses[index];
+        }
+
+        // Si aucun Progress n'est trouvé, on en crée un nouveau
+        self.progresses.push(Progress::new(guide_id));
+
+        // On récupère une référence mutable au nouvel élément ajouté
+        self.progresses
+            .last_mut()
+            .expect("L'élément vient juste d'être ajouté, il doit exister.")
     }
 }
 
@@ -239,17 +257,7 @@ pub fn toggle_guide_checkbox(
     }
 
     let profile = profile.unwrap();
-    let profile_name = profile.name.clone();
-    let profile_id = profile.id.clone();
-
-    let progress = profile.get_progress_mut(guide_id);
-    let progress = progress.expect(
-        format!(
-            "Cannot find progress with guide_id in {} profile {}_#{}",
-            guide_id, profile_name, profile_id
-        )
-        .as_str(),
-    );
+    let progress = &mut profile.get_progress_mut(guide_id);
 
     let step = match progress.steps.get_mut(&step_index) {
         Some(step) => step,

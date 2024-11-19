@@ -1,7 +1,7 @@
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { getProgress } from '@/lib/progress'
-import { confQuery } from './conf.query'
 import { getProfile } from '@/lib/profile'
+import { getProgress, newProgress } from '@/lib/progress'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
+import { confQuery } from './conf.query'
 
 export function progressQuery(guideId: number) {
   const conf = useSuspenseQuery(confQuery)
@@ -11,7 +11,7 @@ export function progressQuery(guideId: number) {
     queryFn: async () => {
       const profile = getProfile(conf.data)
 
-      return getProgress(profile, guideId)
+      return getProgress(profile, guideId) ?? newProgress(guideId)
     },
   })
 }

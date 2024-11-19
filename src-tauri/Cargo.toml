@@ -34,3 +34,6 @@ tauri-plugin-sentry = "0.2"
 tauri-plugin-window-state = "2.0.2"
 machine-uid = "0.5.3"
 tauri-plugin-updater = "2"
+
+[profile.release]
+debug = true

@@ -35,6 +35,9 @@ importers:
       '@radix-ui/react-switch':
         specifier: ^1.1.0
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@sentry/browser':
+        specifier: ^8.38.0
+        version: 8.38.0
       '@tanstack/match-sorter-utils':
         specifier: ^8.19.4
         version: 8.19.4
@@ -104,6 +107,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.10)
+      tauri-plugin-sentry-api:
+        specifier: ^0.2.0
+        version: 0.2.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1303,6 +1309,38 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@sentry-internal/browser-utils@8.38.0':
+    resolution: {integrity: sha512-5QMVcssrAcmjKT0NdFYcX0b0wwZovGAZ9L2GajErXtHkBenjI2sgR2+5J7n+QZGuk2SC1qhGmT1O9i3p3UEwew==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/feedback@8.38.0':
+    resolution: {integrity: sha512-AW5HCCAlc3T1jcSuNhbFVNO1CHyJ5g5tsGKEP4VKgu+D1Gg2kZ5S2eFatLBUP/BD5JYb1A7p6XPuzYp1XfMq0A==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/replay-canvas@8.38.0':
+    resolution: {integrity: sha512-OxmlWzK9J8mRM+KxdSnQ5xuxq+p7TiBzTz70FT3HltxmeugvDkyp6803UcFqHOPHR35OYeVLOalym+FmvNn9kw==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/replay@8.38.0':
+    resolution: {integrity: sha512-mQPShKnIab7oKwkwrRxP/D8fZYHSkDY+cvqORzgi+wAwgnunytJQjz9g6Ww2lJu98rHEkr5SH4V4rs6PZYZmnQ==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/browser@8.38.0':
+    resolution: {integrity: sha512-AZR+b0EteNZEGv6JSdBD22S9VhQ7nrljKsSnzxobBULf3BpwmhmCzTbDrqWszKDAIDYmL+yQJIR2glxbknneWQ==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/core@8.38.0':
+    resolution: {integrity: sha512-sGD+5TEHU9G7X7zpyaoJxpOtwjTjvOd1f/MKBrWW2vf9UbYK+GUJrOzLhMoSWp/pHSYgvObkJkDb/HwieQjvhQ==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/types@8.38.0':
+    resolution: {integrity: sha512-fP5H9ZX01W4Z/EYctk3mkSHi7d06cLcX2/UWqwdWbyPWI+pL2QpUPICeO/C+8SnmYx//wFj3qWDhyPCh1PdFAA==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/utils@8.38.0':
+    resolution: {integrity: sha512-3X7MgIKIx+2q5Al7QkhaRB4wV6DvzYsaeIwdqKUzGLuRjXmNgJrLoU87TAwQRmZ6Wr3IoEpThZZMNrzYPXxArw==}
+    engines: {node: '>=14.18'}
+
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
@@ -1370,6 +1408,10 @@ packages:
   '@tanstack/virtual-file-routes@1.56.0':
     resolution: {integrity: sha512-fBUj+lbSaw+VxoBN4J/WFE7dTx8x4XCTRAQvbiIyPJ8MY1KRVkdZV6cbLvg7MeDP6CxUcj6XNvWU6h0ic1Ipyg==}
     engines: {node: '>=12'}
+
+  '@tauri-apps/api@2.0.0-beta.8':
+    resolution: {integrity: sha512-fN5u+9HsSfhRaXGOdD2kPGbqDgyX+nkm1XF/4d/LNuM4WiNfvHjjRAqWQYBhQsg1aF9nsTPmSW+tmy+Yn5T5+A==}
+    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
 
   '@tauri-apps/api@2.0.3':
     resolution: {integrity: sha512-840qk6n8rbXBXMA5/aAgTYsg5JAubKO0nXw5wf7IzGnUuYKGbB4oFBIZtXOIWy+E0kNTDI3qhq5iqsoMJfwp8g==}
@@ -2495,6 +2537,9 @@ packages:
     resolution: {integrity: sha512-KWZkVPm7yJRhdu4SRSl9d4AK2wM3a50UsvgHZO7xY77NQr2V+fIrEuoDGQcbvswWvFGbS2f6e+jC/6WJm1Dl0w==}
     engines: {node: '>=14.0.0'}
     hasBin: true
+
+  tauri-plugin-sentry-api@0.2.0:
+    resolution: {integrity: sha512-HnIbCVnq7jjrj8aRyzP5hfU8GwfSIkl65BH7MHj0Vbx1X4fqrKNc2lzzP/wjjrJ1hsXJCg5bRKF26HshPmgw8g==}
 
   thenify-all@1.6.0:
     resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
@@ -3635,6 +3680,53 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.21.2':
     optional: true
 
+  '@sentry-internal/browser-utils@8.38.0':
+    dependencies:
+      '@sentry/core': 8.38.0
+      '@sentry/types': 8.38.0
+      '@sentry/utils': 8.38.0
+
+  '@sentry-internal/feedback@8.38.0':
+    dependencies:
+      '@sentry/core': 8.38.0
+      '@sentry/types': 8.38.0
+      '@sentry/utils': 8.38.0
+
+  '@sentry-internal/replay-canvas@8.38.0':
+    dependencies:
+      '@sentry-internal/replay': 8.38.0
+      '@sentry/core': 8.38.0
+      '@sentry/types': 8.38.0
+      '@sentry/utils': 8.38.0
+
+  '@sentry-internal/replay@8.38.0':
+    dependencies:
+      '@sentry-internal/browser-utils': 8.38.0
+      '@sentry/core': 8.38.0
+      '@sentry/types': 8.38.0
+      '@sentry/utils': 8.38.0
+
+  '@sentry/browser@8.38.0':
+    dependencies:
+      '@sentry-internal/browser-utils': 8.38.0
+      '@sentry-internal/feedback': 8.38.0
+      '@sentry-internal/replay': 8.38.0
+      '@sentry-internal/replay-canvas': 8.38.0
+      '@sentry/core': 8.38.0
+      '@sentry/types': 8.38.0
+      '@sentry/utils': 8.38.0
+
+  '@sentry/core@8.38.0':
+    dependencies:
+      '@sentry/types': 8.38.0
+      '@sentry/utils': 8.38.0
+
+  '@sentry/types@8.38.0': {}
+
+  '@sentry/utils@8.38.0':
+    dependencies:
+      '@sentry/types': 8.38.0
+
   '@sinclair/typebox@0.27.8': {}
 
   '@tailwindcss/typography@0.5.15(tailwindcss@3.4.10)':
@@ -3711,6 +3803,8 @@ snapshots:
   '@tanstack/store@0.5.5': {}
 
   '@tanstack/virtual-file-routes@1.56.0': {}
+
+  '@tauri-apps/api@2.0.0-beta.8': {}
 
   '@tauri-apps/api@2.0.3': {}
 
@@ -4867,6 +4961,11 @@ snapshots:
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
+
+  tauri-plugin-sentry-api@0.2.0:
+    dependencies:
+      '@tauri-apps/api': 2.0.0-beta.8
+      tslib: 2.7.0
 
   thenify-all@1.6.0:
     dependencies:

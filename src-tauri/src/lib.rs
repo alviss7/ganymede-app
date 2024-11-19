@@ -52,6 +52,7 @@ pub fn run() {
             ..Default::default()
         },
     ));
+
     let _guard = minidump::init(&sentry_client);
 
     tauri::Builder::default()
@@ -61,7 +62,7 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_sentry::init(&sentry_client))
+        .plugin(tauri_plugin_sentry::init_with_no_injection(&sentry_client))
         .setup(|app| {
             match Conf::ensure(&app.path()) {
                 Err(err) => {

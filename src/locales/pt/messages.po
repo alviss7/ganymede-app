@@ -55,40 +55,40 @@ msgstr "Esta ferramenta foi projetada para ajudá-lo ao longo de sua aventura em
 msgid "Chasse au trésor"
 msgstr "Caça ao tesouro"
 
-#: src/components/guide-frame.tsx:211
+#: src/components/guide-frame.tsx:210
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do item. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:212
+#: src/components/guide-frame.tsx:211
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do item. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:219
+#: src/components/guide-frame.tsx:218
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome da missão. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:220
+#: src/components/guide-frame.tsx:219
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome da missão. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:207
+#: src/components/guide-frame.tsx:206
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do calabouço. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:208
+#: src/components/guide-frame.tsx:207
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do calabouço. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:215
+#: src/components/guide-frame.tsx:214
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do monstro. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:216
+#: src/components/guide-frame.tsx:215
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do monstro. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:254
-#: src/components/guide-frame.tsx:282
+#: src/components/guide-frame.tsx:253
+#: src/components/guide-frame.tsx:281
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Clique para abrir no navegador"
 

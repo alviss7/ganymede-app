@@ -1,8 +1,8 @@
 import { toggleGuideCheckbox } from '@/ipc/guides.ts'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { confQuery } from '@/queries/conf.query'
 import { getProfile } from '@/lib/profile'
-import { getProgress } from '@/lib/progress'
+import { getProgress, getStep, newProgress } from '@/lib/progress'
+import { confQuery } from '@/queries/conf.query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export function useToggleGuideCheckbox() {
   const queryClient = useQueryClient()
@@ -29,9 +29,9 @@ export function useToggleGuideCheckbox() {
       const baseConf = { ...conf }
 
       const profile = getProfile(conf)
-      const progress = getProgress(profile, guideId)
+      const progress = getProgress(profile, guideId) ?? newProgress(guideId)
 
-      const step = progress.steps[stepIndex] ?? { checkboxes: [] }
+      const step = getStep(progress, stepIndex) ?? { checkboxes: [] }
 
       const checkbox = step.checkboxes.find((i) => i === checkboxIndex)
 
@@ -45,21 +45,29 @@ export function useToggleGuideCheckbox() {
 
       progress.steps[stepIndex] = step
 
-      profile.progresses.map((p) => {
-        if (p.id === guideId) {
-          p = progress
-        }
+      const progressInProfile = profile.progresses.find((p) => p.id === guideId)
 
-        return p
-      })
+      if (progressInProfile === undefined) {
+        profile.progresses.push(progress)
+      } else {
+        profile.progresses = profile.progresses.map((p) => {
+          if (p.id === guideId) {
+            p = progress
+          }
 
-      conf.profiles.map((p) => {
+          return p
+        })
+      }
+
+      conf.profiles = conf.profiles.map((p) => {
         if (p.id === conf.profileInUse) {
           p = profile
         }
 
         return p
       })
+
+      console.log(conf.profiles)
 
       queryClient.setQueryData(confQuery['queryKey'], () => conf)
 

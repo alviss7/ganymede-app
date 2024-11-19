@@ -5,11 +5,36 @@ import ReactDOM from 'react-dom/client'
 // Import the generated route tree
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
+import * as Sentry from '@sentry/browser'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { invoke } from '@tauri-apps/api/core'
+import { defaultOptions as sentryDefaultOptions } from 'tauri-plugin-sentry-api'
 import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
 import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
+
+function sendBreadcrumbToRust(breadcrumb: Sentry.Breadcrumb): Sentry.Breadcrumb | null {
+  // Ignore IPC breadcrumbs otherwise we'll make an infinite loop
+  if (
+    typeof breadcrumb.data?.url === 'string' &&
+    (breadcrumb.data.url.startsWith('ipc://') ||
+      breadcrumb.data.url.startsWith('tauri://') ||
+      breadcrumb.data.url.startsWith('http://ipc.localhost'))
+  ) {
+    return null
+  }
+
+  invoke('plugin:sentry|breadcrumb', { breadcrumb })
+  // We don't collect breadcrumbs in the renderer since they are passed to Rust
+  return null
+}
+
+Sentry.init({
+  ...sentryDefaultOptions,
+  autoSessionTracking: false,
+  beforeBreadcrumb: sendBreadcrumbToRust,
+})
 
 if (
   (window.location.hostname === 'localhost' && window.location.port === '') ||
