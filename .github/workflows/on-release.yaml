@@ -51,7 +51,9 @@ jobs:
       - name: setup cache
         uses: actions/cache@v4
         with:
-          key: ${{ runner.os }}-tauri-${{ hashFiles('src-tauri/Cargo.lock') }}
+          key: ${{ runner.os }}-tauri-${{ hashFiles('src-tauri/Cargo.lock', 'src-tauri/Cargo.toml', 'src-tauri/target/release') }}
+          restore-keys: |
+            ${{ runner.os }}-tauri
           path: |
             ~/.cargo
             src-tauri/target/release/build
