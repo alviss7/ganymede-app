@@ -1,5 +1,6 @@
 ---
 changeset
+failed to get conf - UI to reset the conf/help the user
 ---
 
 # Tauri + React + Typescript

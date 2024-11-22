@@ -105,7 +105,7 @@ impl Profile {
         // On récupère une référence mutable au nouvel élément ajouté
         self.progresses
             .last_mut()
-            .expect("L'élément vient juste d'être ajouté, il doit exister.")
+            .expect("conf://the element has just been added, it should exist.")
     }
 }
 
@@ -148,10 +148,10 @@ impl Conf {
 
         let conf_path = resolver.app_conf_file();
 
-        println!("conf_path: {:?}", conf_path);
+        println!("conf://path: {:?}", conf_path);
 
         if !conf_path.exists() {
-            println!("Conf file does not exists, creating default one");
+            println!("conf://file does not exists, creating default one");
 
             let default_conf = &mut Conf::default();
 
@@ -166,7 +166,7 @@ impl Conf {
 
         self.normalize();
 
-        let json = serde_json::to_string_pretty(self).expect("Failed to serialize conf");
+        let json = serde_json::to_string_pretty(self).expect("conf://failed to serialize conf");
 
         fs::write(conf_path, json).map_err(Error::from)
     }
@@ -249,7 +249,8 @@ pub fn toggle_guide_checkbox(
     checkbox_index: usize,
 ) -> Option<usize> {
     let resolver = window.path();
-    let conf = &mut Conf::get_with_resolver(resolver).expect("Cannot find conf with resolver");
+    let conf =
+        &mut Conf::get_with_resolver(resolver).expect("conf://cannot find conf with resolver");
     let profile = conf.get_profile_in_use_mut();
 
     if profile.is_none() {
@@ -270,7 +271,7 @@ pub fn toggle_guide_checkbox(
 
     progress.add_or_update_step(step, step_index);
 
-    conf.save(resolver).expect("Cannot save conf");
+    conf.save(resolver).expect("conf://cannot save conf");
 
     Some(checkbox_index)
 }

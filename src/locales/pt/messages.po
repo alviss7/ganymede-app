@@ -198,6 +198,14 @@ msgstr "Guias públicos"
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
 
+#: src/routes/app-old-version.tsx:70
+msgid "Il semblerait que la mise à jour ait eu un problème."
+msgstr "Parece que houve um problema com a atualização."
+
+#: src/routes/app-old-version.tsx:69
+msgid "Lancer le téléchargement"
+msgstr "Iniciar a transferência"
+
 #: src/routes/_app/settings.tsx:141
 msgid "Langue"
 msgstr "Idioma"
@@ -205,6 +213,14 @@ msgstr "Idioma"
 #: src/components/guide-card.tsx:42
 msgid "Mettre à jour le guide"
 msgstr "Atualizar o guia"
+
+#: src/routes/app-old-version.tsx:52
+msgid "Mise à jour en cours."
+msgstr "Atualização em curso."
+
+#: src/routes/app-old-version.tsx:58
+msgid "Mise à jour terminée. L'application va redémarrer."
+msgstr "Atualização concluída. A aplicação vai reiniciar."
 
 #: src/routes/_app/notes.index.tsx:69
 msgid "Modifier la note"
@@ -301,9 +317,9 @@ msgstr "Extra pequena"
 msgid "Twitter de Ganymède"
 msgstr "Twitter do Ganimedes"
 
-#: src/routes/app-old-version.tsx:15
-msgid "Vous ne disposez pas de la dernière version de Ganymède. Veuillez télécharger la dernière version. <0/><1><2>Télécharger maintenant</2></1>"
-msgstr "Você não possui a versão mais recente do Ganimedes. Por favor, baixe a versão mais recente. <0/><1><2>Baixar agora</2></1>"
+#: src/routes/app-old-version.tsx:43
+msgid "Vous ne disposez pas de la dernière version de <0>Ganymède</0>."
+msgstr "Não tem a versão mais recente do <0>Ganymède</0>."
 
 #: src/routes/_app/index.tsx:44
 msgid "Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure."

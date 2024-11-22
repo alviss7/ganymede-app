@@ -6,22 +6,26 @@ use crate::guides::{
     open_guides_folder, Guides,
 };
 use crate::id::new_id;
+use crate::shortcut::handle_shortcuts;
+use crate::update::start_update;
 use tauri::{Manager, Wry};
 use tauri_plugin_http::reqwest;
 use tauri_plugin_sentry::{minidump, sentry};
 use tauri_plugin_shell::ShellExt;
-use tauri_plugin_updater::UpdaterExt;
 
 mod almanax;
 mod api;
 mod conf;
 mod error;
+mod event;
 mod guides;
 mod id;
 mod item;
 mod json;
 mod quest;
+mod shortcut;
 mod tauri_api;
+mod update;
 
 #[tauri::command]
 async fn open_in_shell(
@@ -66,14 +70,14 @@ pub fn run() {
         .setup(|app| {
             match Conf::ensure(&app.path()) {
                 Err(err) => {
-                    eprintln!("Failed to ensure conf: {:?}", err);
+                    eprintln!("lib://failed to ensure conf: {:?}", err);
                 }
                 Ok(_) => {}
             }
 
             match Guides::ensure(&app.path()) {
                 Err(err) => {
-                    eprintln!("Failed to ensure download: {:?}", err);
+                    eprintln!("lib://failed to ensure download: {:?}", err);
                 }
                 Ok(_) => {}
             }
@@ -86,49 +90,16 @@ pub fn run() {
                     let res = api::increment_app_download_count(version).await;
 
                     if let Err(err) = &res {
-                        eprintln!("{:?}", err);
+                        eprintln!("lib://{:?}", err);
                     } else {
-                        println!("App download count incremented");
+                        println!("lib://app download count incremented");
                     }
                 });
             }
 
-            let handle = app.handle().clone();
-            tauri::async_runtime::spawn(async move {
-                update(handle).await.unwrap();
-            });
-
             #[cfg(desktop)]
             {
-                use std::str::FromStr;
-                use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, ShortcutState};
-
-                let ctrl_shift_d_shortcut = Shortcut::from_str("CommandOrControl+Shift+D").unwrap();
-
-                app.handle().plugin(
-                    tauri_plugin_global_shortcut::Builder::new()
-                        .with_handler(move |app, shortcut, event| {
-                            if shortcut == &ctrl_shift_d_shortcut
-                                && event.state() == ShortcutState::Pressed
-                            {
-                                Conf::default()
-                                    .save(app.path())
-                                    .expect("Failed to reset conf");
-                                println!("Conf reset triggered");
-
-                                let mut webview = app
-                                    .get_webview_window("main")
-                                    .expect("Failed to get webview window");
-
-                                let url = webview.url().unwrap();
-
-                                webview.navigate(url).expect("Failed to reload webview");
-                            }
-                        })
-                        .build(),
-                )?;
-
-                app.global_shortcut().register(ctrl_shift_d_shortcut)?;
+                handle_shortcuts(app)?;
             }
 
             Ok(())
@@ -146,32 +117,9 @@ pub fn run() {
             open_in_shell,
             fetch_image,
             get_guide_from_server,
-            is_app_version_old
+            is_app_version_old,
+            start_update
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
-}
-
-async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
-    if let Some(update) = app.updater()?.check().await? {
-        let mut downloaded = 0;
-
-        // alternatively we could also call update.download() and update.install() separately
-        update
-            .download_and_install(
-                |chunk_length, content_length| {
-                    downloaded += chunk_length;
-                    println!("downloaded {downloaded} from {content_length:?}");
-                },
-                || {
-                    println!("download finished");
-                },
-            )
-            .await?;
-
-        println!("update installed");
-        app.restart();
-    }
-
-    Ok(())
+        .expect("lib://error while running tauri application");
 }

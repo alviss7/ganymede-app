@@ -42,7 +42,7 @@ pub async fn increment_app_download_count(
     let os = os_to_string(os);
 
     println!(
-        "Incrementing app download count, id: {} - version: {} - os: {:?}",
+        "api://Incrementing app download count, id: {} - version: {} - os: {:?}",
         id, version, os
     );
 
@@ -59,8 +59,6 @@ pub async fn increment_app_download_count(
     };
 
     let body = serde_json::to_string(&body).unwrap();
-
-    println!("body: {}", body);
 
     let res = tauri_plugin_http::reqwest::ClientBuilder::new()
         .user_agent("GANYMEDE_TAURI_APP")
@@ -117,7 +115,10 @@ pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<bool, A
         .await;
 
     if res.is_err() {
-        eprintln!("Failed to get latest version: {:?}", res.err().unwrap());
+        eprintln!(
+            "api://failed to get latest version: {:?}",
+            res.err().unwrap()
+        );
 
         return Err(AppVersionError::GitHub);
     }
@@ -140,7 +141,7 @@ pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<bool, A
     let version = semver::Version::parse(&version).unwrap();
 
     println!(
-        "version: {:?} - release_version: {:?}",
+        "api://version: {:?} - release_version: {:?}",
         version, release_version
     );
 

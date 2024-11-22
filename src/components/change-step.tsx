@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button.tsx'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useWebviewEvent } from '../hooks/use_webview_event'
 
 export function ChangeStep({
   currentIndex,
@@ -19,6 +20,26 @@ export function ChangeStep({
   const [innerValue, setInnerValue] = useState(current.toString())
   const [hadLostFocus, setHadLostFocus] = useState(true)
 
+  const onInnerNext = async () => {
+    const canMove = await onNext()
+
+    if (!canMove) {
+      return
+    }
+
+    setInnerValue((current + 1).toString())
+  }
+
+  const onInnerPrevious = async () => {
+    const canMove = await onPrevious()
+
+    if (!canMove) {
+      return
+    }
+
+    setInnerValue((current - 1).toString())
+  }
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: no need for innerValue
   useEffect(() => {
     if (innerValue !== current.toString()) {
@@ -26,21 +47,27 @@ export function ChangeStep({
     }
   }, [current])
 
+  useWebviewEvent(
+    'go-to-previous-guide-step',
+    async () => {
+      console.log('p', current)
+      await onInnerPrevious()
+    },
+    [current],
+  )
+
+  useWebviewEvent(
+    'go-to-next-guide-step',
+    async () => {
+      console.log('next', current)
+      await onInnerNext()
+    },
+    [current],
+  )
+
   return (
     <div className="center-absolute flex items-center gap-0.5">
-      <Button
-        size="icon-sm"
-        variant="secondary"
-        onClick={async () => {
-          const canMove = await onPrevious()
-
-          if (!canMove) {
-            return
-          }
-
-          setInnerValue((current - 1).toString())
-        }}
-      >
+      <Button size="icon-sm" variant="secondary" onClick={onInnerPrevious}>
         <ChevronLeftIcon />
       </Button>
       <div className="flex flex-col items-center rounded px-0.5 font-semibold text-primary-foreground text-sm leading-4">
@@ -94,19 +121,7 @@ export function ChangeStep({
         </form>
         <span className="text-xs">{maxIndex + 1}</span>
       </div>
-      <Button
-        size="icon-sm"
-        variant="secondary"
-        onClick={async () => {
-          const canMove = await onNext()
-
-          if (!canMove) {
-            return
-          }
-
-          setInnerValue((current + 1).toString())
-        }}
-      >
+      <Button size="icon-sm" variant="secondary" onClick={onInnerNext}>
         <ChevronRightIcon />
       </Button>
     </div>

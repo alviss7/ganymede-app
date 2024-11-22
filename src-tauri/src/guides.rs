@@ -102,7 +102,7 @@ impl fmt::Display for Status {
 
 impl Guides {
     pub fn get_with_path(path_buf: &PathBuf) -> Result<Guides, Error> {
-        println!("get_guides in {:?}", path_buf);
+        println!("guides://get_guides in {:?}", path_buf);
 
         let options = glob::MatchOptions {
             case_sensitive: false,
@@ -111,15 +111,13 @@ impl Guides {
         };
 
         let files = glob::glob_with(path_buf.join("**/*.json").to_str().unwrap(), options)
-            .expect("Failed to read guides directory for json");
+            .expect("guides://failed to read guides directory for json");
 
         let mut guides = vec![];
 
         for entry in files {
             match entry {
                 Ok(file) => {
-                    println!("file: {:?}", file.file_name().unwrap());
-
                     let file = fs::read_to_string(file.to_str().unwrap());
 
                     match file {
@@ -161,7 +159,8 @@ impl Guides {
         let guides_dir = &resolver.app_guides_dir();
 
         for guide in &self.guides {
-            let json = serde_json::to_string_pretty(guide).expect("Failed to serialize guide");
+            let json =
+                serde_json::to_string_pretty(guide).expect("guides://failed to serialize guide");
 
             // Create the status directory if it doesn't exist
             let file = guides_dir
@@ -186,7 +185,7 @@ pub fn get_guides(window: Window<Wry>) -> Result<Guides, Error> {
 
 #[tauri::command]
 pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Error> {
-    println!("get_guide_from_server: {}", guide_id);
+    println!("guides://get_guide_from_server: {}", guide_id);
 
     let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API_V2, guide_id)).await?;
     let text = res.text().await?;
@@ -195,7 +194,7 @@ pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Erro
     match guide {
         Err(err) => {
             if let Error::JsonPath(json_error) = &err {
-                eprintln!("JsonError: {:?}", json_error.path().to_string());
+                eprintln!("guides://JsonError: {:?}", json_error.path().to_string());
             }
 
             Err(err)
@@ -206,7 +205,7 @@ pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Erro
 
 #[tauri::command]
 pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error> {
-    println!("get_guides_from_server");
+    println!("guides://get_guides_from_server");
 
     let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API_V2, status)).await?;
 
@@ -217,9 +216,9 @@ pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error>
     match guides {
         Err(err) => {
             if let Error::JsonPath(json_error) = &err {
-                eprintln!("JsonError: {:?}", json_error.path().to_string());
+                eprintln!("guides://JsonError: {:?}", json_error.path().to_string());
             } else {
-                eprintln!("Error: {:?}", err);
+                eprintln!("guides://Error: {:?}", err);
             }
 
             Ok(vec![])
@@ -233,7 +232,7 @@ pub async fn download_guide_from_server(
     guide_id: u32,
     window: Window<Wry>,
 ) -> Result<Guides, Error> {
-    println!("download_guide_from_server");
+    println!("guides://download_guide_from_server");
 
     let guide = get_guide_from_server(guide_id).await;
 
@@ -255,7 +254,7 @@ pub async fn download_guide_from_server(
         }
         Err(err) => {
             if let Error::JsonPath(json_error) = &err {
-                eprintln!("JsonError: {:?}", json_error.path().to_string());
+                eprintln!("guides://JsonError: {:?}", json_error.path().to_string());
             }
 
             Err(err)

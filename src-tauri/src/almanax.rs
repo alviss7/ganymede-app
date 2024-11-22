@@ -139,7 +139,7 @@ pub async fn get_almanax_data() -> Result<Almanax, Error> {
     let json = crate::json::from_str::<Almanax>(text.as_str());
 
     if let Err(err) = json {
-        eprintln!("Failed to get almanax: {:?}", err);
+        eprintln!("almanax://failed to get almanax: {:?}", err);
 
         return Err(err);
     }
@@ -158,7 +158,7 @@ pub async fn get_item_data(item_id: u32) -> Result<Item, Error> {
 
     match json {
         Err(err) => {
-            eprintln!("Failed to get item {} data: {:?}", item_id, err);
+            eprintln!("almanax://failed to get item {} data: {:?}", item_id, err);
 
             Err(Error::from(err))
         }

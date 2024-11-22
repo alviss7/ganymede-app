@@ -104,7 +104,7 @@ pub async fn get_quest_data(id: u32) -> Result<QuestData, Error> {
 
     match json {
         Err(err) => {
-            eprintln!("Failed to get quest data: {:?}", err);
+            eprintln!("quest://failed to get quest data: {:?}", err);
 
             Err(Error::from(err))
         }

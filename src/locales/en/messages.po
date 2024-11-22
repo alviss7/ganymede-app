@@ -198,6 +198,14 @@ msgstr "Publics guides"
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
 
+#: src/routes/app-old-version.tsx:70
+msgid "Il semblerait que la mise à jour ait eu un problème."
+msgstr "It seems that the update encountered an issue."
+
+#: src/routes/app-old-version.tsx:69
+msgid "Lancer le téléchargement"
+msgstr "Start download"
+
 #: src/routes/_app/settings.tsx:141
 msgid "Langue"
 msgstr "Language"
@@ -205,6 +213,14 @@ msgstr "Language"
 #: src/components/guide-card.tsx:42
 msgid "Mettre à jour le guide"
 msgstr "Update the guide"
+
+#: src/routes/app-old-version.tsx:52
+msgid "Mise à jour en cours."
+msgstr "Update in progress."
+
+#: src/routes/app-old-version.tsx:58
+msgid "Mise à jour terminée. L'application va redémarrer."
+msgstr "Update completed. The application will restart."
 
 #: src/routes/_app/notes.index.tsx:69
 msgid "Modifier la note"
@@ -301,9 +317,9 @@ msgstr "Extra small"
 msgid "Twitter de Ganymède"
 msgstr "Ganymède's Twitter"
 
-#: src/routes/app-old-version.tsx:15
-msgid "Vous ne disposez pas de la dernière version de Ganymède. Veuillez télécharger la dernière version. <0/><1><2>Télécharger maintenant</2></1>"
-msgstr "You do not have the latest version of Ganymède. Please download the latest version. <0/><1><2>Download now</2></1>"
+#: src/routes/app-old-version.tsx:43
+msgid "Vous ne disposez pas de la dernière version de <0>Ganymède</0>."
+msgstr "You do not have the latest version of <0>Ganymede</0>."
 
 #: src/routes/_app/index.tsx:44
 msgid "Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure."
