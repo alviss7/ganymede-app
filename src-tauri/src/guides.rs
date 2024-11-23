@@ -1,6 +1,5 @@
 use crate::api::GANYMEDE_API_V2;
-use crate::error::Error;
-use crate::tauri_api::GuidesPath;
+use crate::tauri_api_ext::GuidesPathExt;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::{fmt, fs};
@@ -8,6 +7,56 @@ use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
 use tauri_plugin_http::reqwest;
 use tauri_plugin_shell::ShellExt;
+
+#[derive(Debug)]
+pub enum Error {
+    /// Error while parsing a glob pattern.
+    Pattern(glob::PatternError),
+    /// Error while reading the guides directory.
+    ReadGuidesDir(glob::GlobError),
+    /// Error while reading a guide file.
+    ReadGuideFile(std::io::Error),
+    /// Error while parsing a guide.
+    GuideMalformed(crate::json::Error),
+    /// Error while serializing a guide.
+    SerializeGuide(serde_json::Error),
+    /// Error while creating the guides directory.
+    CreateGuidesDir(std::io::Error),
+    /// Error while writing a guide file.
+    WriteGuideFile(std::io::Error),
+    /// Error while requesting a guide from the server.
+    RequestGuide(reqwest::Error),
+    /// Error while getting the content of a guide request.
+    RequestGuideContent(reqwest::Error),
+    /// Error while requesting guides from the server.
+    RequestGuides(reqwest::Error),
+    /// Error while getting the content of a guides request.
+    RequestGuidesContent(reqwest::Error),
+    /// Error while parsing a guide with steps.
+    GuideWithStepsMalformed(crate::json::Error),
+    /// Error while parsing guides.
+    GuidesMalformed(crate::json::Error),
+}
+
+impl Into<tauri::ipc::InvokeError> for Error {
+    fn into(self) -> tauri::ipc::InvokeError {
+        match self {
+            Error::Pattern(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::ReadGuidesDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::ReadGuideFile(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::GuideMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::SerializeGuide(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::CreateGuidesDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::WriteGuideFile(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestGuide(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestGuideContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestGuides(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestGuidesContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::GuideWithStepsMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::GuidesMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+        }
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct User {
@@ -101,8 +150,8 @@ impl fmt::Display for Status {
 }
 
 impl Guides {
-    pub fn get_with_path(path_buf: &PathBuf) -> Result<Guides, Error> {
-        println!("guides://get_guides in {:?}", path_buf);
+    pub fn from_path(path_buf: &PathBuf) -> Result<Guides, Error> {
+        println!("[Guides] get_guides in {:?}", path_buf);
 
         let options = glob::MatchOptions {
             case_sensitive: false,
@@ -111,56 +160,35 @@ impl Guides {
         };
 
         let files = glob::glob_with(path_buf.join("**/*.json").to_str().unwrap(), options)
-            .expect("guides://failed to read guides directory for json");
+            .map_err(Error::Pattern)?;
 
         let mut guides = vec![];
 
         for entry in files {
-            match entry {
-                Ok(file) => {
-                    let file = fs::read_to_string(file.to_str().unwrap());
+            let file = entry.map_err(Error::ReadGuidesDir)?;
 
-                    match file {
-                        Err(err) => return Err(err.into()),
-                        Ok(file) => {
-                            let guide = crate::json::from_str::<GuideWithSteps>(file.as_str())
-                                .map_err(Error::from)?;
+            let file = fs::read_to_string(file.to_str().unwrap()).map_err(Error::ReadGuideFile)?;
 
-                            guides.push(guide);
-                        }
-                    }
-                }
-                Err(err) => {
-                    return Err(crate::error::Error::from(err));
-                }
-            }
+            let guide = crate::json::from_str::<GuideWithSteps>(file.as_str())
+                .map_err(Error::GuideMalformed)?;
+
+            guides.push(guide);
         }
 
         Ok(Guides { guides })
     }
 
-    pub fn get_with_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<Guides, Error> {
+    pub fn from_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<Guides, Error> {
         let guides_dir = &resolver.app_guides_dir();
 
-        Guides::get_with_path(guides_dir)
-    }
-
-    pub fn ensure<R: Runtime>(resolver: &PathResolver<R>) -> Result<(), Error> {
-        let guides_dir = &resolver.app_guides_dir();
-
-        if !guides_dir.exists() {
-            fs::create_dir_all(guides_dir)?;
-        }
-
-        Ok(())
+        Guides::from_path(guides_dir)
     }
 
     pub fn save<R: Runtime>(&self, resolver: &PathResolver<R>) -> Result<(), Error> {
         let guides_dir = &resolver.app_guides_dir();
 
         for guide in &self.guides {
-            let json =
-                serde_json::to_string_pretty(guide).expect("guides://failed to serialize guide");
+            let json = serde_json::to_string_pretty(guide).map_err(Error::SerializeGuide)?;
 
             // Create the status directory if it doesn't exist
             let file = guides_dir
@@ -168,63 +196,54 @@ impl Guides {
                 .join(format!("{}.json", guide.id));
 
             if !file.exists() {
-                fs::create_dir_all(file.parent().unwrap())?;
+                fs::create_dir_all(file.parent().unwrap()).map_err(Error::CreateGuidesDir)?;
             }
 
-            fs::write(file, json).map_err(Error::from)?;
+            fs::write(file, json).map_err(Error::WriteGuideFile)?;
         }
 
         Ok(())
     }
 }
 
+pub fn ensure_with_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<(), Error> {
+    let guides_dir = &resolver.app_guides_dir();
+
+    if !guides_dir.exists() {
+        fs::create_dir_all(guides_dir).map_err(Error::CreateGuidesDir)?;
+    }
+
+    Ok(())
+}
+
 #[tauri::command]
 pub fn get_guides(window: Window<Wry>) -> Result<Guides, Error> {
-    Guides::get_with_resolver(window.path())
+    Guides::from_resolver(window.path())
 }
 
 #[tauri::command]
 pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Error> {
-    println!("guides://get_guide_from_server: {}", guide_id);
+    println!("[Guides] get_guide_from_server: {}", guide_id);
 
-    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API_V2, guide_id)).await?;
-    let text = res.text().await?;
-    let guide = crate::json::from_str::<GuideWithSteps>(text.as_str()).map_err(Error::from);
+    let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API_V2, guide_id))
+        .await
+        .map_err(Error::RequestGuide)?;
+    let text = res.text().await.map_err(Error::RequestGuideContent)?;
 
-    match guide {
-        Err(err) => {
-            if let Error::JsonPath(json_error) = &err {
-                eprintln!("guides://JsonError: {:?}", json_error.path().to_string());
-            }
-
-            Err(err)
-        }
-        Ok(guide) => Ok(guide),
-    }
+    crate::json::from_str::<GuideWithSteps>(text.as_str()).map_err(Error::GuideWithStepsMalformed)
 }
 
 #[tauri::command]
 pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error> {
-    println!("guides://get_guides_from_server");
+    println!("[Guides] get_guides_from_server");
 
-    let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API_V2, status)).await?;
+    let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API_V2, status))
+        .await
+        .map_err(Error::RequestGuides)?;
 
-    let text = res.text().await?;
+    let text = res.text().await.map_err(Error::RequestGuidesContent)?;
 
-    let guides = crate::json::from_str::<Vec<Guide>>(text.as_str()).map_err(Error::from);
-
-    match guides {
-        Err(err) => {
-            if let Error::JsonPath(json_error) = &err {
-                eprintln!("guides://JsonError: {:?}", json_error.path().to_string());
-            } else {
-                eprintln!("guides://Error: {:?}", err);
-            }
-
-            Ok(vec![])
-        }
-        Ok(guides) => Ok(guides),
-    }
+    crate::json::from_str::<Vec<Guide>>(text.as_str()).map_err(Error::GuidesMalformed)
 }
 
 #[tauri::command]
@@ -232,34 +251,23 @@ pub async fn download_guide_from_server(
     guide_id: u32,
     window: Window<Wry>,
 ) -> Result<Guides, Error> {
-    println!("guides://download_guide_from_server");
+    println!("[Guides] download_guide_from_server");
 
-    let guide = get_guide_from_server(guide_id).await;
+    let guide = get_guide_from_server(guide_id).await?;
 
-    match guide {
-        Ok(guide) => {
-            let resolver = window.path();
-            let guide_ref = &guide;
-            let mut guides = Guides::get_with_resolver(resolver)?;
+    let resolver = window.path();
+    let guide_ref = &guide;
+    let mut guides = Guides::from_resolver(resolver)?;
 
-            // Update the guide file if it exists
-            match guides.guides.iter().position(|g| g.id == guide_ref.id) {
-                Some(index) => guides.guides[index] = guide,
-                None => guides.guides.push(guide),
-            }
-
-            guides.save(resolver)?;
-
-            Ok(guides)
-        }
-        Err(err) => {
-            if let Error::JsonPath(json_error) = &err {
-                eprintln!("guides://JsonError: {:?}", json_error.path().to_string());
-            }
-
-            Err(err)
-        }
+    // Update the guide file if it exists
+    match guides.guides.iter().position(|g| g.id == guide_ref.id) {
+        Some(index) => guides.guides[index] = guide,
+        None => guides.guides.push(guide),
     }
+
+    guides.save(resolver)?;
+
+    Ok(guides)
 }
 
 #[tauri::command]

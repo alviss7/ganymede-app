@@ -7,11 +7,36 @@ use tauri::{Manager, Window, Wry};
 use tauri_plugin_http::reqwest;
 
 use crate::conf::{Conf, Lang};
-use crate::error::Error;
 
 const REWARD_REDUCED_SCALE: f32 = 0.7;
 const REWARD_SCALE_CAP: f32 = 1.5;
 const PLAYER_LEVEL: u32 = 200;
+
+pub enum Error {
+    DofusDbAlmanaxMalformed(crate::json::Error),
+    DofusDbItemMalformed(crate::json::Error),
+    RequestAlmanax(reqwest::Error),
+    RequestAlmanaxContent(reqwest::Error),
+    RequestItem(reqwest::Error),
+    RequestItemContent(reqwest::Error),
+    Conf(crate::conf::Error),
+    Quest(crate::quest::Error),
+}
+
+impl Into<tauri::ipc::InvokeError> for Error {
+    fn into(self) -> tauri::ipc::InvokeError {
+        match self {
+            Error::DofusDbAlmanaxMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::DofusDbItemMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestAlmanax(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestAlmanaxContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestItem(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestItemContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::Conf(err) => err.into(),
+            Error::Quest(err) => err.into(),
+        }
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AlmanaxName {
@@ -132,44 +157,33 @@ pub async fn get_almanax_data() -> Result<Almanax, Error> {
         "{}/almanax?date={}/{}/{}",
         DOFUSDB_API, month, day, year
     ))
-    .await?;
+    .await
+    .map_err(Error::RequestAlmanax)?;
 
-    let text = res.text().await?;
+    let text = res.text().await.map_err(Error::RequestAlmanaxContent)?;
 
-    let json = crate::json::from_str::<Almanax>(text.as_str());
-
-    if let Err(err) = json {
-        eprintln!("almanax://failed to get almanax: {:?}", err);
-
-        return Err(err);
-    }
-
-    let almanax = json.unwrap();
+    let almanax =
+        crate::json::from_str::<Almanax>(text.as_str()).map_err(Error::DofusDbAlmanaxMalformed)?;
 
     Ok(almanax)
 }
 
 pub async fn get_item_data(item_id: u32) -> Result<Item, Error> {
-    let res = reqwest::get(format!("{}/items/{}", DOFUSDB_API, item_id)).await?;
+    let res = reqwest::get(format!("{}/items/{}", DOFUSDB_API, item_id))
+        .await
+        .map_err(Error::RequestItem)?;
 
-    let text = res.text().await?;
+    let text = res.text().await.map_err(Error::RequestItemContent)?;
 
-    let json = crate::json::from_str::<Item>(text.as_str());
+    let item = crate::json::from_str::<Item>(text.as_str()).map_err(Error::DofusDbItemMalformed)?;
 
-    match json {
-        Err(err) => {
-            eprintln!("almanax://failed to get item {} data: {:?}", item_id, err);
-
-            Err(Error::from(err))
-        }
-        Ok(json) => Ok(json),
-    }
+    Ok(item)
 }
 
 #[tauri::command]
 pub async fn get_almanax(window: Window<Wry>) -> Result<AlmanaxReward, Error> {
     let almanax = get_almanax_data().await?;
-    let quest = get_quest_data(almanax.id).await?;
+    let quest = get_quest_data(almanax.id).await.map_err(Error::Quest)?;
     let item_id = quest.data[0].steps[0].objectives[0].need.generated.items[0];
     let quantity = quest.data[0].steps[0].objectives[0]
         .need
@@ -177,7 +191,7 @@ pub async fn get_almanax(window: Window<Wry>) -> Result<AlmanaxReward, Error> {
         .quantities[0];
     let item = get_item_data(item_id).await?;
     let resolver = window.path();
-    let conf = Conf::get_with_resolver(resolver)?;
+    let conf = Conf::get_with_resolver(resolver).map_err(Error::Conf)?;
 
     let name = match conf.lang {
         crate::conf::Lang::En => item.name.en,

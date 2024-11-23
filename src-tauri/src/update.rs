@@ -6,7 +6,7 @@ use tauri_plugin_updater::UpdaterExt;
 pub async fn start_update(app: AppHandle) -> tauri_plugin_updater::Result<()> {
     if let Some(update) = app.updater()?.check().await? {
         app.emit(Event::UpdateStarted.into(), 0)
-            .expect("update://failed to emit update in progress event");
+            .expect("[Update] failed to emit update in progress event");
 
         let mut downloaded = 0;
 
@@ -16,18 +16,18 @@ pub async fn start_update(app: AppHandle) -> tauri_plugin_updater::Result<()> {
                 |chunk_length, content_length| {
                     downloaded += chunk_length;
                     app.emit(Event::UpdateInProgress.into(), (downloaded, content_length))
-                        .expect("update://failed to emit update in progress event");
-                    println!("update://downloaded {downloaded} from {content_length:?}");
+                        .expect("[Update] failed to emit update in progress event");
+                    println!("[Update] downloaded {downloaded} from {content_length:?}");
                 },
                 || {
                     app.emit(Event::UpdateFinished.into(), 0)
-                        .expect("update://failed to emit update finished event");
-                    println!("update://download finished");
+                        .expect("[Update] failed to emit update finished event");
+                    println!("[Update] download finished");
                 },
             )
             .await?;
 
-        println!("update://update installed");
+        println!("[Update] update installed");
 
         // not required, but we can restart the app after the update
         app.restart();

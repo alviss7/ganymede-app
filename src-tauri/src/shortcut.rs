@@ -20,18 +20,18 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Box<dyn std::error::Error>> {
                         if shortcut == &reset_conf_shortcut {
                             Conf::default()
                                 .save(app.path())
-                                .expect("shortcut://failed to reset conf");
-                            println!("shortcut://conf reset triggered");
+                                .expect("[Shortcut] failed to reset conf");
+                            println!("[Shortcut] conf reset triggered");
 
                             let mut webview = app
                                 .get_webview_window("main")
-                                .expect("shortcut://failed to get webview window");
+                                .expect("[Shortcut] failed to get webview window");
 
                             let url = webview.url().unwrap();
 
                             webview
                                 .navigate(url)
-                                .expect("shortcut://failed to reload webview");
+                                .expect("[Shortcut] failed to reload webview");
                         }
 
                         if shortcut == &go_next_step_shortcut
@@ -41,10 +41,10 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 
                             if shortcut == &go_next_step_shortcut {
                                 app.emit(Event::GoToNextGuideStep.into(), 0)
-                                    .expect("shortcut://failed to emit next event");
+                                    .expect("[Shortcut] failed to emit next event");
                             } else if shortcut == &go_previous_step_shortcut {
                                 app.emit(Event::GoToPreviousGuideStep.into(), 0)
-                                    .expect("shortcut://failed to emit previous event");
+                                    .expect("[Shortcut] failed to emit previous event");
                             }
                         }
                     }

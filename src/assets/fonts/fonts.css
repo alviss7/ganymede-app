@@ -14,10 +14,11 @@
   src: url(./Lexend-Light.ttf) format("truetype");
 }
 
-@font-face {
+/* Not used at the moment */
+/* @font-face {
   font-family: Liberation;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
   src: url(./LiberationSans.ttf) format("truetype");
-}
+} */

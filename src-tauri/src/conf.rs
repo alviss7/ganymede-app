@@ -1,11 +1,35 @@
-use crate::error::Error;
-use crate::tauri_api::ConfPath;
+use crate::tauri_api_ext::ConfPathExt;
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fs;
 use tauri::path::PathResolver;
 use tauri::{Manager, Runtime, Window, Wry};
+
+#[derive(Debug)]
+pub enum Error {
+    Malformed(crate::json::Error),
+    CreateConfDir(std::io::Error),
+    ConfDir(tauri::Error),
+    SerializeConf(serde_json::Error),
+    UnhandledIo(std::io::Error),
+    SaveConf(std::io::Error),
+    GetProfileInUse,
+}
+
+impl Into<tauri::ipc::InvokeError> for Error {
+    fn into(self) -> tauri::ipc::InvokeError {
+        match self {
+            Error::Malformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::CreateConfDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::ConfDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::SerializeConf(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::UnhandledIo(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::SaveConf(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::GetProfileInUse => tauri::ipc::InvokeError::from("GetProfileInUse".to_string()),
+        }
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Profile {
@@ -99,13 +123,13 @@ impl Profile {
             return &mut self.progresses[index];
         }
 
-        // Si aucun Progress n'est trouvé, on en crée un nouveau
+        // If no Progress is found, we create a new one
         self.progresses.push(Progress::new(guide_id));
 
-        // On récupère une référence mutable au nouvel élément ajouté
+        // We return a mutable reference to the newly created Progress
         self.progresses
             .last_mut()
-            .expect("conf://the element has just been added, it should exist.")
+            .expect("[Conf] the element has just been added, it should exist.")
     }
 }
 
@@ -123,7 +147,7 @@ impl Step {
 }
 
 impl Conf {
-    // Check when serde_json error, display a reset button?
+    /// Get the conf file content, if it does not exist, return default conf
     pub fn get_with_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<Conf, Error> {
         let conf_path = resolver.app_conf_file();
 
@@ -133,48 +157,28 @@ impl Conf {
         match file {
             Err(err) => match err.kind() {
                 std::io::ErrorKind::NotFound => Ok(Conf::default()),
-                _ => Err(err.into()),
+                _ => Err(Error::UnhandledIo(err)),
             },
-            Ok(file) => Ok(crate::json::from_str::<Conf>(file.as_str()).map_err(Error::from)?),
+            Ok(file) => Ok(crate::json::from_str::<Conf>(file.as_str()).map_err(Error::Malformed)?),
         }
     }
 
-    pub fn ensure<R: Runtime>(resolver: &PathResolver<R>) -> Result<(), Error> {
-        let conf_dir = resolver.app_config_dir()?;
-
-        if !conf_dir.exists() {
-            fs::create_dir_all(conf_dir)?;
-        }
-
-        let conf_path = resolver.app_conf_file();
-
-        println!("conf://path: {:?}", conf_path);
-
-        if !conf_path.exists() {
-            println!("conf://file does not exists, creating default one");
-
-            let default_conf = &mut Conf::default();
-
-            default_conf.save(resolver)?;
-        }
-
-        Ok(())
-    }
-
+    /// Save the conf into the conf file. Normalize the conf before saving it
     pub fn save<R: Runtime>(&mut self, resolver: &PathResolver<R>) -> Result<(), Error> {
         let conf_path = resolver.app_conf_file();
 
         self.normalize();
 
-        let json = serde_json::to_string_pretty(self).expect("conf://failed to serialize conf");
+        let json = serde_json::to_string_pretty(self).map_err(Error::SerializeConf)?;
 
-        fs::write(conf_path, json).map_err(Error::from)
+        fs::write(conf_path, json).map_err(Error::SaveConf)
     }
 
-    pub fn get_profile_in_use_mut(&mut self) -> Option<&mut Profile> {
+    pub fn get_profile_in_use_mut(&mut self) -> Result<&mut Profile, Error> {
         self.profiles
             .iter_mut()
             .find(|p| p.id == self.profile_in_use)
+            .ok_or(Error::GetProfileInUse)
     }
 
     pub fn normalize(&mut self) {
@@ -229,6 +233,29 @@ impl Default for Profile {
     }
 }
 
+/// Ensure that the conf file exists, if not, create it with default values
+pub fn ensure_with_resolver<R: Runtime>(resolver: &PathResolver<R>) -> Result<(), Error> {
+    let conf_dir = resolver.app_config_dir().map_err(Error::ConfDir)?;
+
+    if !conf_dir.exists() {
+        fs::create_dir_all(conf_dir).map_err(Error::CreateConfDir)?;
+    }
+
+    let conf_path = resolver.app_conf_file();
+
+    println!("[Conf] path: {:?}", conf_path);
+
+    if !conf_path.exists() {
+        println!("[Conf] file does not exists, creating default one");
+
+        let default_conf = &mut Conf::default();
+
+        default_conf.save(resolver)?;
+    }
+
+    Ok(())
+}
+
 #[tauri::command]
 pub fn get_conf(window: Window<Wry>) -> Result<Conf, Error> {
     Conf::get_with_resolver(window.path())
@@ -247,31 +274,29 @@ pub fn toggle_guide_checkbox(
     guide_id: u32,
     step_index: usize,
     checkbox_index: usize,
-) -> Option<usize> {
+) -> Result<usize, Error> {
     let resolver = window.path();
-    let conf =
-        &mut Conf::get_with_resolver(resolver).expect("conf://cannot find conf with resolver");
-    let profile = conf.get_profile_in_use_mut();
-
-    if profile.is_none() {
-        return None;
-    }
-
-    let profile = profile.unwrap();
-    let progress = &mut profile.get_progress_mut(guide_id);
+    let conf = &mut Conf::get_with_resolver(resolver)?;
+    let profile = conf.get_profile_in_use_mut()?;
+    let progress = profile.get_progress_mut(guide_id);
 
     let step = match progress.steps.get_mut(&step_index) {
-        Some(step) => step,
-        None => &mut Step::default(),
+        Some(step) => {
+            step.toggle_checkbox(checkbox_index);
+
+            step.clone()
+        }
+        None => {
+            let mut step = Step::default();
+            step.toggle_checkbox(checkbox_index);
+
+            step
+        }
     };
-
-    step.toggle_checkbox(checkbox_index);
-
-    let step = step.clone();
 
     progress.add_or_update_step(step, step_index);
 
-    conf.save(resolver).expect("conf://cannot save conf");
+    conf.save(resolver)?;
 
-    Some(checkbox_index)
+    Ok(checkbox_index)
 }

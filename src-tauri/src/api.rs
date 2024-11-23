@@ -1,11 +1,8 @@
 use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Runtime};
-
-#[cfg(not(debug_assertions))]
-use crate::error::Error;
+use tauri_plugin_http::reqwest;
 
 pub const DOFUSDB_API: &str = "https://api.dofusdb.fr";
-#[cfg(not(debug_assertions))]
 pub const GANYMEDE_API: &str = "https://ganymede-dofus.com/api";
 #[cfg(debug_assertions)]
 pub const GANYMEDE_API_V2: &str = "https://dev.ganymede-dofus.com/api/v2";
@@ -14,7 +11,15 @@ pub const GANYMEDE_API_V2: &str = "https://ganymede-dofus.com/api/v2";
 
 const GITHUB_API: &str = "https://api.github.com/repos/GanymedeTeam/ganymede-app";
 
-#[cfg(not(debug_assertions))]
+#[allow(dead_code)]
+#[derive(Debug)]
+pub enum Error {
+    OsNotFound,
+    BuildClientBuilder(reqwest::Error),
+    RequestDownloaded(reqwest::Error),
+    DownloadedCount(reqwest::StatusCode, String),
+}
+
 #[derive(Serialize)]
 struct DownloadedBody {
     #[serde(rename = "uniqueID")]
@@ -23,7 +28,6 @@ struct DownloadedBody {
     os: String,
 }
 
-#[cfg(not(debug_assertions))]
 fn os_to_string(os: String) -> Option<String> {
     match os.as_str() {
         "windows" => Some("Windows".into()),
@@ -33,24 +37,17 @@ fn os_to_string(os: String) -> Option<String> {
     }
 }
 
-#[cfg(not(debug_assertions))]
 pub async fn increment_app_download_count(
     version: String,
 ) -> Result<tauri_plugin_http::reqwest::Response, Error> {
     let id = machine_uid::get().unwrap();
     let os = std::env::consts::OS.to_string();
-    let os = os_to_string(os);
+    let os = os_to_string(os).ok_or(Error::OsNotFound)?;
 
     println!(
-        "api://Incrementing app download count, id: {} - version: {} - os: {:?}",
+        "[Api] Incrementing app download count, id: {} - version: {} - os: {:?}",
         id, version, os
     );
-
-    if os.is_none() {
-        return Err(Error::EarlyReturn);
-    }
-
-    let os = os.unwrap();
 
     let body = DownloadedBody {
         unique_id: id,
@@ -62,29 +59,22 @@ pub async fn increment_app_download_count(
 
     let res = tauri_plugin_http::reqwest::ClientBuilder::new()
         .user_agent("GANYMEDE_TAURI_APP")
-        .build()?
+        .build()
+        .map_err(Error::BuildClientBuilder)?
         .post(format!("{}/downloaded", GANYMEDE_API))
         .header("Content-Type", "application/json")
         .body(body)
         .send()
         .await
-        .map_err(Error::from);
+        .map_err(Error::RequestDownloaded)?;
 
-    match res {
-        Ok(res) => {
-            if res.status().is_success() {
-                Ok(res)
-            } else {
-                Err(Error::from(format!(
-                    "Failed to increment app download count: status={}",
-                    res.status().as_str()
-                )))
-            }
-        }
-        Err(err) => Err(Error::from(format!(
-            "Failed to increment app download count: {:?}",
-            err
-        ))),
+    if res.status().is_success() {
+        Ok(res)
+    } else {
+        Err(Error::DownloadedCount(
+            res.status(),
+            res.text().await.expect("[Api] failed to get response text"),
+        ))
     }
 }
 
@@ -93,11 +83,20 @@ struct AppRelease {
     tag_name: String,
 }
 
-#[derive(Serialize)]
 pub enum AppVersionError {
-    GitHub,
-    Json,
-    Semver,
+    GitHub(reqwest::Error),
+    JsonMalformed(reqwest::Error),
+    SemverParse(semver::Error),
+}
+
+impl Into<tauri::ipc::InvokeError> for AppVersionError {
+    fn into(self) -> tauri::ipc::InvokeError {
+        match self {
+            AppVersionError::GitHub(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            AppVersionError::JsonMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            AppVersionError::SemverParse(err) => tauri::ipc::InvokeError::from(err.to_string()),
+        }
+    }
 }
 
 #[tauri::command]
@@ -112,36 +111,19 @@ pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<bool, A
     let res = client
         .get(format!("{}/releases/latest", GITHUB_API))
         .send()
-        .await;
+        .await
+        .map_err(AppVersionError::GitHub)?
+        .json::<AppRelease>()
+        .await
+        .map_err(AppVersionError::JsonMalformed)?;
 
-    if res.is_err() {
-        eprintln!(
-            "api://failed to get latest version: {:?}",
-            res.err().unwrap()
-        );
+    let release_version = semver::VersionReq::parse(format!("<{}", res.tag_name).as_str())
+        .map_err(AppVersionError::SemverParse)?;
 
-        return Err(AppVersionError::GitHub);
-    }
-
-    let res = res.unwrap().json::<AppRelease>().await;
-
-    if res.is_err() {
-        return Err(AppVersionError::Json);
-    }
-
-    let res = res.unwrap();
-
-    let release_version = semver::VersionReq::parse(format!("<{}", res.tag_name).as_str());
-
-    if release_version.is_err() {
-        return Err(AppVersionError::Semver);
-    }
-
-    let release_version = release_version.unwrap();
     let version = semver::Version::parse(&version).unwrap();
 
     println!(
-        "api://version: {:?} - release_version: {:?}",
+        "[Api] version from package: {:?} - release_version from GitHub: {:?}",
         version, release_version
     );
 
