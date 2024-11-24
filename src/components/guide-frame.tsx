@@ -16,6 +16,7 @@ import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import parse, { DOMNode, domToReact, type HTMLReactParserOptions } from 'html-react-parser'
 import { AlertCircleIcon } from 'lucide-react'
 import { DownloadImage } from './download-image'
+import { Fragment, ReactNode } from 'react'
 
 export function GuideFrame({
   className,
@@ -40,32 +41,39 @@ export function GuideFrame({
 
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
-      const posReg = /(.*)\[(-?\d+),\s?(-?\d+)\](\w*)/
-
       // #region positions
       if (domNode.type === 'text') {
-        const groups = posReg.exec(domNode.data)
+        const posReg = /(.*?)\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]([\w\s]*)/g
 
-        if (!groups) return
+        console.log(Array.from(domNode.data.matchAll(posReg)))
 
-        const [, prefix, posX, posY, suffix] = groups
+        let elems: ReactNode[] = []
 
-        return (
-          <>
-            {prefix}
-            <button
-              type="button"
-              className="inline-flex hover:saturate-50 focus:saturate-[12.5%]"
-              onClick={async () => {
-                await copyPosition(Number.parseInt(posX, 10), Number.parseInt(posY, 10), conf.data.autoTravelCopy)
-              }}
-              title={conf.data.autoTravelCopy ? 'Copier la commande autopilote' : 'Copier la position'}
-            >
-              [{posX},{posY}]
-            </button>{' '}
-            {suffix}
-          </>
-        )
+        for (const groups of domNode.data.matchAll(posReg)) {
+          const [, prefix, posX, posY, suffix] = groups
+
+          elems = [
+            ...elems,
+            <Fragment key={`${prefix ?? ''}-${posX ?? ''}-${posY ?? ''}`}>
+              {prefix}
+              {posX !== undefined && posY !== undefined && (
+                <button
+                  type="button"
+                  className="inline-flex hover:saturate-50 focus:saturate-[12.5%]"
+                  onClick={async () => {
+                    await copyPosition(Number.parseInt(posX, 10), Number.parseInt(posY, 10), conf.data.autoTravelCopy)
+                  }}
+                  title={conf.data.autoTravelCopy ? 'Copier la commande autopilote' : 'Copier la position'}
+                >
+                  [{posX},{posY}]
+                </button>
+              )}
+              {suffix}
+            </Fragment>,
+          ]
+        }
+
+        return <>{elems}</>
       }
       // #endregion
 
