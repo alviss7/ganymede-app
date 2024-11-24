@@ -3,7 +3,7 @@ name: 'on-release'
 on:
   push:
     branches:
-      - release
+      - changeset-release/main
 
 # This workflow will trigger on each push to the `release` branch to create or update a GitHub release, build your app, and upload the artifacts to the release.
 
@@ -67,7 +67,7 @@ jobs:
             src-tauri/target/release/.cargo-lock
 
       - name: install frontend dependencies
-        run: pnpm install
+        run: pnpm i --frozen-lockfile
 
       - uses: tauri-apps/tauri-action@v0
         id: tauri
