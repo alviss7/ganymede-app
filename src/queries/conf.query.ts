@@ -1,7 +1,8 @@
-import { getConf } from '@/ipc/conf.ts'
+import { getConf, GetConfError } from '@/ipc/conf.ts'
+import { Conf } from '@/types/conf'
 import { queryOptions } from '@tanstack/react-query'
 
-export const confQuery = queryOptions({
+export const confQuery = queryOptions<Conf, GetConfError>({
   queryKey: ['conf'],
   queryFn: async () => {
     const conf = await getConf()

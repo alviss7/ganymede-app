@@ -16,6 +16,9 @@ export default {
           '2xl': '1400px',
         },
       },
+      height: {
+        'app-without-header': 'calc(100vh - 30px)',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

@@ -25,6 +25,10 @@ msgstr "Afficher les guides terminés"
 msgid "Ajouter"
 msgstr "Ajouter"
 
+#: src/components/error-component.tsx:63
+msgid "Attention !"
+msgstr "Attention !"
+
 #: src/routes/_app/downloads/$status.tsx:128
 msgid "Aucun guides trouvé"
 msgstr "Aucun guides trouvé"
@@ -46,6 +50,11 @@ msgstr "Bienvenue sur <0>GANYMÈDE</0> !"
 #: src/routes/_app/downloads/index.tsx:44
 msgid "Catégories"
 msgstr "Catégories"
+
+#: src/components/error-component.tsx:81
+#: src/components/error-component.tsx:110
+msgid "Causée par :"
+msgstr "Causée par :"
 
 #: src/routes/_app/index.tsx:38
 msgid "Cet outil a pour but de vous assister tout au long de votre aventure sur <0>Dofus</0> !"
@@ -114,11 +123,11 @@ msgstr "Copier la note"
 msgid "Copier la position"
 msgstr "Copier la position"
 
-#: src/routes/_app/settings.tsx:229
+#: src/routes/_app/settings.tsx:216
 msgid "Créer"
 msgstr "Créer"
 
-#: src/routes/_app/settings.tsx:193
+#: src/routes/_app/settings.tsx:180
 msgid "Créer un profil"
 msgstr "Créer un profil"
 
@@ -137,6 +146,10 @@ msgstr "Créez vos guides via le site officiel et téléchargez ceux des autres 
 #: src/routes/_app/downloads/$status.tsx:167
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
+
+#: src/components/error-component.tsx:75
+msgid "Détails"
+msgstr "Détails"
 
 #: src/routes/_app/index.tsx:60
 msgid "Discord de Ganymède"
@@ -202,11 +215,16 @@ msgstr "id <0>{0}</0>"
 msgid "Il semblerait que la mise à jour ait eu un problème."
 msgstr "Il semblerait que la mise à jour ait eu un problème."
 
+#: src/components/error-component.tsx:93
+#: src/components/error-component.tsx:122
+msgid "Informations supplémentaires : {0}"
+msgstr "Informations supplémentaires : {0}"
+
 #: src/routes/app-old-version.tsx:69
 msgid "Lancer le téléchargement"
 msgstr "Lancer le téléchargement"
 
-#: src/routes/_app/settings.tsx:141
+#: src/components/select-lang.tsx:10
 msgid "Langue"
 msgstr "Langue"
 
@@ -249,6 +267,10 @@ msgstr "Notes"
 msgid "Opacité"
 msgstr "Opacité"
 
+#: src/components/error-component.tsx:53
+msgid "Ou le bouton suivant"
+msgstr "Ou le bouton suivant"
+
 #: src/routes/_app/guides/index.tsx:105
 msgid "Ouvrir le dossier des guides téléchargés"
 msgstr "Ouvrir le dossier des guides téléchargés"
@@ -263,11 +285,15 @@ msgstr "Paramètres"
 msgid "Petite"
 msgstr "Petite"
 
+#: src/components/error-component.tsx:47
+msgid "Pour réinitialiser la configuration, exécuter le raccourci clavier : <0>{0}</0>."
+msgstr "Pour réinitialiser la configuration, exécuter le raccourci clavier : <0>{0}</0>."
+
 #: src/routes/_app/index.tsx:22
 msgid "Présentation"
 msgstr "Présentation"
 
-#: src/routes/_app/settings.tsx:166
+#: src/routes/_app/settings.tsx:153
 msgid "Profils"
 msgstr "Profils"
 
@@ -283,6 +309,14 @@ msgstr "Rechercher un guide"
 #: src/components/title-bar.tsx:98
 msgid "Réduire"
 msgstr "Réduire"
+
+#: src/components/error-component.tsx:128
+msgid "Réessayer"
+msgstr "Réessayer"
+
+#: src/components/error-component.tsx:57
+msgid "Réinitialiser"
+msgstr "Réinitialiser"
 
 #: src/routes/_app/index.tsx:78
 msgid "Site officiel"
@@ -316,6 +350,18 @@ msgstr "Très petite"
 #: src/routes/_app/index.tsx:69
 msgid "Twitter de Ganymède"
 msgstr "Twitter de Ganymède"
+
+#: src/components/error-component.tsx:104
+msgid "Une erreur est survenue"
+msgstr "Une erreur est survenue"
+
+#: src/components/error-component.tsx:43
+msgid "Une erreur est survenue lors de la récupération de la configuration."
+msgstr "Une erreur est survenue lors de la récupération de la configuration."
+
+#: src/components/error-component.tsx:66
+msgid "Votre progression dans les guides sera réinitialisée. Les guides téléchargés seront toujours présents."
+msgstr "Votre progression dans les guides sera réinitialisée. Les guides téléchargés seront toujours présents."
 
 #: src/routes/app-old-version.tsx:43
 msgid "Vous ne disposez pas de la dernière version de <0>Ganymède</0>."

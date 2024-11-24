@@ -124,12 +124,12 @@ function GuidesPage() {
           {filteredGuides.map((guide) => {
             const step = (guide.currentStep ?? 0) + 1
             const totalSteps = guide.steps.length
-            const percentage = (((step - 1) / (totalSteps - 1)) * 100).toFixed(1)
+            const percentage = totalSteps === 1 ? 100 : (((step - 1) / (totalSteps - 1)) * 100).toFixed(1)
             const hasOpenButton = guide.steps.length > 0
 
             return (
               <Card key={guide.id} className="flex gap-2 p-2 xs:px-3 text-xxs xs:text-sm sm:text-base">
-                <div className="flex flex-col items-center gap-0.5">
+                <div className="flex min-w-9 flex-col items-center gap-0.5">
                   <FlagPerLang lang={guide.lang} />
                   <span className="whitespace-nowrap text-xxs">
                     <Trans>

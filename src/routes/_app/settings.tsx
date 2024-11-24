@@ -1,12 +1,12 @@
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { PageScrollableContent } from '@/components/page-scrollable-content'
+import { SelectLangLabel, SelectLangSelect } from '@/components/select-lang'
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch.tsx'
-import { dynamicActiveLocale } from '@/i18n'
 import { newId } from '@/ipc/id.ts'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
@@ -137,29 +137,16 @@ function Settings() {
             />
           </section>
           <section className="space-y-2">
-            <Label htmlFor="lang-guides" className="text-xs">
-              <Trans>Langue</Trans>
-            </Label>
-            <Select
+            <SelectLangLabel htmlFor="lang-guides" />
+            <SelectLangSelect
               value={conf.data.lang}
               onValueChange={async (value) => {
                 setConf.mutate({
                   ...conf.data,
                   lang: value as Lang,
                 })
-                await dynamicActiveLocale(value.toLowerCase())
               }}
-            >
-              <SelectTrigger id="lang-guides" className="text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Fr">Français</SelectItem>
-                <SelectItem value="En">English</SelectItem>
-                <SelectItem value="Es">Español</SelectItem>
-                <SelectItem value="Pt">Português</SelectItem>
-              </SelectContent>
-            </Select>
+            />
           </section>
           <section className="space-y-2">
             <Label htmlFor="profiles" className="text-xs">

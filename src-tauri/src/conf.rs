@@ -15,6 +15,7 @@ pub enum Error {
     UnhandledIo(std::io::Error),
     SaveConf(std::io::Error),
     GetProfileInUse,
+    ResetConf(Box<Error>),
 }
 
 impl Into<tauri::ipc::InvokeError> for Error {
@@ -27,6 +28,7 @@ impl Into<tauri::ipc::InvokeError> for Error {
             Error::UnhandledIo(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::SaveConf(err) => tauri::ipc::InvokeError::from(err.to_string()),
             Error::GetProfileInUse => tauri::ipc::InvokeError::from("GetProfileInUse".to_string()),
+            Error::ResetConf(err) => (*err).into(),
         }
     }
 }
@@ -299,4 +301,23 @@ pub fn toggle_guide_checkbox(
     conf.save(resolver)?;
 
     Ok(checkbox_index)
+}
+
+#[tauri::command]
+pub fn reset_conf(window: Window<Wry>) -> Result<(), Error> {
+    Conf::default()
+        .save(window.path())
+        .map_err(|e| Error::ResetConf(Box::new(e)))?;
+
+    let mut webview = window
+        .get_webview_window("main")
+        .expect("[Conf] main webview should exist");
+
+    let url = webview.url().unwrap();
+
+    webview
+        .navigate(url)
+        .expect("[Conf] failed to reload webview");
+
+    Ok(())
 }

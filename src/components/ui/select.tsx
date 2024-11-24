@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils'
 
 const Select = SelectPrimitive.Root
 
+export type SelectProps = SelectPrimitive.SelectProps
+
 const SelectGroup = SelectPrimitive.Group
 
 const SelectValue = SelectPrimitive.Value

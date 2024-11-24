@@ -14,6 +14,12 @@ export class SetConfError extends Error {
   }
 }
 
+export class ResetConfError extends Error {
+  static from(error: unknown) {
+    return new ResetConfError('Failed to reset conf', { cause: error })
+  }
+}
+
 export function getConf() {
   return fromPromise(invoke('get_conf'), GetConfError.from).map((response) => {
     return ConfZod.parseAsync(response)
@@ -22,4 +28,8 @@ export function getConf() {
 
 export async function setConf(conf: Conf) {
   return fromPromise(invoke('set_conf', { conf }), SetConfError.from)
+}
+
+export async function resetConf() {
+  return fromPromise(invoke('reset_conf'), ResetConfError.from)
 }

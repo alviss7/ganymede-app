@@ -1,16 +1,14 @@
+import { resetConf } from '@/ipc/conf.ts'
 import { useMutation } from '@tanstack/react-query'
-import { startUpdate } from '@/ipc/update'
 
-export function useStartUpdate() {
+export function useResetConf() {
   return useMutation({
     mutationFn: async () => {
-      const result = await startUpdate()
+      const result = await resetConf()
 
       if (result.isErr()) {
         throw result.error
       }
-
-      return result.value
     },
   })
 }

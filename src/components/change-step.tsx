@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button.tsx'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useWebviewEvent } from '../hooks/use_webview_event'
+import { useWebviewEvent } from '@/hooks/use_webview_event'
 
 export function ChangeStep({
   currentIndex,

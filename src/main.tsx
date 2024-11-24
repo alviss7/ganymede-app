@@ -1,14 +1,13 @@
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-import * as React from 'react'
-import ReactDOM from 'react-dom/client'
-
-// Import the generated route tree
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
-import * as Sentry from '@sentry/browser'
+import type * as Sentry from '@sentry/browser'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { invoke } from '@tauri-apps/api/core'
+import * as React from 'react'
+import ReactDOM from 'react-dom/client'
 import { defaultOptions as sentryDefaultOptions } from 'tauri-plugin-sentry-api'
+import { ErrorComponent } from './components/error-component.tsx'
 import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
 import { confQuery } from './queries/conf.query.ts'
@@ -30,11 +29,19 @@ function sendBreadcrumbToRust(breadcrumb: Sentry.Breadcrumb): Sentry.Breadcrumb 
   return null
 }
 
-Sentry.init({
-  ...sentryDefaultOptions,
-  autoSessionTracking: false,
-  beforeBreadcrumb: sendBreadcrumbToRust,
-})
+async function setupSentry() {
+  if (import.meta.env.PROD) {
+    const Sentry = await import('@sentry/browser')
+
+    Sentry.init({
+      ...sentryDefaultOptions,
+      autoSessionTracking: false,
+      beforeBreadcrumb: sendBreadcrumbToRust,
+    })
+  }
+}
+
+setupSentry().catch(console.error)
 
 if (
   (window.location.hostname === 'localhost' && window.location.port === '') ||
@@ -70,16 +77,22 @@ const queryClient = new QueryClient({
   },
 })
 
-const conf = await queryClient.ensureQueryData(confQuery)
+await dynamicActiveLocale('fr')
 
-window.document.documentElement.style.setProperty('--opacity', `${conf.opacity.toFixed(2)}`)
+queryClient
+  .ensureQueryData(confQuery)
+  .then(async (conf) => {
+    window.document.documentElement.style.setProperty('--opacity', `${conf.opacity.toFixed(2)}`)
 
-await dynamicActiveLocale(conf.lang.toLowerCase())
+    await dynamicActiveLocale(conf.lang.toLowerCase())
+  })
+  .catch(console.error)
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
   context: { queryClient },
+  defaultErrorComponent: ErrorComponent,
 })
 
 // Register the router instance for type safety
