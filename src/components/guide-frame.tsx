@@ -150,6 +150,11 @@ export function GuideFrame({
                     )}
                     disabled={downloadGuide.isPending}
                     onClick={async () => {
+                      if (domGuideId === undefined) {
+                        // this should never happen
+                        return
+                      }
+
                       if (!nextGuide) {
                         await downloadGuide.mutateAsync({ id: domGuideId })
                       }

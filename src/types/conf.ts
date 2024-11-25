@@ -20,7 +20,7 @@ export const ConfZod = z.object({
       text: z.string(),
     }),
   ),
-  opacity: z.number().max(0.94).min(0).default(0.94),
+  opacity: z.number().max(0.98).min(0).default(0.98),
 })
 
 export type Conf = z.infer<typeof ConfZod>
