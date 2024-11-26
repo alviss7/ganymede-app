@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-tauri:
-    if: startsWith(changeset-release, 'changeset-release')
+    if: startsWith(github.head_ref, 'changeset-release')
     permissions:
       contents: write
     strategy:
