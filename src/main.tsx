@@ -41,6 +41,8 @@ async function setupSentry() {
   }
 }
 
+// test
+
 setupSentry().catch(console.error)
 
 if (
