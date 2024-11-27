@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/title-bar.tsx:41
+#: src/components/title-bar.tsx:43
 msgid "Accueil"
 msgstr "Inicio"
 
@@ -29,15 +29,15 @@ msgstr "Añadir"
 msgid "Attention !"
 msgstr "¡Atención!"
 
-#: src/routes/_app/downloads/$status.tsx:128
+#: src/routes/_app/downloads/$status.tsx:133
 msgid "Aucun guides trouvé"
 msgstr "No se encontraron guías"
 
-#: src/routes/_app/downloads/$status.tsx:144
+#: src/routes/_app/downloads/$status.tsx:149
 msgid "Aucun guides trouvé avec {term}"
 msgstr "No se encontraron guías con {term}"
 
-#: src/components/title-bar.tsx:59
+#: src/components/title-bar.tsx:62
 #: src/routes/_app/auto-pilot.tsx:22
 #: src/routes/_app/auto-pilot.tsx:45
 msgid "Autopilotage"
@@ -46,6 +46,10 @@ msgstr "Piloto automático"
 #: src/routes/_app/index.tsx:33
 msgid "Bienvenue sur <0>GANYMÈDE</0> !"
 msgstr "¡Bienvenido a <0>GÁNYMEDE</0>!"
+
+#: src/components/title-bar.tsx:75
+msgid "Carte"
+msgstr "Mapa"
 
 #: src/routes/_app/downloads/index.tsx:44
 msgid "Catégories"
@@ -60,44 +64,44 @@ msgstr "Causada por:"
 msgid "Cet outil a pour but de vous assister tout au long de votre aventure sur <0>Dofus</0> !"
 msgstr "¡Esta herramienta tiene como objetivo asistirte durante toda tu aventura en <0>Dofus</0>!"
 
-#: src/components/title-bar.tsx:71
+#: src/components/title-bar.tsx:81
 msgid "Chasse au trésor"
 msgstr "Búsqueda del tesoro"
 
-#: src/components/guide-frame.tsx:227
+#: src/components/guide-frame.tsx:226
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del objeto. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:228
+#: src/components/guide-frame.tsx:227
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del objeto. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:235
+#: src/components/guide-frame.tsx:234
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre de la misión. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:236
+#: src/components/guide-frame.tsx:235
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre de la misión. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:223
+#: src/components/guide-frame.tsx:222
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del calabozo. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:224
+#: src/components/guide-frame.tsx:223
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del calabozo. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:231
+#: src/components/guide-frame.tsx:230
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del monstruo. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:232
+#: src/components/guide-frame.tsx:231
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del monstruo. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:270
-#: src/components/guide-frame.tsx:298
+#: src/components/guide-frame.tsx:269
+#: src/components/guide-frame.tsx:297
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Haz clic para abrir en el navegador"
 
@@ -143,7 +147,7 @@ msgstr "Crear una nueva nota"
 msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 msgstr "¡Crea tus guías en el sitio oficial y descarga las de otros!"
 
-#: src/routes/_app/downloads/$status.tsx:167
+#: src/routes/_app/downloads/$status.tsx:170
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
 
@@ -163,7 +167,7 @@ msgstr "Editar una nota"
 msgid "Enregistrer la note"
 msgstr "Guardar la nota"
 
-#: src/components/title-bar.tsx:108
+#: src/components/title-bar.tsx:118
 msgid "Fermer"
 msgstr "Cerrar"
 
@@ -175,10 +179,10 @@ msgstr "Ganymede - No afiliado a Ankama Games"
 msgid "Grande"
 msgstr "Grande"
 
-#: src/components/title-bar.tsx:47
+#: src/components/title-bar.tsx:49
 #: src/routes/_app/downloads/$status.tsx:86
 #: src/routes/_app/guides/index.tsx:28
-#: src/routes/_app/guides/index.tsx:88
+#: src/routes/_app/guides/index.tsx:93
 msgid "Guides"
 msgstr "Guías"
 
@@ -206,8 +210,8 @@ msgstr "Guías privadas"
 msgid "Guides publics"
 msgstr "Guías públicas"
 
-#: src/routes/_app/downloads/$status.tsx:158
-#: src/routes/_app/guides/index.tsx:135
+#: src/routes/_app/downloads/$status.tsx:161
+#: src/routes/_app/guides/index.tsx:140
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
 
@@ -257,7 +261,7 @@ msgstr "Nombre de la nota"
 msgid "Normal"
 msgstr "Normal"
 
-#: src/components/title-bar.tsx:65
+#: src/components/title-bar.tsx:68
 #: src/routes/_app/notes.index.tsx:22
 #: src/routes/_app/notes.index.tsx:47
 msgid "Notes"
@@ -271,11 +275,11 @@ msgstr "Opacidad"
 msgid "Ou le bouton suivant"
 msgstr "O el botón siguiente"
 
-#: src/routes/_app/guides/index.tsx:105
+#: src/routes/_app/guides/index.tsx:110
 msgid "Ouvrir le dossier des guides téléchargés"
 msgstr "Abrir la carpeta de guías descargadas"
 
-#: src/components/title-bar.tsx:87
+#: src/components/title-bar.tsx:97
 #: src/routes/_app/settings.tsx:28
 #: src/routes/_app/settings.tsx:57
 msgid "Paramètres"
@@ -297,16 +301,16 @@ msgstr "Presentación"
 msgid "Profils"
 msgstr "Perfiles"
 
-#: src/routes/_app/guides/index.tsx:96
+#: src/routes/_app/guides/index.tsx:101
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Actualizar la carpeta de guías descargadas"
 
-#: src/routes/_app/downloads/$status.tsx:139
-#: src/routes/_app/guides/index.tsx:121
+#: src/routes/_app/downloads/$status.tsx:144
+#: src/routes/_app/guides/index.tsx:126
 msgid "Rechercher un guide"
 msgstr "Buscar una guía"
 
-#: src/components/title-bar.tsx:98
+#: src/components/title-bar.tsx:108
 msgid "Réduire"
 msgstr "Minimizar"
 
@@ -331,7 +335,7 @@ msgstr "Eliminar de la lista"
 msgid "Taille de texte des guides"
 msgstr "Tamaño del texto de las guías"
 
-#: src/components/title-bar.tsx:53
+#: src/components/title-bar.tsx:55
 msgid "Téléchargements"
 msgstr "Descargas"
 

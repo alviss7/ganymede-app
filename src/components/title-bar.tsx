@@ -2,6 +2,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 import { Trans, t } from '@lingui/macro'
@@ -12,6 +13,7 @@ import {
   CrosshairIcon,
   HomeIcon,
   LocateIcon,
+  MapIcon,
   MenuIcon,
   MinusIcon,
   NotebookPenIcon,
@@ -53,6 +55,7 @@ export function TitleBar() {
                 <Trans>Téléchargements</Trans>
               </Link>
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2" asChild>
               <Link to="/auto-pilot" draggable={false}>
                 <LocateIcon />
@@ -63,6 +66,13 @@ export function TitleBar() {
               <Link to="/notes" draggable={false}>
                 <NotebookPenIcon />
                 <Trans>Notes</Trans>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="gap-2" asChild>
+              <Link to="/dofusdb/map" draggable={false}>
+                <MapIcon />
+                <Trans>Carte</Trans>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="gap-2" asChild>

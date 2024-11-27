@@ -22,6 +22,7 @@ import { Route as AppDownloadsIndexImport } from './routes/_app/downloads/index'
 import { Route as AppNotesCreateImport } from './routes/_app/notes.create'
 import { Route as AppGuidesIdImport } from './routes/_app/guides/$id'
 import { Route as AppDownloadsStatusImport } from './routes/_app/downloads/$status'
+import { Route as AppDofusdbMapImport } from './routes/_app/dofusdb/map'
 import { Route as AppDofusdbHuntImport } from './routes/_app/dofusdb/hunt'
 
 // Create/Update Routes
@@ -81,6 +82,11 @@ const AppDownloadsStatusRoute = AppDownloadsStatusImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppDofusdbMapRoute = AppDofusdbMapImport.update({
+  path: '/dofusdb/map',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppDofusdbHuntRoute = AppDofusdbHuntImport.update({
   path: '/dofusdb/hunt',
   getParentRoute: () => AppRoute,
@@ -130,6 +136,13 @@ declare module '@tanstack/react-router' {
       path: '/dofusdb/hunt'
       fullPath: '/dofusdb/hunt'
       preLoaderRoute: typeof AppDofusdbHuntImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/dofusdb/map': {
+      id: '/_app/dofusdb/map'
+      path: '/dofusdb/map'
+      fullPath: '/dofusdb/map'
+      preLoaderRoute: typeof AppDofusdbMapImport
       parentRoute: typeof AppImport
     }
     '/_app/downloads/$status': {
@@ -184,6 +197,7 @@ interface AppRouteChildren {
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppDofusdbHuntRoute: typeof AppDofusdbHuntRoute
+  AppDofusdbMapRoute: typeof AppDofusdbMapRoute
   AppDownloadsStatusRoute: typeof AppDownloadsStatusRoute
   AppGuidesIdRoute: typeof AppGuidesIdRoute
   AppNotesCreateRoute: typeof AppNotesCreateRoute
@@ -197,6 +211,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
   AppDofusdbHuntRoute: AppDofusdbHuntRoute,
+  AppDofusdbMapRoute: AppDofusdbMapRoute,
   AppDownloadsStatusRoute: AppDownloadsStatusRoute,
   AppGuidesIdRoute: AppGuidesIdRoute,
   AppNotesCreateRoute: AppNotesCreateRoute,
@@ -214,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
   '/dofusdb/hunt': typeof AppDofusdbHuntRoute
+  '/dofusdb/map': typeof AppDofusdbMapRoute
   '/downloads/$status': typeof AppDownloadsStatusRoute
   '/guides/$id': typeof AppGuidesIdRoute
   '/notes/create': typeof AppNotesCreateRoute
@@ -228,6 +244,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
   '/dofusdb/hunt': typeof AppDofusdbHuntRoute
+  '/dofusdb/map': typeof AppDofusdbMapRoute
   '/downloads/$status': typeof AppDownloadsStatusRoute
   '/guides/$id': typeof AppGuidesIdRoute
   '/notes/create': typeof AppNotesCreateRoute
@@ -244,6 +261,7 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
   '/_app/dofusdb/hunt': typeof AppDofusdbHuntRoute
+  '/_app/dofusdb/map': typeof AppDofusdbMapRoute
   '/_app/downloads/$status': typeof AppDownloadsStatusRoute
   '/_app/guides/$id': typeof AppGuidesIdRoute
   '/_app/notes/create': typeof AppNotesCreateRoute
@@ -261,6 +279,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/'
     | '/dofusdb/hunt'
+    | '/dofusdb/map'
     | '/downloads/$status'
     | '/guides/$id'
     | '/notes/create'
@@ -274,6 +293,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/'
     | '/dofusdb/hunt'
+    | '/dofusdb/map'
     | '/downloads/$status'
     | '/guides/$id'
     | '/notes/create'
@@ -288,6 +308,7 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/'
     | '/_app/dofusdb/hunt'
+    | '/_app/dofusdb/map'
     | '/_app/downloads/$status'
     | '/_app/guides/$id'
     | '/_app/notes/create'
@@ -330,6 +351,7 @@ export const routeTree = rootRoute
         "/_app/settings",
         "/_app/",
         "/_app/dofusdb/hunt",
+        "/_app/dofusdb/map",
         "/_app/downloads/$status",
         "/_app/guides/$id",
         "/_app/notes/create",
@@ -355,6 +377,10 @@ export const routeTree = rootRoute
     },
     "/_app/dofusdb/hunt": {
       "filePath": "_app/dofusdb/hunt.tsx",
+      "parent": "/_app"
+    },
+    "/_app/dofusdb/map": {
+      "filePath": "_app/dofusdb/map.tsx",
       "parent": "/_app"
     },
     "/_app/downloads/$status": {
