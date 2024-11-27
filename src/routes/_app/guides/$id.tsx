@@ -129,7 +129,9 @@ function GuideIdPage() {
           <div className="relative flex h-9 items-center justify-between gap-2 p-1">
             {step && (
               <>
-                <Position pos_x={step.pos_x} pos_y={step.pos_y} />
+                {step.map !== null && step.map.toLowerCase() !== 'nomap' && (
+                  <Position pos_x={step.pos_x} pos_y={step.pos_y} />
+                )}
                 <ChangeStep
                   currentIndex={index}
                   maxIndex={stepMax}

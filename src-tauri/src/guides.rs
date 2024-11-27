@@ -88,7 +88,7 @@ pub enum Status {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Step {
     pub name: Option<String>,
-    pub map: String,
+    pub map: Option<String>,
     pub pos_x: i32,
     pub pos_y: i32,
     pub web_text: String,
