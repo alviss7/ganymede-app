@@ -26,12 +26,25 @@ pub enum Error {
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         match self {
-            Error::DofusDbAlmanaxMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::DofusDbItemMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestAlmanax(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestAlmanaxContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestItem(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestItemContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::DofusDbAlmanaxMalformed(err) => tauri::ipc::InvokeError::from(format!(
+                "DofusDbAlmanaxMalformed({})",
+                err.to_string()
+            )),
+            Error::DofusDbItemMalformed(err) => {
+                tauri::ipc::InvokeError::from(format!("DofusDbItemMalformed({})", err.to_string()))
+            }
+            Error::RequestAlmanax(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestAlmanax({})", err.to_string()))
+            }
+            Error::RequestAlmanaxContent(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestAlmanaxContent({})", err.to_string()))
+            }
+            Error::RequestItem(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestItem({})", err.to_string()))
+            }
+            Error::RequestItemContent(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestItemContent({})", err.to_string()))
+            }
             Error::Conf(err) => err.into(),
             Error::Quest(err) => err.into(),
         }

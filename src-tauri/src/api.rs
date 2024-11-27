@@ -99,9 +99,15 @@ pub enum AppVersionError {
 impl Into<tauri::ipc::InvokeError> for AppVersionError {
     fn into(self) -> tauri::ipc::InvokeError {
         match self {
-            AppVersionError::GitHub(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            AppVersionError::JsonMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            AppVersionError::SemverParse(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            AppVersionError::GitHub(err) => {
+                tauri::ipc::InvokeError::from(format!("GitHub({})", err.to_string()))
+            }
+            AppVersionError::JsonMalformed(err) => {
+                tauri::ipc::InvokeError::from(format!("JsonMalformed({})", err.to_string()))
+            }
+            AppVersionError::SemverParse(err) => {
+                tauri::ipc::InvokeError::from(format!("SemverParse({})", err.to_string()))
+            }
         }
     }
 }

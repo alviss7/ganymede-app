@@ -12,9 +12,15 @@ pub enum Error {
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         match self {
-            Error::RequestQuest(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestQuestContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::DofusDbQuestMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestQuest(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestQuest({})", err.to_string()))
+            }
+            Error::RequestQuestContent(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestQuestContent({})", err.to_string()))
+            }
+            Error::DofusDbQuestMalformed(err) => {
+                tauri::ipc::InvokeError::from(format!("DofusDbQuestMalformed({})", err.to_string()))
+            }
         }
     }
 }

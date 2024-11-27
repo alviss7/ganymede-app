@@ -21,12 +21,24 @@ pub enum Error {
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         match self {
-            Error::Malformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::CreateConfDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::ConfDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::SerializeConf(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::UnhandledIo(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::SaveConf(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::Malformed(err) => {
+                tauri::ipc::InvokeError::from(format!("Malformed({})", err.to_string()))
+            }
+            Error::CreateConfDir(err) => {
+                tauri::ipc::InvokeError::from(format!("CreateConfDir({})", err.to_string()))
+            }
+            Error::ConfDir(err) => {
+                tauri::ipc::InvokeError::from(format!("ConfDir({})", err.to_string()))
+            }
+            Error::SerializeConf(err) => {
+                tauri::ipc::InvokeError::from(format!("SerializeConf({})", err.to_string()))
+            }
+            Error::UnhandledIo(err) => {
+                tauri::ipc::InvokeError::from(format!("UnhandledIo({})", err.to_string()))
+            }
+            Error::SaveConf(err) => {
+                tauri::ipc::InvokeError::from(format!("SaveConf({})", err.to_string()))
+            }
             Error::GetProfileInUse => tauri::ipc::InvokeError::from("GetProfileInUse".to_string()),
             Error::ResetConf(err) => (*err).into(),
         }

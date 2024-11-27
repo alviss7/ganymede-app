@@ -8,8 +8,12 @@ pub enum Error {
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         match self {
-            Error::RequestImage(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::ConvertToBytes(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::RequestImage(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestImage({})", err.to_string()))
+            }
+            Error::ConvertToBytes(err) => {
+                tauri::ipc::InvokeError::from(format!("ConvertToBytes({})", err.to_string()))
+            }
         }
     }
 }

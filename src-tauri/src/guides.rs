@@ -41,19 +41,46 @@ pub enum Error {
 impl Into<tauri::ipc::InvokeError> for Error {
     fn into(self) -> tauri::ipc::InvokeError {
         match self {
-            Error::Pattern(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::ReadGuidesDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::ReadGuideFile(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::GuideMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::SerializeGuide(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::CreateGuidesDir(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::WriteGuideFile(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestGuide(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestGuideContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestGuides(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::RequestGuidesContent(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::GuideWithStepsMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
-            Error::GuidesMalformed(err) => tauri::ipc::InvokeError::from(err.to_string()),
+            Error::Pattern(err) => {
+                tauri::ipc::InvokeError::from(format!("Pattern({})", err.to_string()))
+            }
+            Error::ReadGuidesDir(err) => {
+                tauri::ipc::InvokeError::from(format!("ReadGuidesDir({})", err.to_string()))
+            }
+            Error::ReadGuideFile(err) => {
+                tauri::ipc::InvokeError::from(format!("ReadGuideFile({})", err.to_string()))
+            }
+            Error::GuideMalformed(err) => {
+                tauri::ipc::InvokeError::from(format!("GuideMalformed({})", err.to_string()))
+            }
+            Error::SerializeGuide(err) => {
+                tauri::ipc::InvokeError::from(format!("SerializeGuide({})", err.to_string()))
+            }
+            Error::CreateGuidesDir(err) => {
+                tauri::ipc::InvokeError::from(format!("CreateGuidesDir({})", err.to_string()))
+            }
+            Error::WriteGuideFile(err) => {
+                tauri::ipc::InvokeError::from(format!("WriteGuideFile({})", err.to_string()))
+            }
+            Error::RequestGuide(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestGuide({})", err.to_string()))
+            }
+            Error::RequestGuideContent(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestGuideContent({})", err.to_string()))
+            }
+            Error::RequestGuides(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestGuides({})", err.to_string()))
+            }
+            Error::RequestGuidesContent(err) => {
+                tauri::ipc::InvokeError::from(format!("RequestGuidesContent({})", err.to_string()))
+            }
+            Error::GuideWithStepsMalformed(err) => tauri::ipc::InvokeError::from(format!(
+                "GuideWithStepsMalformed({})",
+                err.to_string()
+            )),
+            Error::GuidesMalformed(err) => {
+                tauri::ipc::InvokeError::from(format!("GuidesMalformed({})", err.to_string()))
+            }
         }
     }
 }
