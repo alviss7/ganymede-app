@@ -92,6 +92,12 @@ export function TitleBar() {
         {!linksAreDisabled && (
           <Link
             to="/settings"
+            search={{
+              from: location.pathname,
+              search: location.search,
+              hash: location.hash,
+              state: location.state,
+            }}
             className="inline-flex size-7 items-center justify-center hover:bg-primary-800 aria-disabled:pointer-events-none"
             draggable={false}
             title={t`Paramètres`}

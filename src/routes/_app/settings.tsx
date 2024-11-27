@@ -17,8 +17,17 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useEffect, useState } from 'react'
+import { z } from 'zod'
+
+const SearchZod = z.object({
+  from: z.string().optional(),
+  hash: z.string().optional(),
+  state: z.any().optional(),
+  search: z.any().optional(),
+})
 
 export const Route = createFileRoute('/_app/settings')({
+  validateSearch: SearchZod.parse,
   component: Settings,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(confQuery)
@@ -36,6 +45,7 @@ export const Route = createFileRoute('/_app/settings')({
 })
 
 function Settings() {
+  const { from, hash, state, search } = Route.useSearch()
   const conf = useSuspenseQuery(confQuery)
   const setConf = useSetConf()
   const [opacity, setOpacity] = useState(conf.data.opacity)
@@ -54,7 +64,15 @@ function Settings() {
   }, [opacity])
 
   return (
-    <Page key="settings-page" title={t`Paramètres`}>
+    <Page
+      key="settings-page"
+      title={t`Paramètres`}
+      from={Route.fullPath}
+      to={from}
+      state={state}
+      hash={hash}
+      search={search}
+    >
       <PageScrollableContent className="py-2">
         <div className="container flex flex-col gap-4 text-sm">
           <section className="flex flex-col gap-2">
