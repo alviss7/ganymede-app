@@ -15,8 +15,8 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import parse, { DOMNode, domToReact, type HTMLReactParserOptions } from 'html-react-parser'
 import { AlertCircleIcon } from 'lucide-react'
-import { DownloadImage } from './download-image'
 import { Fragment, ReactNode } from 'react'
+import { DownloadImage } from './download-image'
 
 export function GuideFrame({
   className,
@@ -159,7 +159,6 @@ export function GuideFrame({
                         await downloadGuide.mutateAsync({ id: domGuideId })
                       }
 
-                      console.log('go to guide', domGuideId, stepNumber - 1)
                       await navigate({
                         to: '/guides/$id',
                         params: { id: domGuideId },

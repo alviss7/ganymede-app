@@ -17,7 +17,6 @@ export function useToggleGuideCheckbox() {
       checkboxIndex: number
       stepIndex: number
     }) => {
-      console.log('toggle', guideId, checkboxIndex, stepIndex)
       const result = await toggleGuideCheckbox(guideId, checkboxIndex, stepIndex)
 
       if (result.isErr()) {
@@ -66,8 +65,6 @@ export function useToggleGuideCheckbox() {
 
         return p
       })
-
-      console.log(conf.profiles)
 
       queryClient.setQueryData(confQuery['queryKey'], () => conf)
 

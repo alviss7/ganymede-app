@@ -68,7 +68,12 @@ function GuidesPage() {
       guidesWithCurrentProgression.filter((guide) => {
         return guide.currentStep === null || guide.currentStep < guide.steps.length - 1
       })
-  const filteredGuides = rankList(notDoneGuides, [(guide) => guide.name], searchTerm)
+  const filteredGuides = rankList({
+    list: notDoneGuides,
+    keys: [(guide) => guide.name],
+    term: searchTerm,
+    sortKeys: [(guide) => guide.order],
+  })
 
   const onRefresh = () => {
     if (!guides.isFetching) {

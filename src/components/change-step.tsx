@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button.tsx'
+import { useWebviewEvent } from '@/hooks/use_webview_event'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useWebviewEvent } from '@/hooks/use_webview_event'
 
 export function ChangeStep({
   currentIndex,
@@ -50,7 +50,6 @@ export function ChangeStep({
   useWebviewEvent(
     'go-to-previous-guide-step',
     async () => {
-      console.log('p', current)
       await onInnerPrevious()
     },
     [current],
@@ -59,7 +58,6 @@ export function ChangeStep({
   useWebviewEvent(
     'go-to-next-guide-step',
     async () => {
-      console.log('next', current)
       await onInnerNext()
     },
     [current],

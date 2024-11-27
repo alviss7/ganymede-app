@@ -105,7 +105,12 @@ function DownloadGuidePage() {
 
   const term = searchTerm !== '' ? debouncedTerm : ''
 
-  const filteredGuides = rankList(guides.data, [(guide) => guide.name, (guide) => guide.user.name], term)
+  const filteredGuides = rankList({
+    list: guides.data,
+    keys: [(guide) => guide.name, (guide) => guide.user.name],
+    term: term,
+    sortKeys: [(guide) => guide.order],
+  })
 
   // if we are searching, we don't want to paginate
   const paginatedOrFilteredGuides =
@@ -148,11 +153,9 @@ function DownloadGuidePage() {
               {paginatedOrFilteredGuides.map((guide) => {
                 const isGuideDownloaded = getGuideById(downloads.data.guides, guide.id)
 
-                console.log(guide)
-
                 return (
                   <Card key={guide.id} className="flex gap-2 p-2 xs:px-3 text-xxs xs:text-sm sm:text-base">
-                    <div className="flex flex-col items-center gap-0.5">
+                    <div className="flex min-w-9 flex-col items-center gap-0.5">
                       <FlagPerLang lang={guide.lang} />
                       <span className="whitespace-nowrap text-xxs">
                         <Trans>
