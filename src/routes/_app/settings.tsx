@@ -11,6 +11,7 @@ import { newId } from '@/ipc/id.ts'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Page } from '@/routes/-page.tsx'
+import { Profiles } from '@/routes/_app/-settings/profiles.tsx'
 import { FontSize, Lang } from '@/types/conf.ts'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -166,32 +167,13 @@ function Settings() {
               }}
             />
           </section>
-          <section className="space-y-2">
+          <section className="flex flex-col gap-2">
             <Label htmlFor="profiles" className="text-xs">
               <Trans>Profils</Trans>
             </Label>
-            <Select
-              value={conf.data.profileInUse}
-              onValueChange={(value) => {
-                setConf.mutate({
-                  ...conf.data,
-                  profileInUse: value,
-                })
-              }}
-            >
-              <SelectTrigger id="profiles" className="text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {conf.data.profiles.map((profile) => {
-                  return (
-                    <SelectItem key={profile.id} value={profile.id}>
-                      {profile.name}
-                    </SelectItem>
-                  )
-                })}
-              </SelectContent>
-            </Select>
+            <div className="w-full">
+              <Profiles />
+            </div>
           </section>
           <section className="space-y-2">
             <Label htmlFor="create-profile" className="text-xs">
