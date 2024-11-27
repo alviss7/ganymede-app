@@ -17,7 +17,7 @@ msgstr ""
 msgid "Accueil"
 msgstr "Inicio"
 
-#: src/routes/_app/settings.tsx:126
+#: src/routes/_app/settings.tsx:144
 msgid "Afficher les guides terminés"
 msgstr "Mostrar las guías terminadas"
 
@@ -109,7 +109,7 @@ msgstr "Haz clic para abrir en el navegador"
 msgid "Contenu de la note.{linesBreak}Depuis le menu précédent, une fois créée, je peux la modifier en cliquant dessus, ou copier son contenu."
 msgstr "Contenido de la nota.{linesBreak}Desde el menú anterior, una vez creada, puedo modificarla haciendo clic sobre ella o copiar su contenido."
 
-#: src/routes/_app/settings.tsx:111
+#: src/routes/_app/settings.tsx:129
 msgid "Copie d'autopilote"
 msgstr "Copia del piloto automático"
 
@@ -127,11 +127,11 @@ msgstr "Copiar la nota"
 msgid "Copier la position"
 msgstr "Copiar la posición"
 
-#: src/routes/_app/settings.tsx:216
+#: src/routes/_app/settings.tsx:234
 msgid "Créer"
 msgstr "Crear"
 
-#: src/routes/_app/settings.tsx:180
+#: src/routes/_app/settings.tsx:198
 msgid "Créer un profil"
 msgstr "Crear un perfil"
 
@@ -167,7 +167,7 @@ msgstr "Editar una nota"
 msgid "Enregistrer la note"
 msgstr "Guardar la nota"
 
-#: src/components/title-bar.tsx:118
+#: src/components/title-bar.tsx:124
 msgid "Fermer"
 msgstr "Cerrar"
 
@@ -175,7 +175,7 @@ msgstr "Cerrar"
 msgid "Ganymède - Non affilié à Ankama Games"
 msgstr "Ganymede - No afiliado a Ankama Games"
 
-#: src/routes/_app/settings.tsx:101
+#: src/routes/_app/settings.tsx:119
 msgid "Grande"
 msgstr "Grande"
 
@@ -257,7 +257,7 @@ msgstr "Nombre"
 msgid "Nom de la note"
 msgstr "Nombre de la nota"
 
-#: src/routes/_app/settings.tsx:98
+#: src/routes/_app/settings.tsx:116
 msgid "Normal"
 msgstr "Normal"
 
@@ -267,7 +267,7 @@ msgstr "Normal"
 msgid "Notes"
 msgstr "Notas"
 
-#: src/routes/_app/settings.tsx:62
+#: src/routes/_app/settings.tsx:80
 msgid "Opacité"
 msgstr "Opacidad"
 
@@ -279,13 +279,13 @@ msgstr "O el botón siguiente"
 msgid "Ouvrir le dossier des guides téléchargés"
 msgstr "Abrir la carpeta de guías descargadas"
 
-#: src/components/title-bar.tsx:97
-#: src/routes/_app/settings.tsx:28
-#: src/routes/_app/settings.tsx:57
+#: src/components/title-bar.tsx:103
+#: src/routes/_app/settings.tsx:37
+#: src/routes/_app/settings.tsx:69
 msgid "Paramètres"
 msgstr "Configuraciones"
 
-#: src/routes/_app/settings.tsx:95
+#: src/routes/_app/settings.tsx:113
 msgid "Petite"
 msgstr "Pequeña"
 
@@ -297,7 +297,7 @@ msgstr "Para restablecer la configuración, ejecute el atajo de teclado: <0>{0}<
 msgid "Présentation"
 msgstr "Presentación"
 
-#: src/routes/_app/settings.tsx:153
+#: src/routes/_app/settings.tsx:171
 msgid "Profils"
 msgstr "Perfiles"
 
@@ -310,7 +310,7 @@ msgstr "Actualizar la carpeta de guías descargadas"
 msgid "Rechercher un guide"
 msgstr "Buscar una guía"
 
-#: src/components/title-bar.tsx:108
+#: src/components/title-bar.tsx:114
 msgid "Réduire"
 msgstr "Minimizar"
 
@@ -331,7 +331,7 @@ msgstr "Sitio oficial"
 msgid "Supprimer de la liste"
 msgstr "Eliminar de la lista"
 
-#: src/routes/_app/settings.tsx:76
+#: src/routes/_app/settings.tsx:94
 msgid "Taille de texte des guides"
 msgstr "Tamaño del texto de las guías"
 
@@ -343,11 +343,11 @@ msgstr "Descargas"
 msgid "Télécharger le guide"
 msgstr "Descargar la guía"
 
-#: src/routes/_app/settings.tsx:104
+#: src/routes/_app/settings.tsx:122
 msgid "Très grande"
 msgstr "Extra grande"
 
-#: src/routes/_app/settings.tsx:92
+#: src/routes/_app/settings.tsx:110
 msgid "Très petite"
 msgstr "Extra pequeña"
 

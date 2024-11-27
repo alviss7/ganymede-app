@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button.tsx'
 import { useWebviewEvent } from '@/hooks/use_webview_event'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function ChangeStep({
   currentIndex,
@@ -19,6 +19,7 @@ export function ChangeStep({
   const current = currentIndex + 1
   const [innerValue, setInnerValue] = useState(current.toString())
   const [hadLostFocus, setHadLostFocus] = useState(true)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const onInnerNext = async () => {
     const canMove = await onNext()
@@ -63,6 +64,32 @@ export function ChangeStep({
     [current],
   )
 
+  const handleChange = async () => {
+    if (!formRef.current) {
+      return
+    }
+
+    const data = new FormData(formRef.current)
+    const value = data.get('current') as string
+
+    if (value === '') {
+      return
+    }
+
+    const number = parseInt(value)
+
+    if (Number.isNaN(number) || number < 1) {
+      return
+    }
+
+    const numberIndex = number - 1
+    const nextStepIndex = numberIndex > maxIndex ? maxIndex : numberIndex
+
+    await setCurrentIndex(nextStepIndex)
+
+    setInnerValue((nextStepIndex + 1).toString())
+  }
+
   return (
     <div className="center-absolute flex items-center gap-0.5">
       <Button size="icon-sm" variant="secondary" onClick={onInnerPrevious}>
@@ -70,28 +97,11 @@ export function ChangeStep({
       </Button>
       <div className="flex flex-col items-center rounded px-0.5 font-semibold text-primary-foreground text-sm leading-4">
         <form
+          ref={formRef}
           onSubmit={async (evt) => {
             evt.preventDefault()
 
-            const data = new FormData(evt.currentTarget)
-            const value = data.get('current') as string
-
-            if (value === '') {
-              return
-            }
-
-            const number = parseInt(value)
-
-            if (Number.isNaN(number) || number < 1) {
-              return
-            }
-
-            const numberIndex = number - 1
-            const nextStepIndex = numberIndex > maxIndex ? maxIndex : numberIndex
-
-            await setCurrentIndex(nextStepIndex)
-
-            setInnerValue((nextStepIndex + 1).toString())
+            await handleChange()
           }}
         >
           <input
@@ -104,8 +114,12 @@ export function ChangeStep({
               setInnerValue(value)
             }}
             className="w-8 bg-transparent text-center text-xs outline-none"
-            onBlur={() => {
+            onBlur={async () => {
               setHadLostFocus(true)
+
+              console.log('fsdaf')
+
+              await handleChange()
             }}
             onClick={(evt) => {
               const input = evt.currentTarget
@@ -115,6 +129,11 @@ export function ChangeStep({
                 setHadLostFocus(false)
               }
             }}
+            autoCapitalize="off"
+            autoCorrect="off"
+            autoComplete="off"
+            max={maxIndex + 1}
+            min={1}
           />
         </form>
         <span className="text-xs">{maxIndex + 1}</span>
