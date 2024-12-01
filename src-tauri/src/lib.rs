@@ -8,6 +8,7 @@ use crate::guides::{
 };
 use crate::id::new_id;
 use crate::image::fetch_image;
+use crate::security::get_white_list;
 use crate::shortcut::handle_shortcuts;
 use crate::update::start_update;
 use tauri::Wry;
@@ -26,6 +27,7 @@ mod image;
 mod item;
 mod json;
 mod quest;
+mod security;
 mod shortcut;
 mod tauri_api_ext;
 mod update;
@@ -144,7 +146,8 @@ pub fn run() {
         get_guide_from_server,
         is_app_version_old,
         start_update,
-        reset_conf
+        reset_conf,
+        get_white_list
     ])
     .run(tauri::generate_context!())
     .expect("[Lib] error while running tauri application");

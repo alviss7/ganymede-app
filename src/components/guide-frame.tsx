@@ -11,7 +11,8 @@ import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { useToggleGuideCheckbox } from '@/mutations/toggle-guide-checkbox.mutation'
 import { confQuery } from '@/queries/conf.query'
 import { guidesQuery } from '@/queries/guides.query'
-import { t } from '@lingui/macro'
+import { whiteListQuery } from '@/queries/white_list.query.ts'
+import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
@@ -39,6 +40,7 @@ export function GuideFrame({
   const guides = useSuspenseQuery(guidesQuery)
   const navigate = useNavigate()
   const downloadGuide = useDownloadGuideFromServer()
+  const whiteList = useSuspenseQuery(whiteListQuery)
 
   let checkboxesCount = 0
 
@@ -46,7 +48,11 @@ export function GuideFrame({
     replace: (domNode) => {
       // #region positions
       if (domNode.type === 'text') {
-        const posReg = /(.*?)\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]([\w\s]*)/g
+        if (domNode.data.includes('https://') || domNode.data.includes('http://')) {
+          return <Trans>lien masqué</Trans>
+        }
+
+        const posReg = /(.*?)\[\s*(-?\d+)\s*,\s*(-?\d+)\s*]([\w\s]*)/g
 
         let elems: ReactNode[] = []
 
@@ -298,12 +304,18 @@ export function GuideFrame({
         if (domNode.name === 'a') {
           const href = domNode.attribs.href ?? ''
           const isHrefHttp = href !== '' && href.startsWith('http')
+          const url = isHrefHttp ? new URL(href) : undefined
+          const isValid = url !== undefined ? whiteList.data.includes(`${url.protocol}//${url.hostname}`) : false
+
+          if (isHrefHttp && !isValid) {
+            return <>{domToReact(domNode.children as DOMNode[], options)}</>
+          }
 
           return (
             <button
               data-href={href}
               type="button"
-              className="inline-flex"
+              className="inline-flex text-yellow-300 underline [&_a]:underline"
               onClick={() => {
                 if (isHrefHttp) {
                   openGuideLink.mutate(href)
