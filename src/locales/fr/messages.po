@@ -25,15 +25,19 @@ msgstr "Afficher les guides terminés"
 msgid "Ajouter"
 msgstr "Ajouter"
 
+#: src/routes/_app/downloads/$status.tsx:140
+msgid "Attention"
+msgstr "Attention"
+
 #: src/components/error-component.tsx:63
 msgid "Attention !"
 msgstr "Attention !"
 
-#: src/routes/_app/downloads/$status.tsx:133
+#: src/routes/_app/downloads/$status.tsx:160
 msgid "Aucun guides trouvé"
 msgstr "Aucun guides trouvé"
 
-#: src/routes/_app/downloads/$status.tsx:149
+#: src/routes/_app/downloads/$status.tsx:176
 msgid "Aucun guides trouvé avec {term}"
 msgstr "Aucun guides trouvé avec {term}"
 
@@ -72,40 +76,40 @@ msgstr "Cet outil a pour but de vous assister tout au long de votre aventure sur
 msgid "Chasse au trésor"
 msgstr "Chasse au trésor"
 
-#: src/components/guide-frame.tsx:226
+#: src/components/guide-frame.tsx:247
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:227
+#: src/components/guide-frame.tsx:248
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:234
+#: src/components/guide-frame.tsx:255
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:235
+#: src/components/guide-frame.tsx:256
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:222
+#: src/components/guide-frame.tsx:243
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:223
+#: src/components/guide-frame.tsx:244
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:230
+#: src/components/guide-frame.tsx:251
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:231
+#: src/components/guide-frame.tsx:252
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:269
-#: src/components/guide-frame.tsx:297
+#: src/components/guide-frame.tsx:290
+#: src/components/guide-frame.tsx:324
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Cliquez pour ouvrir dans le navigateur"
 
@@ -151,7 +155,7 @@ msgstr "Créer une nouvelle note"
 msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 msgstr "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 
-#: src/routes/_app/downloads/$status.tsx:170
+#: src/routes/_app/downloads/$status.tsx:197
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
 
@@ -184,37 +188,37 @@ msgid "Grande"
 msgstr "Grande"
 
 #: src/components/title-bar.tsx:49
-#: src/routes/_app/downloads/$status.tsx:86
+#: src/routes/_app/downloads/$status.tsx:94
 #: src/routes/_app/guides/index.tsx:28
 #: src/routes/_app/guides/index.tsx:93
 msgid "Guides"
 msgstr "Guides"
 
-#: src/routes/_app/downloads/$status.tsx:84
+#: src/routes/_app/downloads/$status.tsx:92
 #: src/routes/_app/downloads/index.tsx:51
 msgid "Guides certifiés"
 msgstr "Guides certifiés"
 
-#: src/routes/_app/downloads/$status.tsx:80
+#: src/routes/_app/downloads/$status.tsx:88
 #: src/routes/_app/downloads/index.tsx:57
 msgid "Guides draft"
 msgstr "Guides draft"
 
-#: src/routes/_app/downloads/$status.tsx:82
+#: src/routes/_app/downloads/$status.tsx:90
 #: src/routes/_app/downloads/index.tsx:48
 msgid "Guides principaux"
 msgstr "Guides principaux"
 
-#: src/routes/_app/downloads/$status.tsx:78
+#: src/routes/_app/downloads/$status.tsx:86
 msgid "Guides privés"
 msgstr "Guides privés"
 
-#: src/routes/_app/downloads/$status.tsx:76
+#: src/routes/_app/downloads/$status.tsx:84
 #: src/routes/_app/downloads/index.tsx:54
 msgid "Guides publics"
 msgstr "Guides publics"
 
-#: src/routes/_app/downloads/$status.tsx:161
+#: src/routes/_app/downloads/$status.tsx:188
 #: src/routes/_app/guides/index.tsx:140
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
@@ -228,6 +232,10 @@ msgstr "Il semblerait que la mise à jour ait eu un problème."
 msgid "Informations supplémentaires : {0}"
 msgstr "Informations supplémentaires : {0}"
 
+#: src/routes/_app/downloads/$status.tsx:151
+msgid "J'ai compris"
+msgstr "J'ai compris"
+
 #: src/routes/app-old-version.tsx:69
 msgid "Lancer le téléchargement"
 msgstr "Lancer le téléchargement"
@@ -235,6 +243,14 @@ msgstr "Lancer le téléchargement"
 #: src/components/select-lang.tsx:10
 msgid "Langue"
 msgstr "Langue"
+
+#: src/routes/_app/downloads/$status.tsx:143
+msgid "Les guides de cette section n'ont pas été vérifiés manuellement par l'équipe Ganymède. <0/> Bien que les liens vers les sites soient sécurisés, veuillez vérifier attentivement les guides <1>sur notre site</1> avant de les télécharger."
+msgstr "Les guides de cette section n'ont pas été vérifiés manuellement par l'équipe Ganymède. <0/> Bien que les liens vers les sites soient sécurisés, veuillez vérifier attentivement les guides <1>sur notre site</1> avant de les télécharger."
+
+#: src/components/guide-frame.tsx:52
+msgid "lien masqué"
+msgstr "lien masqué"
 
 #: src/components/guide-card.tsx:42
 msgid "Mettre à jour le guide"
@@ -309,7 +325,7 @@ msgstr "Profils"
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Rafraichir le dossier des guides téléchargés"
 
-#: src/routes/_app/downloads/$status.tsx:144
+#: src/routes/_app/downloads/$status.tsx:171
 #: src/routes/_app/guides/index.tsx:126
 msgid "Rechercher un guide"
 msgstr "Rechercher un guide"

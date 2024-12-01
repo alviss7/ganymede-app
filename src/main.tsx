@@ -10,6 +10,7 @@ import { defaultOptions as sentryDefaultOptions } from 'tauri-plugin-sentry-api'
 import { ErrorComponent } from './components/error-component.tsx'
 import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
+import { whiteListQuery } from '@/queries/white_list.query.ts'
 import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
 
@@ -89,6 +90,8 @@ queryClient
     await dynamicActiveLocale(conf.lang.toLowerCase())
   })
   .catch(console.error)
+
+queryClient.prefetchQuery(whiteListQuery).catch(console.error)
 
 // Create a new router instance
 const router = createRouter({

@@ -1,15 +1,18 @@
 import goToStepIcon from '@/assets/guide-go-to-step.webp'
+import { useProfile } from '@/hooks/use_profile.ts'
 import { useProgressStep } from '@/hooks/use_progress_step'
 import { clamp } from '@/lib/clamp'
 import { copyPosition } from '@/lib/copy-position'
 import { getGuideById } from '@/lib/guide'
+import { getProgress } from '@/lib/progress.ts'
 import { cn } from '@/lib/utils'
 import { useDownloadGuideFromServer } from '@/mutations/download-guide-from-server.mutation'
 import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { useToggleGuideCheckbox } from '@/mutations/toggle-guide-checkbox.mutation'
 import { confQuery } from '@/queries/conf.query'
 import { guidesQuery } from '@/queries/guides.query'
-import { t } from '@lingui/macro'
+import { whiteListQuery } from '@/queries/white_list.query.ts'
+import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
@@ -30,12 +33,14 @@ export function GuideFrame({
   stepIndex: number
 }) {
   const conf = useSuspenseQuery(confQuery)
+  const profile = useProfile()
   const toggleGuideCheckbox = useToggleGuideCheckbox()
   const step = useProgressStep(guideId, stepIndex)
   const openGuideLink = useOpenGuideLink()
   const guides = useSuspenseQuery(guidesQuery)
   const navigate = useNavigate()
   const downloadGuide = useDownloadGuideFromServer()
+  const whiteList = useSuspenseQuery(whiteListQuery)
 
   let checkboxesCount = 0
 
@@ -43,7 +48,11 @@ export function GuideFrame({
     replace: (domNode) => {
       // #region positions
       if (domNode.type === 'text') {
-        const posReg = /(.*?)\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]([\w\s]*)/g
+        if (domNode.data.includes('https://') || domNode.data.includes('http://')) {
+          return <Trans>lien masqué</Trans>
+        }
+
+        const posReg = /(.*?)\[\s*(-?\d+)\s*,\s*(-?\d+)\s*]([\w\s]*)/g
 
         let elems: ReactNode[] = []
 
@@ -105,6 +114,7 @@ export function GuideFrame({
 
         // #region guide step go to
         if (domNode.attribs['data-type'] === 'guide-step') {
+          const stepId = Number.parseInt(domNode.attribs['stepid'] ?? null)
           let stepNumber = Number.parseInt(domNode.attribs['stepnumber'] ?? 0)
           const domGuideId =
             domNode.attribs['guideid'] !== undefined ? Number.parseInt(domNode.attribs['guideid']) : undefined
@@ -117,8 +127,19 @@ export function GuideFrame({
 
           if (!Number.isNaN(domGuideId) || !Number.isNaN(stepNumber)) {
             const guideInSystem = getGuideById(guides.data.guides, domGuideId ?? guideId)
+
             stepNumber = clamp(stepNumber, 1, guideInSystem?.steps.length ?? stepNumber)
             const nextGuide = guideId !== domGuideId ? guideInSystem : undefined
+
+            // go to the user progress step if the guide has been downloaded and the stepId is 0.
+            // stepId === 0 means that the user has to go to currentStep of the progress
+            if (guideInSystem && !Number.isNaN(stepId) && stepId === 0) {
+              const userProgress = getProgress(profile, guideInSystem.id)
+
+              if (userProgress) {
+                stepNumber = clamp(userProgress.currentStep + 1, 1, guideInSystem.steps.length)
+              }
+            }
 
             return (
               <div className="contents hover:saturate-200 focus:saturate-[25%]">
@@ -283,12 +304,18 @@ export function GuideFrame({
         if (domNode.name === 'a') {
           const href = domNode.attribs.href ?? ''
           const isHrefHttp = href !== '' && href.startsWith('http')
+          const url = isHrefHttp ? new URL(href) : undefined
+          const isValid = url !== undefined ? whiteList.data.includes(`${url.protocol}//${url.hostname}`) : false
+
+          if (isHrefHttp && !isValid) {
+            return <>{domToReact(domNode.children as DOMNode[], options)}</>
+          }
 
           return (
             <button
               data-href={href}
               type="button"
-              className="inline-flex"
+              className="inline-flex text-yellow-300 underline [&_a]:underline"
               onClick={() => {
                 if (isHrefHttp) {
                   openGuideLink.mutate(href)

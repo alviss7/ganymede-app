@@ -117,8 +117,6 @@ export function ChangeStep({
             onBlur={async () => {
               setHadLostFocus(true)
 
-              console.log('fsdaf')
-
               await handleChange()
             }}
             onClick={(evt) => {
