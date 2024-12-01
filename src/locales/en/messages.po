@@ -25,15 +25,19 @@ msgstr "Display completed guides"
 msgid "Ajouter"
 msgstr "Add"
 
+#: src/routes/_app/downloads/$status.tsx:140
+msgid "Attention"
+msgstr "Warning"
+
 #: src/components/error-component.tsx:63
 msgid "Attention !"
 msgstr "Warning!"
 
-#: src/routes/_app/downloads/$status.tsx:133
+#: src/routes/_app/downloads/$status.tsx:160
 msgid "Aucun guides trouvé"
 msgstr "No guides found"
 
-#: src/routes/_app/downloads/$status.tsx:149
+#: src/routes/_app/downloads/$status.tsx:176
 msgid "Aucun guides trouvé avec {term}"
 msgstr "No guides found with {term}"
 
@@ -72,40 +76,40 @@ msgstr "This tool is designed to assist you throughout your adventure on <0>Dofu
 msgid "Chasse au trésor"
 msgstr "Hunt"
 
-#: src/components/guide-frame.tsx:226
+#: src/components/guide-frame.tsx:247
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the item's name. Cmd+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:227
+#: src/components/guide-frame.tsx:248
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the item's name. Ctrl+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:234
+#: src/components/guide-frame.tsx:255
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the quest's name. Cmd+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:235
+#: src/components/guide-frame.tsx:256
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the quest's name. Ctrl+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:222
+#: src/components/guide-frame.tsx:243
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the dungeon's name. Cmd+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:223
+#: src/components/guide-frame.tsx:244
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the dungeon's name. Ctrl+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:230
+#: src/components/guide-frame.tsx:251
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the monster's name. Cmd+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:231
+#: src/components/guide-frame.tsx:252
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Click to copy the monster's name. Ctrl+click to open on dofusdb"
 
-#: src/components/guide-frame.tsx:269
-#: src/components/guide-frame.tsx:297
+#: src/components/guide-frame.tsx:290
+#: src/components/guide-frame.tsx:324
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Click to open in browser"
 
@@ -151,7 +155,7 @@ msgstr "Create a new note"
 msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 msgstr "Create your guides on the official website and download those made by others!"
 
-#: src/routes/_app/downloads/$status.tsx:170
+#: src/routes/_app/downloads/$status.tsx:197
 msgid "de <0>{0}</0>"
 msgstr "from <0>{0}</0>"
 
@@ -184,37 +188,37 @@ msgid "Grande"
 msgstr "Large"
 
 #: src/components/title-bar.tsx:49
-#: src/routes/_app/downloads/$status.tsx:86
+#: src/routes/_app/downloads/$status.tsx:94
 #: src/routes/_app/guides/index.tsx:28
 #: src/routes/_app/guides/index.tsx:93
 msgid "Guides"
 msgstr "Guides"
 
-#: src/routes/_app/downloads/$status.tsx:84
+#: src/routes/_app/downloads/$status.tsx:92
 #: src/routes/_app/downloads/index.tsx:51
 msgid "Guides certifiés"
 msgstr "Certified guides"
 
-#: src/routes/_app/downloads/$status.tsx:80
+#: src/routes/_app/downloads/$status.tsx:88
 #: src/routes/_app/downloads/index.tsx:57
 msgid "Guides draft"
 msgstr "Draft guides"
 
-#: src/routes/_app/downloads/$status.tsx:82
+#: src/routes/_app/downloads/$status.tsx:90
 #: src/routes/_app/downloads/index.tsx:48
 msgid "Guides principaux"
 msgstr "Main guides"
 
-#: src/routes/_app/downloads/$status.tsx:78
+#: src/routes/_app/downloads/$status.tsx:86
 msgid "Guides privés"
 msgstr "Private guides"
 
-#: src/routes/_app/downloads/$status.tsx:76
+#: src/routes/_app/downloads/$status.tsx:84
 #: src/routes/_app/downloads/index.tsx:54
 msgid "Guides publics"
 msgstr "Publics guides"
 
-#: src/routes/_app/downloads/$status.tsx:161
+#: src/routes/_app/downloads/$status.tsx:188
 #: src/routes/_app/guides/index.tsx:140
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
@@ -228,6 +232,10 @@ msgstr "It seems that the update encountered an issue."
 msgid "Informations supplémentaires : {0}"
 msgstr "More info: {0}"
 
+#: src/routes/_app/downloads/$status.tsx:151
+msgid "J'ai compris"
+msgstr "I understand"
+
 #: src/routes/app-old-version.tsx:69
 msgid "Lancer le téléchargement"
 msgstr "Start download"
@@ -235,6 +243,14 @@ msgstr "Start download"
 #: src/components/select-lang.tsx:10
 msgid "Langue"
 msgstr "Language"
+
+#: src/routes/_app/downloads/$status.tsx:143
+msgid "Les guides de cette section n'ont pas été vérifiés manuellement par l'équipe Ganymède. <0/> Bien que les liens vers les sites soient sécurisés, veuillez vérifier attentivement les guides <1>sur notre site</1> avant de les télécharger."
+msgstr "Guides in this section have not been manually verified by the Ganymede team. <0/> Although the links to the sites are secure, please carefully check the guides <1>on our site</1> before downloading them."
+
+#: src/components/guide-frame.tsx:52
+msgid "lien masqué"
+msgstr "hidden link"
 
 #: src/components/guide-card.tsx:42
 msgid "Mettre à jour le guide"
@@ -309,7 +325,7 @@ msgstr "Profiles"
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Refresh downloaded guides folder"
 
-#: src/routes/_app/downloads/$status.tsx:144
+#: src/routes/_app/downloads/$status.tsx:171
 #: src/routes/_app/guides/index.tsx:126
 msgid "Rechercher un guide"
 msgstr "Search a guide"
