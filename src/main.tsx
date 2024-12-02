@@ -11,9 +11,9 @@ import { ErrorComponent } from './components/error-component.tsx'
 import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
 import { whiteListQuery } from '@/queries/white_list.query.ts'
+import { attachConsole, error } from '@tauri-apps/plugin-log'
 import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
-import { attachConsole } from '@tauri-apps/plugin-log'
 
 await attachConsole()
 
@@ -47,7 +47,7 @@ async function setupSentry() {
 
 // test
 
-setupSentry().catch(console.error)
+setupSentry().catch(error)
 
 if (
   (window.location.hostname === 'localhost' && window.location.port === '') ||
@@ -83,7 +83,7 @@ const queryClient = new QueryClient({
   },
 })
 
-await dynamicActiveLocale('fr')
+await dynamicActiveLocale('fr').catch(error)
 
 queryClient
   .ensureQueryData(confQuery)
@@ -92,9 +92,9 @@ queryClient
 
     await dynamicActiveLocale(conf.lang.toLowerCase())
   })
-  .catch(console.error)
+  .catch(error)
 
-queryClient.prefetchQuery(whiteListQuery).catch(console.error)
+queryClient.prefetchQuery(whiteListQuery).catch(error)
 
 // Create a new router instance
 const router = createRouter({
@@ -110,18 +110,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
-// Render the app
-const rootElement = document.getElementById('root')!
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
+try {
+  // Render the app
+  const rootElement = document.getElementById('root')!
+  if (!rootElement.innerHTML) {
+    const root = ReactDOM.createRoot(rootElement)
 
-  root.render(
-    <React.StrictMode>
-      <I18nProvider i18n={i18n}>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </I18nProvider>
-    </React.StrictMode>,
-  )
+    root.render(
+      <React.StrictMode>
+        <I18nProvider i18n={i18n}>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </I18nProvider>
+      </React.StrictMode>,
+    )
+  }
+} catch (err) {
+  error(`Error rendering the app: ${err}`)
 }

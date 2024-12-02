@@ -73,9 +73,14 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(
             tauri_plugin_log::Builder::new()
+                .clear_targets()
                 .targets([
                     Target::new(TargetKind::Stdout),
                     Target::new(TargetKind::LogDir { file_name: None }),
+                    Target::new(TargetKind::LogDir {
+                        file_name: Some("webview".into()),
+                    })
+                    .filter(|metadata| metadata.target() == tauri_plugin_log::WEBVIEW_TARGET),
                     Target::new(TargetKind::Webview),
                 ])
                 .level(level_filter)
