@@ -1,5 +1,6 @@
 use crate::api::GANYMEDE_API_V2;
 use crate::tauri_api_ext::GuidesPathExt;
+use log::info;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::{fmt, fs};
@@ -179,7 +180,7 @@ impl fmt::Display for Status {
 
 impl Guides {
     pub fn from_path(path_buf: &PathBuf) -> Result<Guides, Error> {
-        println!("[Guides] get_guides in {:?}", path_buf);
+        info!("[Guides] get_guides in {:?}", path_buf);
 
         let options = glob::MatchOptions {
             case_sensitive: false,
@@ -237,6 +238,8 @@ impl Guides {
 pub fn ensure(app: &AppHandle) -> Result<(), Error> {
     let guides_dir = &app.path().app_guides_dir();
 
+    info!("Log dir: {:?}", &app.path().app_log_dir().unwrap());
+
     if !guides_dir.exists() {
         fs::create_dir_all(guides_dir).map_err(Error::CreateGuidesDir)?;
     }
@@ -255,7 +258,7 @@ pub fn get_guides(app: AppHandle) -> Result<Guides, Error> {
 
 #[tauri::command]
 pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Error> {
-    println!("[Guides] get_guide_from_server: {}", guide_id);
+    info!("[Guides] get_guide_from_server: {}", guide_id);
 
     let res = reqwest::get(format!("{}/guides/{}", GANYMEDE_API_V2, guide_id))
         .await
@@ -267,7 +270,7 @@ pub async fn get_guide_from_server(guide_id: u32) -> Result<GuideWithSteps, Erro
 
 #[tauri::command]
 pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error> {
-    println!("[Guides] get_guides_from_server");
+    info!("[Guides] get_guides_from_server");
 
     let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API_V2, status))
         .await
@@ -280,7 +283,7 @@ pub async fn get_guides_from_server(status: Status) -> Result<Vec<Guide>, Error>
 
 #[tauri::command]
 pub async fn download_guide_from_server(guide_id: u32, app: AppHandle) -> Result<Guides, Error> {
-    println!("[Guides] download_guide_from_server");
+    info!("[Guides] download_guide_from_server");
 
     Ok(download_guide_by_id(&app, guide_id).await?)
 }

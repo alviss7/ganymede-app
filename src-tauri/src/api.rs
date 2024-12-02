@@ -1,3 +1,4 @@
+use log::info;
 use serde::Deserialize;
 use tauri::{AppHandle, Runtime};
 use tauri_plugin_http::reqwest;
@@ -48,7 +49,7 @@ pub async fn increment_app_download_count(
     let os = std::env::consts::OS.to_string();
     let os = os_to_string(os).ok_or(Error::OsNotFound)?;
 
-    println!(
+    info!(
         "[Api] Incrementing app download count, id: {} - version: {} - os: {:?}",
         id, version, os
     );
@@ -132,7 +133,7 @@ pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<bool, A
 
     let version = semver::Version::parse(&version).unwrap();
 
-    println!(
+    info!(
         "[Api] version from package: {:?} - release_version from GitHub: {:?}",
         version, release_version
     );

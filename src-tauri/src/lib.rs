@@ -11,7 +11,9 @@ use crate::image::fetch_image;
 use crate::security::get_white_list;
 use crate::shortcut::handle_shortcuts;
 use crate::update::start_update;
+use log::{error, info, LevelFilter};
 use tauri::Wry;
+use tauri_plugin_log::{Target, TargetKind};
 #[cfg(not(debug_assertions))]
 use tauri_plugin_sentry::{minidump, sentry};
 use tauri_plugin_shell::ShellExt;
@@ -55,45 +57,64 @@ pub fn run() {
     #[cfg(not(debug_assertions))]
     let _guard = minidump::init(&sentry_client);
 
+    let level_filter = if cfg!(debug_assertions) {
+        LevelFilter::Debug
+    } else {
+        LevelFilter::Info
+    };
+
     let app = tauri::Builder::default()
+        .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
-        .plugin(tauri_plugin_shell::init());
+        .plugin(tauri_plugin_shell::init())
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .targets([
+                    Target::new(TargetKind::Stdout),
+                    Target::new(TargetKind::LogDir { file_name: None }),
+                    Target::new(TargetKind::Webview),
+                ])
+                .level(level_filter)
+                .max_file_size(10_485_760) // 10MB
+                .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepOne)
+                .build(),
+        );
 
     #[cfg(not(debug_assertions))]
     let app = app.plugin(tauri_plugin_sentry::init_with_no_injection(&sentry_client));
 
     app.setup(|app| {
         if let Err(err) = crate::conf::ensure(app.handle()) {
-            eprintln!("[Lib] failed to ensure conf: {:?}", err);
+            error!("[Lib] failed to ensure conf: {:?}", err);
         }
 
         if let Err(err) = crate::guides::ensure(app.handle()) {
-            eprintln!("[Lib] failed to ensure guides: {:?}", err);
+            error!("[Lib] failed to ensure guides: {:?}", err);
         }
 
         let handle = app.handle().clone();
 
         match handle.is_first_start() {
             Err(err) => {
-                eprintln!("[Lib] failed to ensure first start: {:?}", err);
+                error!("[Lib] failed to ensure first start: {:?}", err);
             }
             Ok(first_start) => {
                 if first_start {
-                    println!("[Lib] first start");
+                    info!("[Lib] first start");
 
                     tauri::async_runtime::spawn(async move {
                         let res = download_default_guide(&handle).await;
 
                         match res {
                             Err(err) => {
-                                eprintln!("[Lib] cannot download default guide {:?}", err);
+                                error!("[Lib] cannot download default guide {:?}", err);
                             }
                             Ok(_) => {
-                                println!("[Lib] default guide downloaded");
+                                info!("[Lib] default guide downloaded");
                             }
                         }
                     });
@@ -110,10 +131,10 @@ pub fn run() {
 
                 match &res {
                     Err(err) => {
-                        eprintln!("[Lib] {:?}", err);
+                        error!("[Lib] {:?}", err);
                     }
                     _ => {
-                        println!("[Lib] app download count incremented");
+                        info!("[Lib] app download count incremented");
                     }
                 }
             });
@@ -125,7 +146,7 @@ pub fn run() {
             if let Err(err) =
                 handle_shortcuts(app).map_err(|e| Box::<dyn std::error::Error>::from(e))
             {
-                eprintln!("[Lib] failed to handle shortcuts: {:?}", err);
+                error!("[Lib] failed to handle shortcuts: {:?}", err);
             }
         }
 

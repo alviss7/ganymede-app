@@ -1,4 +1,5 @@
 use crate::tauri_api_ext::ConfPathExt;
+use log::info;
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
@@ -257,10 +258,10 @@ pub fn ensure(app: &AppHandle) -> Result<(), Error> {
 
     let conf_path = resolver.app_conf_file();
 
-    println!("[Conf] path: {:?}", conf_path);
+    info!("[Conf] path: {:?}", conf_path);
 
     if !conf_path.exists() {
-        println!("[Conf] file does not exists, creating default one");
+        info!("[Conf] file does not exists, creating default one");
 
         let default_conf = &mut Conf::default();
 

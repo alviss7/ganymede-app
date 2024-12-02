@@ -13,6 +13,9 @@ import './main.css'
 import { whiteListQuery } from '@/queries/white_list.query.ts'
 import { confQuery } from './queries/conf.query.ts'
 import { routeTree } from './routeTree.gen.ts'
+import { attachConsole } from '@tauri-apps/plugin-log'
+
+await attachConsole()
 
 function sendBreadcrumbToRust(breadcrumb: Sentry.Breadcrumb): Sentry.Breadcrumb | null {
   // Ignore IPC breadcrumbs otherwise we'll make an infinite loop

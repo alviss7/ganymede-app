@@ -1,3 +1,4 @@
+use log::{error, info};
 use std::str::FromStr;
 use tauri::{App, Emitter, Manager};
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, ShortcutState};
@@ -31,7 +32,7 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Error> {
                                 Conf::default()
                                     .save(app)
                                     .expect("[Shortcut] failed to reset conf");
-                                println!("[Shortcut] conf reset triggered");
+                                info!("[Shortcut] conf reset triggered");
 
                                 let mut webview = app
                                     .get_webview_window("main")
@@ -47,7 +48,7 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Error> {
                             if shortcut == &go_next_step_shortcut
                                 || shortcut == &go_previous_step_shortcut
                             {
-                                println!("Shortcut {} pressed", shortcut.to_string());
+                                info!("Shortcut {} pressed", shortcut.to_string());
 
                                 if shortcut == &go_next_step_shortcut {
                                     app.emit(Event::GoToNextGuideStep.into(), 0)
@@ -71,9 +72,9 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Error> {
         .map_err(Error::Register);
 
     if let Err(err) = &reset_register {
-        eprintln!("[Shortcut]: {:?}", err);
+        error!("[Shortcut]: {:?}", err);
     } else {
-        println!("[Shortcut] registered: {}", reset_conf_shortcut.to_string());
+        info!("[Shortcut] registered: {}", reset_conf_shortcut.to_string());
     }
 
     let go_next_step_register = app
@@ -82,9 +83,9 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Error> {
         .map_err(Error::Register);
 
     if let Err(err) = &go_next_step_register {
-        eprintln!("[Shortcut]: {:?}", err);
+        error!("[Shortcut]: {:?}", err);
     } else {
-        println!(
+        info!(
             "[Shortcut] registered: {}",
             go_next_step_shortcut.to_string()
         );
@@ -96,9 +97,9 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Error> {
         .map_err(Error::Register);
 
     if let Err(err) = &go_previous_step_register {
-        eprintln!("[Shortcut]: {:?}", err);
+        error!("[Shortcut]: {:?}", err);
     } else {
-        println!(
+        info!(
             "[Shortcut] registered: {}",
             go_previous_step_shortcut.to_string()
         );
