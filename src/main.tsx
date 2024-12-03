@@ -1,15 +1,13 @@
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
-import type * as Sentry from '@sentry/browser'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { invoke } from '@tauri-apps/api/core'
 import * as React from 'react'
 import ReactDOM from 'react-dom/client'
-import { defaultOptions as sentryDefaultOptions } from 'tauri-plugin-sentry-api'
 import { ErrorComponent } from './components/error-component.tsx'
 import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
+import { sentry, setupSentry } from '@/lib/sentry.ts'
 import { whiteListQuery } from '@/queries/white_list.query.ts'
 import { attachConsole, error } from '@tauri-apps/plugin-log'
 import { confQuery } from './queries/conf.query.ts'
@@ -17,37 +15,9 @@ import { routeTree } from './routeTree.gen.ts'
 
 await attachConsole()
 
-function sendBreadcrumbToRust(breadcrumb: Sentry.Breadcrumb): Sentry.Breadcrumb | null {
-  // Ignore IPC breadcrumbs otherwise we'll make an infinite loop
-  if (
-    typeof breadcrumb.data?.url === 'string' &&
-    (breadcrumb.data.url.startsWith('ipc://') ||
-      breadcrumb.data.url.startsWith('tauri://') ||
-      breadcrumb.data.url.startsWith('http://ipc.localhost'))
-  ) {
-    return null
-  }
-
-  invoke('plugin:sentry|breadcrumb', { breadcrumb })
-  // We don't collect breadcrumbs in the renderer since they are passed to Rust
-  return null
-}
-
-async function setupSentry() {
-  if (import.meta.env.PROD) {
-    const Sentry = await import('@sentry/browser')
-
-    Sentry.init({
-      ...sentryDefaultOptions,
-      autoSessionTracking: false,
-      beforeBreadcrumb: sendBreadcrumbToRust,
-    })
-  }
-}
-
-// test
-
-setupSentry().catch(error)
+await setupSentry().catch((err) => {
+  error(`Error setting up Sentry: ${err}`)
+})
 
 if (
   (window.location.hostname === 'localhost' && window.location.port === '') ||
@@ -83,7 +53,10 @@ const queryClient = new QueryClient({
   },
 })
 
-await dynamicActiveLocale('fr').catch(error)
+await dynamicActiveLocale('fr').catch((err) => {
+  error(err)
+  sentry?.captureException(err, { data: 'Error fetching locale fr' })
+})
 
 queryClient
   .ensureQueryData(confQuery)
@@ -92,9 +65,15 @@ queryClient
 
     await dynamicActiveLocale(conf.lang.toLowerCase())
   })
-  .catch(error)
+  .catch((err) => {
+    error(err)
+    sentry?.captureException(err, { data: 'Error fetching conf' })
+  })
 
-queryClient.prefetchQuery(whiteListQuery).catch(error)
+queryClient.prefetchQuery(whiteListQuery).catch((err) => {
+  error(err)
+  sentry?.captureException(err, { data: 'Error prefetching white list' })
+})
 
 // Create a new router instance
 const router = createRouter({
@@ -128,4 +107,5 @@ try {
   }
 } catch (err) {
   error(`Error rendering the app: ${err}`)
+  sentry?.captureException(err, { data: 'Error rendering the app' })
 }
