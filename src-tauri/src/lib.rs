@@ -76,7 +76,8 @@ pub fn run() {
                 .clear_targets()
                 .targets([
                     Target::new(TargetKind::Stdout),
-                    Target::new(TargetKind::LogDir { file_name: None }),
+                    Target::new(TargetKind::LogDir { file_name: None })
+                        .filter(|metadata| metadata.target() != tauri_plugin_log::WEBVIEW_TARGET),
                     Target::new(TargetKind::LogDir {
                         file_name: Some("webview".into()),
                     })
