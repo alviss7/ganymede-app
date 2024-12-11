@@ -42,6 +42,18 @@ async fn open_in_shell(
     app.shell().open(href, None)
 }
 
+#[cfg(debug_assertions)]
+const LOG_TARGETS: [Target; 2] = [
+    Target::new(TargetKind::Stdout),
+    Target::new(TargetKind::Webview),
+];
+
+#[cfg(not(debug_assertions))]
+const LOG_TARGETS: [Target; 2] = [
+    Target::new(TargetKind::Stdout),
+    Target::new(TargetKind::LogDir),
+];
+
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -74,19 +86,11 @@ pub fn run() {
         .plugin(
             tauri_plugin_log::Builder::new()
                 .clear_targets()
-                .targets([
-                    Target::new(TargetKind::Stdout),
-                    Target::new(TargetKind::LogDir { file_name: None })
-                        .filter(|metadata| metadata.target() != tauri_plugin_log::WEBVIEW_TARGET),
-                    Target::new(TargetKind::LogDir {
-                        file_name: Some("webview".into()),
-                    })
-                    .filter(|metadata| metadata.target() == tauri_plugin_log::WEBVIEW_TARGET),
-                    Target::new(TargetKind::Webview),
-                ])
+                .targets(LOG_TARGETS)
                 .level(level_filter)
-                .max_file_size(10_485_760) // 10MB
+                .max_file_size(524_288)
                 .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepOne)
+                .level_for("tauri", LevelFilter::Info)
                 .build(),
         );
 

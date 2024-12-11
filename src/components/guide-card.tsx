@@ -34,8 +34,6 @@ export function GuideDownloadButton({
       <Button
         size="icon"
         onClick={async () => {
-          console.log(guideInDownloads)
-
           await fromPromise(
             downloadGuideFromServer.mutateAsync({ guide, folder: guideInDownloads?.folder ?? '' }),
             (err) => err,

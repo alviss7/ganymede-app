@@ -32,6 +32,6 @@
     "core:webview:allow-internal-toggle-devtools",
     "os:default",
     "sentry:default",
-    "log:allow-log"
+    "log:default"
   ]
 }

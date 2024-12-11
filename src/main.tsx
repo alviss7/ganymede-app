@@ -16,7 +16,6 @@ import { routeTree } from './routeTree.gen.ts'
 await attachConsole()
 
 setupSentry().catch((err) => {
-  console.log(err)
   error(`Error setting up Sentry: ${err}`)
 })
 
