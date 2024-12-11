@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fs;
+use tauri::ipc::InvokeError;
 use tauri::{AppHandle, Manager, Window, Wry};
 
 #[derive(Debug)]
@@ -18,30 +19,22 @@ pub enum Error {
     ResetConf(Box<Error>),
 }
 
-impl Into<tauri::ipc::InvokeError> for Error {
-    fn into(self) -> tauri::ipc::InvokeError {
-        match self {
-            Error::Malformed(err) => {
-                tauri::ipc::InvokeError::from(format!("Malformed({})", err.to_string()))
-            }
-            Error::CreateConfDir(err) => {
-                tauri::ipc::InvokeError::from(format!("CreateConfDir({})", err.to_string()))
-            }
-            Error::ConfDir(err) => {
-                tauri::ipc::InvokeError::from(format!("ConfDir({})", err.to_string()))
-            }
-            Error::SerializeConf(err) => {
-                tauri::ipc::InvokeError::from(format!("SerializeConf({})", err.to_string()))
-            }
-            Error::UnhandledIo(err) => {
-                tauri::ipc::InvokeError::from(format!("UnhandledIo({})", err.to_string()))
-            }
-            Error::SaveConf(err) => {
-                tauri::ipc::InvokeError::from(format!("SaveConf({})", err.to_string()))
-            }
-            Error::GetProfileInUse => tauri::ipc::InvokeError::from("GetProfileInUse".to_string()),
-            Error::ResetConf(err) => (*err).into(),
-        }
+impl Into<InvokeError> for Error {
+    fn into(self) -> InvokeError {
+        use Error::*;
+
+        let message = match self {
+            Malformed(err) => format!("Malformed({})", err.to_string()),
+            CreateConfDir(err) => format!("CreateConfDir({})", err.to_string()),
+            ConfDir(err) => format!("ConfDir({})", err.to_string()),
+            SerializeConf(err) => format!("SerializeConf({})", err.to_string()),
+            UnhandledIo(err) => format!("UnhandledIo({})", err.to_string()),
+            SaveConf(err) => format!("SaveConf({})", err.to_string()),
+            GetProfileInUse => "GetProfileInUse".to_string(),
+            ResetConf(err) => return (*err).into(),
+        };
+
+        InvokeError::from(message)
     }
 }
 

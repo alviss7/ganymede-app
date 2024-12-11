@@ -1,4 +1,4 @@
-import { GuidesZod } from '@/types/download.ts'
+import { GuideInFolder, GuidesZod } from '@/types/download.ts'
 import { invoke } from '@tauri-apps/api/core'
 import { fromPromise } from 'neverthrow'
 
@@ -32,14 +32,20 @@ export class OpenGuidesLinkError extends Error {
   }
 }
 
-export function getGuides() {
-  return fromPromise(invoke('get_guides'), GetGuidesError.from).map((response) => {
+export function getGuides(folder?: string) {
+  return fromPromise(invoke('get_guides', { folder }), GetGuidesError.from).map((response) => {
+    return GuideInFolder.parseAsync(response)
+  })
+}
+
+export function getFlatGuides(folder: string) {
+  return fromPromise(invoke('get_flat_guides', { folder }), GetGuidesError.from).map((response) => {
     return GuidesZod.parseAsync(response)
   })
 }
 
-export async function downloadGuideFromServer(guideId: number) {
-  return fromPromise(invoke('download_guide_from_server', { guideId }), DownloadGuideFromServerError.from)
+export async function downloadGuideFromServer(guideId: number, folder: string) {
+  return fromPromise(invoke('download_guide_from_server', { guideId, folder }), DownloadGuideFromServerError.from)
 }
 
 export async function openGuidesFolder() {

@@ -20,19 +20,22 @@ export function Page<
   className,
   actions,
   pageTitleTextClassName,
+  disabled,
+  removeBackButton = false,
 }: PropsWithChildren<{
   title: string
   actions?: ReactNode
   className?: string
   pageTitleTextClassName?: string
+  removeBackButton?: boolean
 }> &
   LinkProps<TRouter, TFrom, TTo>) {
   return (
     <PageContent className={cn(className)}>
       <PageTitle>
         <div className="flex w-full items-center gap-2">
-          {(to || search || from || hash || state) && (
-            <BackButtonLink to={to} search={search} from={from} hash={hash} state={state} />
+          {!removeBackButton && (to || search || from || hash || state) && (
+            <BackButtonLink to={to} search={search} from={from} hash={hash} state={state} disabled={disabled} />
           )}
           <PageTitleText className={pageTitleTextClassName} title={title}>
             {title}

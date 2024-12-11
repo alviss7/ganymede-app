@@ -102,7 +102,7 @@ function DownloadGuidePage() {
   const status = Route.useParams({ select: (p) => p.status })
   const debouncedTerm = useDebounce(searchTerm, 300)
   const guides = useSuspenseQuery(guidesFromServerQuery({ status }))
-  const downloads = useSuspenseQuery(guidesQuery)
+  const downloads = useSuspenseQuery(guidesQuery())
 
   const scrollableRef = useRef<HTMLDivElement>(null)
 
@@ -178,7 +178,7 @@ function DownloadGuidePage() {
               )}
 
               {paginatedOrFilteredGuides.map((guide) => {
-                const isGuideDownloaded = getGuideById(downloads.data.guides, guide.id)
+                const isGuideDownloaded = getGuideById(downloads.data, guide.id)
 
                 return (
                   <Card key={guide.id} className="flex gap-2 p-2 xs:px-3 text-xxs xs:text-sm sm:text-base">

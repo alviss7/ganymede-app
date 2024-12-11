@@ -1,15 +1,32 @@
-import { getGuides } from '@/ipc/guides.ts'
+import { getFlatGuides, getGuides } from '@/ipc/guides.ts'
 import { queryOptions } from '@tanstack/react-query'
 
-export const guidesQuery = queryOptions({
-  queryKey: ['conf', 'guides'],
-  queryFn: async () => {
-    const guides = await getGuides()
+export function guidesQuery(folder = '') {
+  return queryOptions({
+    queryKey: ['conf', 'guides', folder],
+    queryFn: async () => {
+      const guides = await getFlatGuides(folder)
 
-    if (guides.isErr()) {
-      throw guides.error
-    }
+      if (guides.isErr()) {
+        throw guides.error
+      }
 
-    return guides.value
-  },
-})
+      return guides.value
+    },
+  })
+}
+
+export function guidesInFolderQuery(folder?: string) {
+  return queryOptions({
+    queryKey: ['conf', 'guides_in_folder', folder ?? -1],
+    queryFn: async () => {
+      const guides = await getGuides(folder)
+
+      if (guides.isErr()) {
+        throw guides.error
+      }
+
+      return guides.value
+    },
+  })
+}

@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { invoke } from '@tauri-apps/api/core'
+import { error } from '@tauri-apps/plugin-log'
 import { fromPromise } from 'neverthrow'
 import { ComponentProps } from 'react'
 import { GenericLoader } from './generic-loader'
@@ -37,7 +38,7 @@ export function DownloadImage({
     retry: 2,
   })
 
-  if (!enabled) return <img src={src} {...props} />
+  if (!enabled) return <img alt="" src={src} {...props} />
 
   if (image.isLoading) {
     return (
@@ -48,10 +49,12 @@ export function DownloadImage({
   }
 
   if (image.isError) {
-    console.error(image.error)
+    error(`Failed to load image: ${src}. ${image.error.message}`).then(() => {
+      error(image.error.stack ?? 'No stack trace')
+    })
 
-    return <img src={src} referrerPolicy="same-origin" {...props} />
+    return <img alt="" src={src} referrerPolicy="same-origin" {...props} />
   }
 
-  return <img src={`data:image/png;base64,${image.data}`} referrerPolicy="same-origin" {...props} />
+  return <img alt="" src={`data:image/png;base64,${image.data}`} referrerPolicy="same-origin" {...props} />
 }

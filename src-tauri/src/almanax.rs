@@ -53,11 +53,9 @@ impl Into<tauri::ipc::InvokeError> for Error {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AlmanaxName {
-    de: String,
     en: String,
     es: String,
     fr: String,
-    it: String,
     pt: String,
 }
 
@@ -72,16 +70,7 @@ pub struct AlmanaxDesc {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Almanax {
     id: u32,
-    name: AlmanaxName,
-    #[serde(rename = "descId")]
-    desc_id: i32,
     desc: AlmanaxDesc,
-    #[serde(rename = "npcId")]
-    npc_id: i32,
-    #[serde(rename = "createdAt")]
-    created_at: String,
-    #[serde(rename = "updatedAt")]
-    updated_at: String,
 }
 
 impl Almanax {

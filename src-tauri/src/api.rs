@@ -1,13 +1,15 @@
-use log::info;
+use log::debug;
 use serde::Deserialize;
 use tauri::{AppHandle, Runtime};
 use tauri_plugin_http::reqwest;
 
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
+use log::info;
+#[cfg(not(dev))]
 use serde::Serialize;
 
 pub const DOFUSDB_API: &str = "https://api.dofusdb.fr";
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
 pub const GANYMEDE_API: &str = "https://ganymede-dofus.com/api";
 pub const GANYMEDE_API_V2: &str = "https://ganymede-dofus.com/api/v2";
 
@@ -22,7 +24,7 @@ pub enum Error {
     DownloadedCount(reqwest::StatusCode, String),
 }
 
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
 #[derive(Serialize)]
 struct DownloadedBody {
     #[serde(rename = "uniqueID")]
@@ -31,7 +33,7 @@ struct DownloadedBody {
     os: String,
 }
 
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
 fn os_to_string(os: String) -> Option<String> {
     match os.as_str() {
         "windows" => Some("Windows".into()),
@@ -41,7 +43,7 @@ fn os_to_string(os: String) -> Option<String> {
     }
 }
 
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
 pub async fn increment_app_download_count(
     version: String,
 ) -> Result<tauri_plugin_http::reqwest::Response, Error> {
@@ -133,7 +135,7 @@ pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<bool, A
 
     let version = semver::Version::parse(&version).unwrap();
 
-    info!(
+    debug!(
         "[Api] version from package: {:?} - release_version from GitHub: {:?}",
         version, release_version
     );

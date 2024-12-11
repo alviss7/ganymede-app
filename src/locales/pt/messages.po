@@ -76,40 +76,40 @@ msgstr "Esta ferramenta foi projetada para ajudá-lo ao longo de sua aventura em
 msgid "Chasse au trésor"
 msgstr "Caça ao tesouro"
 
-#: src/components/guide-frame.tsx:247
+#: src/components/guide-frame.tsx:248
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do item. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:248
+#: src/components/guide-frame.tsx:249
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do item. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:255
+#: src/components/guide-frame.tsx:256
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome da missão. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:256
+#: src/components/guide-frame.tsx:257
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome da missão. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:243
+#: src/components/guide-frame.tsx:244
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do calabouço. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:244
+#: src/components/guide-frame.tsx:245
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do calabouço. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:251
+#: src/components/guide-frame.tsx:252
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do monstro. Cmd+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:252
+#: src/components/guide-frame.tsx:253
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Clique para copiar o nome do monstro. Ctrl+clique para abrir no dofusdb"
 
-#: src/components/guide-frame.tsx:290
-#: src/components/guide-frame.tsx:324
+#: src/components/guide-frame.tsx:291
+#: src/components/guide-frame.tsx:325
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Clique para abrir no navegador"
 
@@ -189,8 +189,8 @@ msgstr "Grande"
 
 #: src/components/title-bar.tsx:49
 #: src/routes/_app/downloads/$status.tsx:94
-#: src/routes/_app/guides/index.tsx:28
-#: src/routes/_app/guides/index.tsx:93
+#: src/routes/_app/guides/index.tsx:37
+#: src/routes/_app/guides/index.tsx:134
 msgid "Guides"
 msgstr "Guias"
 
@@ -219,7 +219,7 @@ msgid "Guides publics"
 msgstr "Guias públicos"
 
 #: src/routes/_app/downloads/$status.tsx:188
-#: src/routes/_app/guides/index.tsx:140
+#: src/routes/_app/guides/index.tsx:195
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
 
@@ -252,7 +252,7 @@ msgstr "Os guias desta seção não foram verificados manualmente pela equipe Ga
 msgid "lien masqué"
 msgstr "link oculto"
 
-#: src/components/guide-card.tsx:42
+#: src/components/guide-card.tsx:47
 msgid "Mettre à jour le guide"
 msgstr "Atualizar o guia"
 
@@ -295,7 +295,7 @@ msgstr "Opacidade"
 msgid "Ou le bouton suivant"
 msgstr "Ou o próximo botão"
 
-#: src/routes/_app/guides/index.tsx:110
+#: src/routes/_app/guides/index.tsx:154
 msgid "Ouvrir le dossier des guides téléchargés"
 msgstr "Abrir a pasta dos guias baixados"
 
@@ -321,12 +321,12 @@ msgstr "Apresentação"
 msgid "Profils"
 msgstr "Perfis"
 
-#: src/routes/_app/guides/index.tsx:101
+#: src/routes/_app/guides/index.tsx:145
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Atualizar a pasta dos guias baixados"
 
 #: src/routes/_app/downloads/$status.tsx:171
-#: src/routes/_app/guides/index.tsx:126
+#: src/routes/_app/guides/index.tsx:170
 msgid "Rechercher un guide"
 msgstr "Pesquisar um guia"
 
@@ -363,7 +363,7 @@ msgstr "Tamanho do texto dos guias"
 msgid "Téléchargements"
 msgstr "Downloads"
 
-#: src/components/guide-card.tsx:42
+#: src/components/guide-card.tsx:47
 msgid "Télécharger le guide"
 msgstr "Baixar o guia"
 

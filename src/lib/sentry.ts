@@ -1,5 +1,6 @@
 import type * as Sentry from '@sentry/browser'
 import { invoke } from '@tauri-apps/api/core'
+import { info } from '@tauri-apps/plugin-log'
 import { defaultOptions as sentryDefaultOptions } from 'tauri-plugin-sentry-api'
 
 export let sentry: typeof Sentry | undefined
@@ -29,5 +30,7 @@ export async function setupSentry() {
       autoSessionTracking: false,
       beforeBreadcrumb: sendBreadcrumbToRust,
     })
+
+    await info('Sentry initialized')
   }
 }

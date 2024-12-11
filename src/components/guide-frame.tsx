@@ -37,7 +37,7 @@ export function GuideFrame({
   const toggleGuideCheckbox = useToggleGuideCheckbox()
   const step = useProgressStep(guideId, stepIndex)
   const openGuideLink = useOpenGuideLink()
-  const guides = useSuspenseQuery(guidesQuery)
+  const guides = useSuspenseQuery(guidesQuery())
   const navigate = useNavigate()
   const downloadGuide = useDownloadGuideFromServer()
   const whiteList = useSuspenseQuery(whiteListQuery)
@@ -126,7 +126,7 @@ export function GuideFrame({
           )
 
           if (!Number.isNaN(domGuideId) || !Number.isNaN(stepNumber)) {
-            const guideInSystem = getGuideById(guides.data.guides, domGuideId ?? guideId)
+            const guideInSystem = getGuideById(guides.data, domGuideId ?? guideId)
 
             stepNumber = clamp(stepNumber, 1, guideInSystem?.steps.length ?? stepNumber)
             const nextGuide = guideId !== domGuideId ? guideInSystem : undefined
@@ -154,7 +154,7 @@ export function GuideFrame({
                     className={cn('contents select-none data-[type=guide-step]:no-underline', domNode.attribs.class)}
                   >
                     {!hasGoToGuideIcon && (
-                      <img src={goToStepIcon} className="size-5 select-none" data-icon draggable={false} />
+                      <img alt="" src={goToStepIcon} className="size-5 select-none" data-icon draggable={false} />
                     )}
                     <span className="hover:saturate-200 focus:saturate-[25%] group-focus-within:saturate-[25%] peer-hover:saturate-200">
                       {domToReact(domNode.children as DOMNode[], options)}
@@ -177,7 +177,7 @@ export function GuideFrame({
                       }
 
                       if (!nextGuide) {
-                        await downloadGuide.mutateAsync({ id: domGuideId })
+                        await downloadGuide.mutateAsync({ guide: { id: domGuideId }, folder: '' })
                       }
 
                       await navigate({
@@ -192,6 +192,7 @@ export function GuideFrame({
                     )}
                     {!hasGoToGuideIcon && (
                       <img
+                        alt=""
                         src={goToStepIcon}
                         className="peer inline-flex size-5 select-none group-focus-within:saturate-[25%] group-hover:saturate-200"
                         data-icon

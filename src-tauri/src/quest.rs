@@ -46,8 +46,6 @@ pub struct QuestDescription {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct QuestStep {
-    #[serde(rename = "descriptionId")]
-    pub description_id: u32,
     pub description: QuestDescription,
     #[serde(rename = "optimalLevel")]
     pub optimal_level: u32,

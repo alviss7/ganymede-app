@@ -2,12 +2,15 @@ import { setConf } from '@/ipc/conf.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Conf } from '@/types/conf.ts'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { debug } from '@tauri-apps/plugin-log'
 
 export function useSetConf() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (conf: Conf) => {
+      await debug(`set the conf: ${JSON.stringify(conf, undefined, 2)}`)
+
       const result = await setConf(conf)
 
       if (result.isErr()) {

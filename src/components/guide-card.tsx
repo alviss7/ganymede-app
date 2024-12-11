@@ -19,11 +19,11 @@ export function GuideDownloadButton({
       status: guide.status,
     }),
   )
-  const downloads = useSuspenseQuery(guidesQuery)
+  const downloads = useSuspenseQuery(guidesQuery())
   const downloadGuideFromServer = useDownloadGuideFromServer()
 
   const guideInServer = getGuideById(guides.data, guide.id)
-  const guideInDownloads = getGuideById(downloads.data.guides, guide.id)
+  const guideInDownloads = getGuideById(downloads.data, guide.id)
 
   const isGuideNeedUpdate = isGuideNew(guideInServer, guideInDownloads)
 
@@ -34,7 +34,12 @@ export function GuideDownloadButton({
       <Button
         size="icon"
         onClick={async () => {
-          await fromPromise(downloadGuideFromServer.mutateAsync(guide), (err) => err)
+          console.log(guideInDownloads)
+
+          await fromPromise(
+            downloadGuideFromServer.mutateAsync({ guide, folder: guideInDownloads?.folder ?? '' }),
+            (err) => err,
+          )
         }}
         disabled={downloadGuideFromServer.isPending}
         className="relative"

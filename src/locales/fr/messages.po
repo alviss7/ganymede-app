@@ -76,40 +76,40 @@ msgstr "Cet outil a pour but de vous assister tout au long de votre aventure sur
 msgid "Chasse au trésor"
 msgstr "Chasse au trésor"
 
-#: src/components/guide-frame.tsx:247
+#: src/components/guide-frame.tsx:248
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:248
+#: src/components/guide-frame.tsx:249
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:255
+#: src/components/guide-frame.tsx:256
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:256
+#: src/components/guide-frame.tsx:257
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:243
+#: src/components/guide-frame.tsx:244
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:244
+#: src/components/guide-frame.tsx:245
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:251
+#: src/components/guide-frame.tsx:252
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:252
+#: src/components/guide-frame.tsx:253
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 
-#: src/components/guide-frame.tsx:290
-#: src/components/guide-frame.tsx:324
+#: src/components/guide-frame.tsx:291
+#: src/components/guide-frame.tsx:325
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Cliquez pour ouvrir dans le navigateur"
 
@@ -189,8 +189,8 @@ msgstr "Grande"
 
 #: src/components/title-bar.tsx:49
 #: src/routes/_app/downloads/$status.tsx:94
-#: src/routes/_app/guides/index.tsx:28
-#: src/routes/_app/guides/index.tsx:93
+#: src/routes/_app/guides/index.tsx:37
+#: src/routes/_app/guides/index.tsx:134
 msgid "Guides"
 msgstr "Guides"
 
@@ -219,7 +219,7 @@ msgid "Guides publics"
 msgstr "Guides publics"
 
 #: src/routes/_app/downloads/$status.tsx:188
-#: src/routes/_app/guides/index.tsx:140
+#: src/routes/_app/guides/index.tsx:195
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
 
@@ -252,7 +252,7 @@ msgstr "Les guides de cette section n'ont pas été vérifiés manuellement par 
 msgid "lien masqué"
 msgstr "lien masqué"
 
-#: src/components/guide-card.tsx:42
+#: src/components/guide-card.tsx:47
 msgid "Mettre à jour le guide"
 msgstr "Mettre à jour le guide"
 
@@ -295,7 +295,7 @@ msgstr "Opacité"
 msgid "Ou le bouton suivant"
 msgstr "Ou le bouton suivant"
 
-#: src/routes/_app/guides/index.tsx:110
+#: src/routes/_app/guides/index.tsx:154
 msgid "Ouvrir le dossier des guides téléchargés"
 msgstr "Ouvrir le dossier des guides téléchargés"
 
@@ -321,12 +321,12 @@ msgstr "Présentation"
 msgid "Profils"
 msgstr "Profils"
 
-#: src/routes/_app/guides/index.tsx:101
+#: src/routes/_app/guides/index.tsx:145
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Rafraichir le dossier des guides téléchargés"
 
 #: src/routes/_app/downloads/$status.tsx:171
-#: src/routes/_app/guides/index.tsx:126
+#: src/routes/_app/guides/index.tsx:170
 msgid "Rechercher un guide"
 msgstr "Rechercher un guide"
 
@@ -363,7 +363,7 @@ msgstr "Taille de texte des guides"
 msgid "Téléchargements"
 msgstr "Téléchargements"
 
-#: src/components/guide-card.tsx:42
+#: src/components/guide-card.tsx:47
 msgid "Télécharger le guide"
 msgstr "Télécharger le guide"
 

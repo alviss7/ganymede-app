@@ -34,7 +34,7 @@ export const Route = createFileRoute('/_app/guides/$id')({
 
 function Pending() {
   return (
-    <Page title="" key="guide" to="/guides">
+    <Page title="" key="guide" to="/guides" search={{ path: '' }}>
       <PageScrollableContent hasTitleBar className="flex items-center justify-center">
         <header className="fixed inset-x-0 top-[66px] z-10 bg-primary">
           <div className="relative flex h-10 items-center justify-between gap-2 p-1"></div>
@@ -123,7 +123,13 @@ function GuideIdPage() {
   }
 
   return (
-    <Page key="guide" title={guide.name} to="/guides" pageTitleTextClassName="leading-5 line-clamp-1">
+    <Page
+      key="guide"
+      title={guide.name}
+      to="/guides"
+      search={{ path: '' }}
+      pageTitleTextClassName="leading-5 line-clamp-1"
+    >
       <PageScrollableContent hasTitleBar ref={scrollableRef}>
         <header className="fixed inset-x-0 top-[60px] z-10 bg-primary-800 sm:top-[66px]">
           <div className="relative flex h-9 items-center justify-between gap-2 p-1">

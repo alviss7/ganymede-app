@@ -3,8 +3,8 @@ use crate::api::is_app_version_old;
 use crate::conf::{get_conf, reset_conf, set_conf, toggle_guide_checkbox};
 use crate::first_start::FirstStartExt;
 use crate::guides::{
-    download_default_guide, download_guide_from_server, get_guide_from_server, get_guides,
-    get_guides_from_server, open_guides_folder,
+    download_default_guide, download_guide_from_server, get_flat_guides, get_guide_from_server,
+    get_guides, get_guides_from_server, open_guides_folder,
 };
 use crate::id::new_id;
 use crate::image::fetch_image;
@@ -14,7 +14,7 @@ use crate::update::start_update;
 use log::{error, info, LevelFilter};
 use tauri::Wry;
 use tauri_plugin_log::{Target, TargetKind};
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
 use tauri_plugin_sentry::{minidump, sentry};
 use tauri_plugin_shell::ShellExt;
 
@@ -45,7 +45,7 @@ async fn open_in_shell(
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    #[cfg(not(debug_assertions))]
+    #[cfg(not(dev))]
     let sentry_client = sentry::init((
         env!("SENTRY_DSN"),
         sentry::ClientOptions {
@@ -54,7 +54,7 @@ pub fn run() {
         },
     ));
 
-    #[cfg(not(debug_assertions))]
+    #[cfg(not(dev))]
     let _guard = minidump::init(&sentry_client);
 
     let level_filter = if cfg!(debug_assertions) {
@@ -90,7 +90,7 @@ pub fn run() {
                 .build(),
         );
 
-    #[cfg(not(debug_assertions))]
+    #[cfg(not(dev))]
     let app = app.plugin(tauri_plugin_sentry::init_with_no_injection(&sentry_client));
 
     app.setup(|app| {
@@ -128,7 +128,7 @@ pub fn run() {
             }
         }
 
-        #[cfg(not(debug_assertions))]
+        #[cfg(not(dev))]
         {
             let version = app.package_info().version.to_string();
 
@@ -174,7 +174,8 @@ pub fn run() {
         is_app_version_old,
         start_update,
         reset_conf,
-        get_white_list
+        get_white_list,
+        get_flat_guides
     ])
     .run(tauri::generate_context!())
     .expect("[Lib] error while running tauri application");
