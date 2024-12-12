@@ -28,7 +28,7 @@ import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
-import { ChevronRightIcon, FileDownIcon, VerifiedIcon } from 'lucide-react'
+import { ChevronRightIcon, FileDownIcon, ThumbsDownIcon, ThumbsUpIcon, VerifiedIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
 
@@ -133,6 +133,7 @@ function DownloadGuidePage() {
         })
 
   const hasPagination = term === '' && guides.data.length !== 0 && guides.data.length > itemsPerPage
+  const intl = new Intl.NumberFormat(conf.data.lang.toLowerCase(), {})
 
   return (
     <Page key={`download-${status}`} to="/downloads" title={title}>
@@ -194,12 +195,20 @@ function DownloadGuidePage() {
                     </div>
                     <div className="flex grow flex-col gap-1">
                       <h3 className="grow text-balance">{guide.name}</h3>
-                      <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs text-yellow-200">
-                        {guide.downloads !== null
-                          ? new Intl.NumberFormat(conf.data.lang.toLowerCase(), {}).format(guide.downloads)
-                          : 'N/A'}
+                      <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
+                        {guide.downloads !== null ? intl.format(guide.downloads) : 'N/A'}
                         <FileDownIcon className="size-3" />
                       </span>
+                      <div className="flex justify-end gap-1">
+                        <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
+                          {intl.format(guide.likes)}
+                          <ThumbsUpIcon className="size-3" />
+                        </span>
+                        <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
+                          {intl.format(guide.dislikes)}
+                          <ThumbsDownIcon className="size-3" />
+                        </span>
+                      </div>
                       <p className="inline-flex items-center gap-1 self-end">
                         <span>
                           <Trans>
