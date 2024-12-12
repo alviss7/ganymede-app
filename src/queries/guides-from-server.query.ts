@@ -14,9 +14,7 @@ export function guidesFromServerQuery({ status }: { status: Status }) {
         throw result.error
       }
 
-      const guides = result.value
-
-      return guides
+      return result.value
     },
     staleTime: 1000 * 60,
   })

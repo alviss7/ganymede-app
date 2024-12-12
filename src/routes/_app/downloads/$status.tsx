@@ -19,6 +19,7 @@ import { useScrollToTop } from '@/hooks/use_scroll_to_top'
 import { getGuideById } from '@/lib/guide'
 import { rankList } from '@/lib/rank'
 import { paginate } from '@/lib/search'
+import { confQuery } from '@/queries/conf.query.ts'
 import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
 import { guidesQuery } from '@/queries/guides.query'
 import { Page } from '@/routes/-page.tsx'
@@ -27,7 +28,7 @@ import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
-import { ChevronRightIcon, VerifiedIcon } from 'lucide-react'
+import { ChevronRightIcon, FileDownIcon, VerifiedIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
 
@@ -103,6 +104,7 @@ function DownloadGuidePage() {
   const debouncedTerm = useDebounce(searchTerm, 300)
   const guides = useSuspenseQuery(guidesFromServerQuery({ status }))
   const downloads = useSuspenseQuery(guidesQuery())
+  const conf = useSuspenseQuery(confQuery)
 
   const scrollableRef = useRef<HTMLDivElement>(null)
 
@@ -182,7 +184,7 @@ function DownloadGuidePage() {
 
                 return (
                   <Card key={guide.id} className="flex gap-2 p-2 xs:px-3 text-xxs xs:text-sm sm:text-base">
-                    <div className="flex min-w-9 flex-col items-center gap-0.5">
+                    <div className="flex w-9 flex-col items-center gap-0.5">
                       <FlagPerLang lang={guide.lang} />
                       <span className="whitespace-nowrap text-xxs">
                         <Trans>
@@ -192,6 +194,12 @@ function DownloadGuidePage() {
                     </div>
                     <div className="flex grow flex-col gap-1">
                       <h3 className="grow text-balance">{guide.name}</h3>
+                      <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs text-yellow-200">
+                        {guide.downloads !== null
+                          ? new Intl.NumberFormat(conf.data.lang.toLowerCase(), {}).format(guide.downloads)
+                          : 'N/A'}
+                        <FileDownIcon className="size-3" />
+                      </span>
                       <p className="inline-flex items-center gap-1 self-end">
                         <span>
                           <Trans>
@@ -201,7 +209,7 @@ function DownloadGuidePage() {
                         {guide.user.is_certified === 1 && <VerifiedIcon className="size-3 xs:size-4 text-orange-300" />}
                       </p>
                     </div>
-                    <div className="flex flex-col items-center gap-1">
+                    <div className="flex flex-col items-center justify-end gap-1">
                       <Button variant="secondary" size="icon" disabled={!isGuideDownloaded} asChild>
                         <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: 0 }} draggable={false}>
                           <ChevronRightIcon />

@@ -14,7 +14,7 @@ export const GuideZod = z.object({
   created_at: z.coerce.date(),
   updated_at: z.coerce.date().nullable(),
   deleted_at: z.coerce.date().nullable(),
-  downloads: z.number(),
+  downloads: z.number().nullable(),
   order: z.number(),
   user: z.object({
     id: z.number(),
