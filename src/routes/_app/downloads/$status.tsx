@@ -200,11 +200,11 @@ function DownloadGuidePage() {
                         <FileDownIcon className="size-3" />
                       </span>
                       <div className="flex justify-end gap-1">
-                        <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
+                        <span className="inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
                           {intl.format(guide.likes)}
                           <ThumbsUpIcon className="size-3" />
                         </span>
-                        <span className="mt-2 inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
+                        <span className="inline-flex flex-wrap justify-end gap-1 whitespace-nowrap text-xxs">
                           {intl.format(guide.dislikes)}
                           <ThumbsDownIcon className="size-3" />
                         </span>
