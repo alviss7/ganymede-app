@@ -61,6 +61,7 @@
     "@lingui/conf": "^4.14.0",
     "@lingui/macro": "^4.14.0",
     "@lingui/vite-plugin": "^4.14.0",
+    "@sentry/cli": "^2.39.1",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/router-plugin": "^1.57.8",
     "@tauri-apps/cli": "2.0.4",

@@ -2,6 +2,7 @@ use log::{error, info};
 use std::str::FromStr;
 use tauri::{App, Emitter, Manager};
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, ShortcutState};
+use tauri_plugin_sentry::sentry;
 use thiserror::Error as ThisError;
 
 use crate::conf::Conf;
@@ -25,6 +26,27 @@ pub fn handle_shortcuts(app: &App) -> Result<(), Error> {
             tauri_plugin_global_shortcut::Builder::new()
                 .with_handler(move |app, shortcut, event| {
                     let state = event.state();
+
+                    sentry::add_breadcrumb(sentry::Breadcrumb {
+                        category: Some("sentry.transaction".into()),
+                        data: {
+                            let mut map = sentry::protocol::Map::new();
+
+                            map.insert(
+                                "type".into(),
+                                match state {
+                                    ShortcutState::Pressed => "pressed",
+                                    ShortcutState::Released => "released",
+                                }
+                                .into(),
+                            );
+
+                            map.insert("shortcut".into(), shortcut.to_string().into());
+
+                            map
+                        },
+                        ..Default::default()
+                    });
 
                     match state {
                         ShortcutState::Pressed => {

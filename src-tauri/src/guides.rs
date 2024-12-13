@@ -7,6 +7,7 @@ use std::{fmt, fs, vec};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_http::reqwest;
 use tauri_plugin_opener::OpenerExt;
+use tauri_plugin_sentry::sentry;
 
 pub const DEFAULT_GUIDE_ID: u32 = 1074;
 
@@ -187,18 +188,29 @@ impl GuidesOrFolder {
     }
 }
 
-impl fmt::Display for Status {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Status {
+    fn to_str(&self) -> &'static str {
         use Status::*;
 
-        let status_str = match self {
+        match self {
             Draft => "draft",
             Public => "public",
             Private => "private",
             Certified => "certified",
             Gp => "gp",
-        };
-        write!(formatter, "{}", status_str)
+        }
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        self.to_string()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(formatter, "{}", self.to_str().to_string())
     }
 }
 
@@ -349,6 +361,19 @@ impl GuidesApi for GuidesApiImpl {
     async fn get_guides_from_server(self, status: Status) -> Result<Vec<Guide>, Error> {
         info!("[Guides] get_guides_from_server");
 
+        sentry::add_breadcrumb(sentry::Breadcrumb {
+            ty: "sentry.transaction".into(),
+            message: Some("Get guides from server".into()),
+            data: {
+                let mut map = sentry::protocol::Map::new();
+
+                map.insert("status".into(), status.to_string().into());
+
+                map
+            },
+            ..Default::default()
+        });
+
         let res = reqwest::get(format!("{}/guides?status={}", GANYMEDE_API_V2, status))
             .await
             .map_err(|err| Error::RequestGuides(err.to_string()))?;
@@ -368,6 +393,19 @@ impl GuidesApi for GuidesApiImpl {
         folder: String,
     ) -> Result<Guides, Error> {
         info!("[Guides] download_guide_from_server");
+        sentry::add_breadcrumb(sentry::Breadcrumb {
+            ty: "sentry.transaction".into(),
+            message: Some("Download guide from server".into()),
+            data: {
+                let mut map = sentry::protocol::Map::new();
+
+                map.insert("guide_id".into(), guide_id.into());
+                map.insert("folder".into(), folder.clone().into());
+
+                map
+            },
+            ..Default::default()
+        });
 
         Ok(download_guide_by_id(&app, guide_id, folder).await?)
     }

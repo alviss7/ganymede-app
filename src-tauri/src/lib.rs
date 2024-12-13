@@ -12,7 +12,8 @@ use tauri::AppHandle;
 use tauri_plugin_log::{Target, TargetKind};
 use tauri_plugin_opener::OpenerExt;
 #[cfg(not(dev))]
-use tauri_plugin_sentry::{minidump, sentry};
+use tauri_plugin_sentry::minidump;
+use tauri_plugin_sentry::sentry;
 use taurpc::Router;
 
 mod almanax;
@@ -74,6 +75,7 @@ pub fn run() {
         env!("SENTRY_DSN"),
         sentry::ClientOptions {
             release: sentry::release_name!(),
+            attach_stacktrace: true,
             ..Default::default()
         },
     ));
@@ -119,13 +121,27 @@ pub fn run() {
         .merge(UpdateApiImpl.into_handler())
         .merge(ConfApiImpl.into_handler());
 
+    sentry::add_breadcrumb(sentry::Breadcrumb {
+        category: Some("sentry.transaction".into()),
+        message: Some("app plugins initialized".into()),
+        ..Default::default()
+    });
+
     app.setup(|app| {
+        sentry::add_breadcrumb(sentry::Breadcrumb {
+            category: Some("sentry.transaction".into()),
+            message: Some("app setup".into()),
+            ..Default::default()
+        });
+
         if let Err(err) = crate::conf::ensure(app.handle()) {
             error!("[Lib] failed to ensure conf: {:?}", err);
+            sentry::capture_error(&err);
         }
 
         if let Err(err) = crate::guides::ensure(app.handle()) {
             error!("[Lib] failed to ensure guides: {:?}", err);
+            sentry::capture_error(&err);
         }
 
         let handle = app.handle().clone();
@@ -133,6 +149,7 @@ pub fn run() {
         match handle.is_first_start() {
             Err(err) => {
                 error!("[Lib] failed to ensure first start: {:?}", err);
+                sentry::capture_error(&err);
             }
             Ok(first_start) => {
                 if first_start {
@@ -144,6 +161,7 @@ pub fn run() {
                         match res {
                             Err(err) => {
                                 error!("[Lib] cannot download default guide {:?}", err);
+                                sentry::capture_error(&err);
                             }
                             Ok(_) => {
                                 info!("[Lib] default guide downloaded");
@@ -164,6 +182,7 @@ pub fn run() {
                 match &res {
                     Err(err) => {
                         error!("[Lib] {:?}", err);
+                        sentry::capture_error(&err);
                     }
                     _ => {
                         info!("[Lib] app download count incremented");
@@ -175,10 +194,9 @@ pub fn run() {
         #[cfg(desktop)]
         {
             // we do not want to crash the app if some shortcuts are not registered
-            if let Err(err) =
-                handle_shortcuts(app).map_err(|e| Box::<dyn std::error::Error>::from(e))
-            {
+            if let Err(err) = handle_shortcuts(app) {
                 error!("[Lib] failed to handle shortcuts: {:?}", err);
+                sentry::capture_error(&err);
             }
         }
 
