@@ -1,22 +1,19 @@
-use crate::almanax::get_almanax;
-use crate::api::is_app_version_old;
-use crate::conf::{get_conf, reset_conf, set_conf, toggle_guide_checkbox};
+use crate::almanax::{AlmanaxApi, AlmanaxApiImpl};
+use crate::api::{Api, ApiImpl};
+use crate::conf::{ConfApi, ConfApiImpl};
 use crate::first_start::FirstStartExt;
-use crate::guides::{
-    download_default_guide, download_guide_from_server, get_flat_guides, get_guide_from_server,
-    get_guides, get_guides_from_server, open_guides_folder,
-};
-use crate::id::new_id;
-use crate::image::fetch_image;
-use crate::security::get_white_list;
+use crate::guides::{download_default_guide, GuidesApi, GuidesApiImpl};
+use crate::image::{ImageApi, ImageApiImpl};
+use crate::security::{SecurityApi, SecurityApiImpl};
 use crate::shortcut::handle_shortcuts;
-use crate::update::start_update;
+use crate::update::{UpdateApi, UpdateApiImpl};
 use log::{error, info, LevelFilter};
-use tauri::Wry;
+use tauri::AppHandle;
 use tauri_plugin_log::{Target, TargetKind};
+use tauri_plugin_opener::OpenerExt;
 #[cfg(not(dev))]
 use tauri_plugin_sentry::{minidump, sentry};
-use tauri_plugin_shell::ShellExt;
+use taurpc::Router;
 
 mod almanax;
 mod api;
@@ -24,7 +21,6 @@ mod conf;
 mod event;
 mod first_start;
 mod guides;
-mod id;
 mod image;
 mod item;
 mod json;
@@ -33,14 +29,6 @@ mod security;
 mod shortcut;
 mod tauri_api_ext;
 mod update;
-
-#[tauri::command]
-async fn open_in_shell(
-    app: tauri::AppHandle<Wry>,
-    href: String,
-) -> Result<(), tauri_plugin_shell::Error> {
-    app.shell().open(href, None)
-}
 
 #[cfg(debug_assertions)]
 const LOG_TARGETS: [Target; 2] = [
@@ -51,8 +39,32 @@ const LOG_TARGETS: [Target; 2] = [
 #[cfg(not(debug_assertions))]
 const LOG_TARGETS: [Target; 2] = [
     Target::new(TargetKind::Stdout),
-    Target::new(TargetKind::LogDir),
+    Target::new(TargetKind::LogDir { file_name: None }),
 ];
+
+#[taurpc::procedures(path = "base", export_to = "../src/ipc/bindings.ts")]
+trait BaseApi {
+    #[taurpc(alias = "newId")]
+    async fn new_id() -> String;
+    #[taurpc(alias = "openUrl")]
+    async fn open_url(app_handle: AppHandle, url: String) -> Result<(), String>;
+}
+
+#[derive(Clone)]
+struct BaseApiImpl;
+
+#[taurpc::resolvers]
+impl BaseApi for BaseApiImpl {
+    async fn new_id(self) -> String {
+        uuid::Uuid::new_v4().to_string()
+    }
+
+    async fn open_url(self, app: AppHandle, url: String) -> Result<(), String> {
+        app.opener()
+            .open_url(url, None::<String>)
+            .map_err(|err| err.to_string())
+    }
+}
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -76,13 +88,13 @@ pub fn run() {
     };
 
     let app = tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
-        .plugin(tauri_plugin_shell::init())
         .plugin(
             tauri_plugin_log::Builder::new()
                 .clear_targets()
@@ -96,6 +108,16 @@ pub fn run() {
 
     #[cfg(not(dev))]
     let app = app.plugin(tauri_plugin_sentry::init_with_no_injection(&sentry_client));
+
+    let router = Router::new()
+        .merge(BaseApiImpl.into_handler())
+        .merge(AlmanaxApiImpl.into_handler())
+        .merge(GuidesApiImpl.into_handler())
+        .merge(ApiImpl.into_handler())
+        .merge(SecurityApiImpl.into_handler())
+        .merge(ImageApiImpl.into_handler())
+        .merge(UpdateApiImpl.into_handler())
+        .merge(ConfApiImpl.into_handler());
 
     app.setup(|app| {
         if let Err(err) = crate::conf::ensure(app.handle()) {
@@ -162,25 +184,7 @@ pub fn run() {
 
         Ok(())
     })
-    .invoke_handler(tauri::generate_handler![
-        get_conf,
-        set_conf,
-        new_id,
-        get_guides_from_server,
-        get_guides,
-        download_guide_from_server,
-        get_almanax,
-        open_guides_folder,
-        toggle_guide_checkbox,
-        open_in_shell,
-        fetch_image,
-        get_guide_from_server,
-        is_app_version_old,
-        start_update,
-        reset_conf,
-        get_white_list,
-        get_flat_guides
-    ])
+    .invoke_handler(router.into_handler())
     .run(tauri::generate_context!())
     .expect("[Lib] error while running tauri application");
 }

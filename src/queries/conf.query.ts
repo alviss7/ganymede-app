@@ -1,5 +1,5 @@
-import { getConf, GetConfError } from '@/ipc/conf.ts'
-import { Conf } from '@/types/conf'
+import { Conf } from '@/ipc/bindings.ts'
+import { GetConfError, getConf } from '@/ipc/conf.ts'
 import { queryOptions } from '@tanstack/react-query'
 
 export const confQuery = queryOptions<Conf, GetConfError>({

@@ -1,6 +1,6 @@
+import { Guide } from '@/ipc/bindings.ts'
 import { downloadGuideFromServer } from '@/ipc/guides.ts'
 import { guidesQuery } from '@/queries/guides.query.ts'
-import { Guide } from '@/types/guide.ts'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export function useDownloadGuideFromServer() {

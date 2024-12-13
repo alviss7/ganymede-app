@@ -1,5 +1,5 @@
-import { Conf, ConfZod } from '@/types/conf.ts'
-import { invoke } from '@tauri-apps/api/core'
+import { Conf } from '@/ipc/bindings.ts'
+import { taurpc } from '@/ipc/ipc.ts'
 import { fromPromise } from 'neverthrow'
 
 export class GetConfError extends Error {
@@ -20,16 +20,24 @@ export class ResetConfError extends Error {
   }
 }
 
+export class ToggleGuideCheckboxError extends Error {
+  static from(error: unknown) {
+    return new ToggleGuideCheckboxError('Failed to toggle checkbox guide', { cause: error })
+  }
+}
+
 export function getConf() {
-  return fromPromise(invoke('get_conf'), GetConfError.from).map((response) => {
-    return ConfZod.parseAsync(response)
-  })
+  return fromPromise(taurpc.conf.get(), GetConfError.from)
 }
 
 export async function setConf(conf: Conf) {
-  return fromPromise(invoke('set_conf', { conf }), SetConfError.from)
+  return fromPromise(taurpc.conf.set(conf), SetConfError.from)
 }
 
 export async function resetConf() {
-  return fromPromise(invoke('reset_conf'), ResetConfError.from)
+  return fromPromise(taurpc.conf.reset(), ResetConfError.from)
+}
+
+export function toggleGuideCheckbox(guideId: number, checkboxIndex: number, stepIndex: number) {
+  return fromPromise(taurpc.conf.toggleGuideCheckbox(guideId, stepIndex, checkboxIndex), ToggleGuideCheckboxError.from)
 }

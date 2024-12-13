@@ -1,4 +1,4 @@
-import { toggleGuideCheckbox } from '@/ipc/guides.ts'
+import { toggleGuideCheckbox } from '@/ipc/conf.ts'
 import { getProfile } from '@/lib/profile'
 import { getProgress, getStep, newProgress } from '@/lib/progress'
 import { confQuery } from '@/queries/conf.query'

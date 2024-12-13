@@ -1,5 +1,4 @@
-import { GuideWithStepsZod } from '@/types/download'
-import { invoke } from '@tauri-apps/api/core'
+import { taurpc } from '@/ipc/ipc.ts'
 import { fromPromise } from 'neverthrow'
 
 export class GetGuideFromServerError extends Error {
@@ -9,7 +8,5 @@ export class GetGuideFromServerError extends Error {
 }
 
 export function getGuideFromServer(guideId: number) {
-  return fromPromise(invoke('get_guide_from_server', { guideId }), GetGuideFromServerError.from).map((res) => {
-    return GuideWithStepsZod.parseAsync(res)
-  })
+  return fromPromise(taurpc.guides.getGuideFromServer(guideId), GetGuideFromServerError.from)
 }

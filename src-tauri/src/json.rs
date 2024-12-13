@@ -1,15 +1,28 @@
 use std::path::PathBuf;
 
-use serde::{Deserialize, Serializer};
+use serde::{Deserialize, Serialize, Serializer};
 
-pub type Error = serde_path_to_error::Error<serde_json::Error>;
+#[derive(Debug, Serialize, thiserror::Error)]
+pub enum Error {
+    #[error("failed to parse JSON: {0}")]
+    Json(String),
+    #[error("failed to serialize JSON: {0}")]
+    Serialize(String),
+}
 
 pub fn from_str<'de, T>(text: &'de str) -> Result<T, Error>
 where
     T: Deserialize<'de>,
 {
     let des = &mut serde_json::Deserializer::from_str(text);
-    serde_path_to_error::deserialize::<_, T>(des)
+    serde_path_to_error::deserialize::<_, T>(des).map_err(|err| Error::Json(err.to_string()))
+}
+
+pub fn serialize_pretty<T>(value: &T) -> Result<String, Error>
+where
+    T: Serialize,
+{
+    serde_json::to_string_pretty(value).map_err(|err| Error::Serialize(err.to_string()))
 }
 
 pub fn serialize_path<S>(path: &Option<PathBuf>, serializer: S) -> Result<S::Ok, S::Error>

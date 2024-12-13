@@ -15,7 +15,6 @@
     "core:window:allow-toggle-maximize",
     "core:window:allow-close",
     "core:window:allow-start-dragging",
-    "shell:allow-open",
     "window-state:default",
     {
       "identifier": "http:default",
@@ -32,6 +31,8 @@
     "core:webview:allow-internal-toggle-devtools",
     "os:default",
     "sentry:default",
-    "log:default"
+    "log:default",
+    "opener:allow-open-path",
+    "opener:allow-open-url"
   ]
 }

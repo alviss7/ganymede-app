@@ -1,6 +1,6 @@
+import { taurpc } from '@/ipc/ipc.ts'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { invoke } from '@tauri-apps/api/core'
 import { error } from '@tauri-apps/plugin-log'
 import { fromPromise } from 'neverthrow'
 import { ComponentProps } from 'react'
@@ -23,7 +23,7 @@ export function DownloadImage({
       if (!src) throw new Error('No image source provided')
 
       const data = await fromPromise(
-        invoke<number[]>('fetch_image', { url: src }),
+        taurpc.image.fetchImage(src),
         (err) => new FetchImageError('Failed to load image', { cause: err }),
       )
 

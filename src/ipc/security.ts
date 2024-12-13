@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core'
+import { taurpc } from '@/ipc/ipc.ts'
 import { fromPromise } from 'neverthrow'
 
 class CannotGetWhiteListError extends Error {
@@ -8,5 +8,5 @@ class CannotGetWhiteListError extends Error {
 }
 
 export function getWhiteList() {
-  return fromPromise(invoke<string[]>('get_white_list'), CannotGetWhiteListError.from)
+  return fromPromise(taurpc.security.getWhiteList(), CannotGetWhiteListError.from)
 }

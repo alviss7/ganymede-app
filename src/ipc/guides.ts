@@ -1,10 +1,23 @@
-import { GuideInFolder, GuidesZod } from '@/types/download.ts'
-import { invoke } from '@tauri-apps/api/core'
-import { fromPromise } from 'neverthrow'
+import { GuideWithStepsWithFolder, taurpc } from '@/ipc/ipc.ts'
+import { error } from '@tauri-apps/plugin-log'
+import { ResultAsync, fromPromise } from 'neverthrow'
 
 export class GetGuidesError extends Error {
   static from(error: unknown) {
+    console.log(error)
     return new GetGuidesError('Failed to get guides', { cause: error })
+  }
+}
+
+export class GetFlatGuidesError extends Error {
+  static from(err: unknown) {
+    error('Failed to get flat guides').then(() => {
+      return error(JSON.stringify(err, undefined, 2))
+    })
+
+    return new GetFlatGuidesError('Failed to get flat guides', {
+      cause: !(err instanceof Error) ? new Error(JSON.stringify(err, undefined, 2)) : err,
+    })
   }
 }
 
@@ -20,12 +33,6 @@ export class OpenGuidesFolderError extends Error {
   }
 }
 
-export class ToggleGuideCheckboxError extends Error {
-  static from(error: unknown) {
-    return new ToggleGuideCheckboxError('Failed to toggle checkbox guide', { cause: error })
-  }
-}
-
 export class OpenGuidesLinkError extends Error {
   static from(error: unknown) {
     return new OpenGuidesLinkError('Failed to open guide link', { cause: error })
@@ -33,32 +40,24 @@ export class OpenGuidesLinkError extends Error {
 }
 
 export function getGuides(folder?: string) {
-  return fromPromise(invoke('get_guides', { folder }), GetGuidesError.from).map((response) => {
-    return GuideInFolder.parseAsync(response)
-  })
+  return fromPromise(taurpc.guides.getGuides(folder ?? null), GetGuidesError.from)
 }
 
 export function getFlatGuides(folder: string) {
-  return fromPromise(invoke('get_flat_guides', { folder }), GetGuidesError.from).map((response) => {
-    return GuidesZod.parseAsync(response)
-  })
+  return fromPromise(taurpc.guides.getFlatGuides(folder), GetFlatGuidesError.from) as ResultAsync<
+    GuideWithStepsWithFolder[],
+    GetFlatGuidesError
+  >
 }
 
 export async function downloadGuideFromServer(guideId: number, folder: string) {
-  return fromPromise(invoke('download_guide_from_server', { guideId, folder }), DownloadGuideFromServerError.from)
+  return fromPromise(taurpc.guides.downloadGuideFromServer(guideId, folder), DownloadGuideFromServerError.from)
 }
 
 export async function openGuidesFolder() {
-  return fromPromise(invoke('open_guides_folder'), OpenGuidesFolderError.from)
-}
-
-export async function toggleGuideCheckbox(guideId: number, checkboxIndex: number, stepIndex: number) {
-  return fromPromise(
-    invoke<number | undefined>('toggle_guide_checkbox', { guideId, checkboxIndex, stepIndex }),
-    ToggleGuideCheckboxError.from,
-  )
+  return fromPromise(taurpc.guides.openGuidesFolder(), OpenGuidesFolderError.from)
 }
 
 export async function openGuideLink(href: string) {
-  return fromPromise(invoke<number | undefined>('open_in_shell', { href }), OpenGuidesLinkError.from)
+  return fromPromise(taurpc.base.openUrl(href), OpenGuidesLinkError.from)
 }

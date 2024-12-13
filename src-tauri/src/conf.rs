@@ -1,72 +1,79 @@
 use crate::tauri_api_ext::ConfPathExt;
-use log::info;
+use log::{debug, info};
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fs;
-use tauri::ipc::InvokeError;
 use tauri::{AppHandle, Manager, Window, Wry};
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, thiserror::Error)]
 pub enum Error {
-    Malformed(crate::json::Error),
-    CreateConfDir(std::io::Error),
-    ConfDir(tauri::Error),
-    SerializeConf(serde_json::Error),
-    UnhandledIo(std::io::Error),
-    SaveConf(std::io::Error),
+    #[error("failed to get conf, file is malformed")]
+    Malformed(#[from] crate::json::Error),
+    #[error("failed to create conf dir: {0}")]
+    CreateConfDir(String),
+    #[error("failed to get conf dir: {0}")]
+    ConfDir(String),
+    #[error("failed to serialize conf")]
+    SerializeConf(crate::json::Error),
+    #[error("unhandled io error: {0}")]
+    UnhandledIo(String),
+    #[error("failed to save conf: {0}")]
+    SaveConf(String),
+    #[error("failed to get profile in use")]
     GetProfileInUse,
+    #[error("failed to reset conf: {0}")]
     ResetConf(Box<Error>),
 }
 
-impl Into<InvokeError> for Error {
-    fn into(self) -> InvokeError {
-        use Error::*;
+// impl Into<InvokeError> for Error {
+//     fn into(self) -> InvokeError {
+//         use Error::*;
 
-        let message = match self {
-            Malformed(err) => format!("Malformed({})", err.to_string()),
-            CreateConfDir(err) => format!("CreateConfDir({})", err.to_string()),
-            ConfDir(err) => format!("ConfDir({})", err.to_string()),
-            SerializeConf(err) => format!("SerializeConf({})", err.to_string()),
-            UnhandledIo(err) => format!("UnhandledIo({})", err.to_string()),
-            SaveConf(err) => format!("SaveConf({})", err.to_string()),
-            GetProfileInUse => "GetProfileInUse".to_string(),
-            ResetConf(err) => return (*err).into(),
-        };
+//         let message = match self {
+//             Malformed(err) => format!("Malformed({})", err.to_string()),
+//             CreateConfDir(err) => format!("CreateConfDir({})", err.to_string()),
+//             ConfDir(err) => format!("ConfDir({})", err.to_string()),
+//             SerializeConf(err) => format!("SerializeConf({})", err.to_string()),
+//             UnhandledIo(err) => format!("UnhandledIo({})", err.to_string()),
+//             SaveConf(err) => format!("SaveConf({})", err.to_string()),
+//             GetProfileInUse => "GetProfileInUse".to_string(),
+//             ResetConf(err) => return (*err).into(),
+//         };
 
-        InvokeError::from(message)
-    }
-}
+//         InvokeError::from(message)
+//     }
+// }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, taurpc::specta::Type)]
 pub struct Profile {
     pub id: String,
     pub name: String,
     pub progresses: Vec<Progress>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Step {
-    pub checkboxes: Vec<usize>,
+#[derive(Serialize, Deserialize, Debug, Clone, taurpc::specta::Type)]
+pub struct ConfStep {
+    pub checkboxes: Vec<u32>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, taurpc::specta::Type)]
 #[serde(rename_all = "camelCase")]
 pub struct Progress {
     pub id: u32, // guide id
-    pub current_step: usize,
-    pub steps: HashMap<usize, Step>,
+    pub current_step: u32,
+    pub steps: HashMap<u32, ConfStep>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Lang {
+#[derive(Debug, Clone, Serialize, Deserialize, taurpc::specta::Type)]
+pub enum ConfLang {
     En,
     Fr,
     Es,
     Pt,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, taurpc::specta::Type)]
 pub enum FontSize {
     ExtraSmall,
     Small,
@@ -75,25 +82,26 @@ pub enum FontSize {
     ExtraLarge,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, taurpc::specta::Type)]
 pub struct AutoPilot {
     pub name: String,
     pub position: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, taurpc::specta::Type)]
 pub struct Note {
     pub name: String,
     pub text: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Debug)]
+#[taurpc::ipc_type]
 #[serde(rename_all = "camelCase")]
 pub struct Conf {
     pub auto_travel_copy: bool,
     pub show_done_guides: bool,
     #[serde(default)]
-    pub lang: Lang,
+    pub lang: ConfLang,
     #[serde(default)]
     pub font_size: FontSize,
     pub profiles: Vec<Profile>,
@@ -104,7 +112,7 @@ pub struct Conf {
 }
 
 impl Progress {
-    pub fn add_or_update_step(&mut self, step: Step, step_index: usize) {
+    pub fn add_or_update_step(&mut self, step: ConfStep, step_index: u32) {
         match self.steps.get(&step_index) {
             Some(s) => {
                 self.steps.insert(step_index, s.clone());
@@ -140,8 +148,8 @@ impl Profile {
     }
 }
 
-impl Step {
-    pub fn toggle_checkbox(&mut self, checkbox_index: usize) {
+impl ConfStep {
+    pub fn toggle_checkbox(&mut self, checkbox_index: u32) {
         match self.checkboxes.iter().position(|&i| i == checkbox_index) {
             Some(index) => {
                 self.checkboxes.remove(index);
@@ -164,7 +172,7 @@ impl Conf {
         match file {
             Err(err) => match err.kind() {
                 std::io::ErrorKind::NotFound => Ok(Conf::default()),
-                _ => Err(Error::UnhandledIo(err)),
+                _ => Err(Error::UnhandledIo(err.to_string())),
             },
             Ok(file) => Ok(crate::json::from_str::<Conf>(file.as_str()).map_err(Error::Malformed)?),
         }
@@ -176,9 +184,9 @@ impl Conf {
 
         self.normalize();
 
-        let json = serde_json::to_string_pretty(self).map_err(Error::SerializeConf)?;
+        let json = crate::json::serialize_pretty(self).map_err(Error::SerializeConf)?;
 
-        fs::write(conf_path, json).map_err(Error::SaveConf)
+        fs::write(conf_path, json).map_err(|err| Error::SaveConf(err.to_string()))
     }
 
     pub fn get_profile_in_use_mut(&mut self) -> Result<&mut Profile, Error> {
@@ -193,15 +201,15 @@ impl Conf {
     }
 }
 
-impl Default for Step {
+impl Default for ConfStep {
     fn default() -> Self {
-        Step { checkboxes: vec![] }
+        ConfStep { checkboxes: vec![] }
     }
 }
 
-impl Default for Lang {
+impl Default for ConfLang {
     fn default() -> Self {
-        Lang::Fr
+        ConfLang::Fr
     }
 }
 
@@ -219,7 +227,7 @@ impl Default for Conf {
         Conf {
             auto_travel_copy: true,
             show_done_guides: true,
-            lang: Lang::default(),
+            lang: ConfLang::default(),
             font_size: FontSize::default(),
             profiles: vec![default_profile],
             profile_in_use: default_profile_id,
@@ -243,10 +251,12 @@ impl Default for Profile {
 /// Ensure that the conf file exists, if not, create it with default values
 pub fn ensure(app: &AppHandle) -> Result<(), Error> {
     let resolver = app.path();
-    let conf_dir = resolver.app_config_dir().map_err(Error::ConfDir)?;
+    let conf_dir = resolver
+        .app_config_dir()
+        .map_err(|err| Error::ConfDir(err.to_string()))?;
 
     if !conf_dir.exists() {
-        fs::create_dir_all(conf_dir).map_err(Error::CreateConfDir)?;
+        fs::create_dir_all(conf_dir).map_err(|err| Error::CreateConfDir(err.to_string()))?;
     }
 
     let conf_path = resolver.app_conf_file();
@@ -264,63 +274,84 @@ pub fn ensure(app: &AppHandle) -> Result<(), Error> {
     Ok(())
 }
 
-#[tauri::command]
-pub fn get_conf(app: AppHandle) -> Result<Conf, Error> {
-    Conf::get(&app)
+#[taurpc::procedures(path = "conf", export_to = "../src/ipc/bindings.ts")]
+pub trait ConfApi {
+    async fn get(app_handle: AppHandle) -> Result<Conf, Error>;
+    async fn set(conf: Conf, app_handle: AppHandle) -> Result<(), Error>;
+    #[taurpc(alias = "toggleGuideCheckbox")]
+    async fn toggle_guide_checkbox(
+        app_handle: AppHandle,
+        guide_id: u32,
+        step_index: u32,
+        checkbox_index: u32,
+    ) -> Result<u32, Error>;
+    async fn reset(app_handle: AppHandle, window: Window) -> Result<(), Error>;
 }
 
-#[tauri::command]
-pub fn set_conf(conf: Conf, app: AppHandle) -> Result<(), Error> {
-    conf.clone().borrow_mut().save(&app)
-}
+#[derive(Clone)]
+pub struct ConfApiImpl;
 
-#[tauri::command]
-pub fn toggle_guide_checkbox(
-    app: AppHandle,
-    guide_id: u32,
-    step_index: usize,
-    checkbox_index: usize,
-) -> Result<usize, Error> {
-    let conf = &mut Conf::get(&app)?;
-    let profile = conf.get_profile_in_use_mut()?;
-    let progress = profile.get_progress_mut(guide_id);
+#[taurpc::resolvers]
+impl ConfApi for ConfApiImpl {
+    async fn get(self, app: AppHandle) -> Result<Conf, Error> {
+        Conf::get(&app)
+    }
 
-    let step = match progress.steps.get_mut(&step_index) {
-        Some(step) => {
-            step.toggle_checkbox(checkbox_index);
+    async fn set(self, conf: Conf, app: AppHandle) -> Result<(), Error> {
+        conf.clone().borrow_mut().save(&app)
+    }
 
-            step.clone()
-        }
-        None => {
-            let mut step = Step::default();
-            step.toggle_checkbox(checkbox_index);
+    async fn toggle_guide_checkbox(
+        self,
+        app: AppHandle,
+        guide_id: u32,
+        step_index: u32,
+        checkbox_index: u32,
+    ) -> Result<u32, Error> {
+        debug!(
+            "[Conf] toggle_guide_checkbox: guide_id: {}, step_index: {}, checkbox_index: {}",
+            guide_id, step_index, checkbox_index
+        );
+        let conf = &mut Conf::get(&app)?;
+        let profile = conf.get_profile_in_use_mut()?;
+        let progress = profile.get_progress_mut(guide_id);
 
-            step
-        }
-    };
+        let step = match progress.steps.get_mut(&step_index) {
+            Some(step) => {
+                step.toggle_checkbox(checkbox_index);
 
-    progress.add_or_update_step(step, step_index);
+                step.clone()
+            }
+            None => {
+                let mut step = ConfStep::default();
+                step.toggle_checkbox(checkbox_index);
 
-    conf.save(&app)?;
+                step
+            }
+        };
 
-    Ok(checkbox_index)
-}
+        progress.add_or_update_step(step, step_index);
 
-#[tauri::command]
-pub fn reset_conf(app: AppHandle, window: Window<Wry>) -> Result<(), Error> {
-    Conf::default()
-        .save(&app)
-        .map_err(|e| Error::ResetConf(Box::new(e)))?;
+        conf.save(&app)?;
 
-    let mut webview = window
-        .get_webview_window("main")
-        .expect("[Conf] main webview should exist");
+        Ok(checkbox_index)
+    }
 
-    let url = webview.url().unwrap();
+    async fn reset(self, app: AppHandle, window: Window<Wry>) -> Result<(), Error> {
+        Conf::default()
+            .save(&app)
+            .map_err(|e| Error::ResetConf(Box::new(e)))?;
 
-    webview
-        .navigate(url)
-        .expect("[Conf] failed to reload webview");
+        let mut webview = window
+            .get_webview_window("main")
+            .expect("[Conf] main webview should exist");
 
-    Ok(())
+        let url = webview.url().unwrap();
+
+        webview
+            .navigate(url)
+            .expect("[Conf] failed to reload webview");
+
+        Ok(())
+    }
 }

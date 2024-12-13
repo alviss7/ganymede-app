@@ -1,30 +1,32 @@
+use serde::Serialize;
 use tauri_plugin_http::reqwest;
 
+#[derive(Debug, Serialize, thiserror::Error)]
 pub enum Error {
-    RequestImage(reqwest::Error),
-    ConvertToBytes(reqwest::Error),
+    #[error("RequestImage({0})")]
+    RequestImage(String),
+    #[error("ConvertToBytes({0})")]
+    ConvertToBytes(String),
 }
 
-impl Into<tauri::ipc::InvokeError> for Error {
-    fn into(self) -> tauri::ipc::InvokeError {
-        match self {
-            Error::RequestImage(err) => {
-                tauri::ipc::InvokeError::from(format!("RequestImage({})", err.to_string()))
-            }
-            Error::ConvertToBytes(err) => {
-                tauri::ipc::InvokeError::from(format!("ConvertToBytes({})", err.to_string()))
-            }
-        }
+#[taurpc::procedures(path = "image", export_to = "../src/ipc/bindings.ts")]
+pub trait ImageApi {
+    #[taurpc(alias = "fetchImage")]
+    async fn fetch_image(url: String) -> Result<Vec<u8>, Error>;
+}
+
+#[derive(Clone)]
+pub struct ImageApiImpl;
+
+#[taurpc::resolvers]
+impl ImageApi for ImageApiImpl {
+    async fn fetch_image(self, url: String) -> Result<Vec<u8>, Error> {
+        reqwest::get(url)
+            .await
+            .map_err(|err| Error::RequestImage(err.to_string()))?
+            .bytes()
+            .await
+            .map(|bytes| bytes.to_vec())
+            .map_err(|err| Error::ConvertToBytes(err.to_string()))
     }
-}
-
-#[tauri::command]
-pub async fn fetch_image(url: String) -> Result<Vec<u8>, Error> {
-    reqwest::get(url)
-        .await
-        .map_err(Error::RequestImage)?
-        .bytes()
-        .await
-        .map(|bytes| bytes.to_vec())
-        .map_err(Error::ConvertToBytes)
 }

@@ -1,8 +1,8 @@
 import { getAlmanax } from '@/ipc/almanax.ts'
-import { Lang } from '@/types/conf'
+import { ConfLang } from '@/ipc/bindings.ts'
 import { queryOptions } from '@tanstack/react-query'
 
-export const almanaxQuery = (lang: Lang) => {
+export const almanaxQuery = (lang: ConfLang) => {
   return queryOptions({
     queryKey: ['almanax', lang],
     queryFn: async () => {

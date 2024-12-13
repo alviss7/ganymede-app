@@ -29,7 +29,18 @@ const VALID_LINKS: [&'static str; 28] = [
     "https://gamosaurus.com",
 ];
 
-#[tauri::command]
-pub fn get_white_list<'a>() -> Result<Vec<&'a str>, ()> {
-    Ok(VALID_LINKS.to_vec())
+#[taurpc::procedures(path = "security", export_to = "../src/ipc/bindings.ts")]
+pub trait SecurityApi {
+    #[taurpc(alias = "getWhiteList")]
+    async fn get_white_list() -> Result<Vec<String>, ()>;
+}
+
+#[derive(Clone)]
+pub struct SecurityApiImpl;
+
+#[taurpc::resolvers]
+impl SecurityApi for SecurityApiImpl {
+    async fn get_white_list(self) -> Result<Vec<String>, ()> {
+        Ok(VALID_LINKS.to_vec().iter().map(|s| s.to_string()).collect())
+    }
 }

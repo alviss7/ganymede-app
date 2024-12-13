@@ -3,26 +3,14 @@ use tauri_plugin_http::reqwest;
 
 use crate::api::DOFUSDB_API;
 
+#[derive(Debug, Serialize, thiserror::Error)]
 pub enum Error {
-    RequestQuest(reqwest::Error),
-    RequestQuestContent(reqwest::Error),
-    DofusDbQuestMalformed(crate::json::Error),
-}
-
-impl Into<tauri::ipc::InvokeError> for Error {
-    fn into(self) -> tauri::ipc::InvokeError {
-        match self {
-            Error::RequestQuest(err) => {
-                tauri::ipc::InvokeError::from(format!("RequestQuest({})", err.to_string()))
-            }
-            Error::RequestQuestContent(err) => {
-                tauri::ipc::InvokeError::from(format!("RequestQuestContent({})", err.to_string()))
-            }
-            Error::DofusDbQuestMalformed(err) => {
-                tauri::ipc::InvokeError::from(format!("DofusDbQuestMalformed({})", err.to_string()))
-            }
-        }
-    }
+    #[error("failed to request quest data: {0}")]
+    RequestQuest(String),
+    #[error("failed to request quest content: {0}")]
+    RequestQuestContent(String),
+    #[error("failed to parse quest data")]
+    DofusDbQuestMalformed(#[from] crate::json::Error),
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -116,9 +104,12 @@ pub async fn get_quest_data(id: u32) -> Result<QuestData, Error> {
         DOFUSDB_API, id
     ))
     .await
-    .map_err(Error::RequestQuest)?;
+    .map_err(|err| Error::RequestQuest(err.to_string()))?;
 
-    let text = res.text().await.map_err(Error::RequestQuestContent)?;
+    let text = res
+        .text()
+        .await
+        .map_err(|err| Error::RequestQuestContent(err.to_string()))?;
 
     crate::json::from_str::<QuestData>(text.as_str()).map_err(Error::DofusDbQuestMalformed)
 }

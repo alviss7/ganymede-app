@@ -7,12 +7,12 @@ import { Label } from '@/components/ui/label.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch.tsx'
+import { ConfLang, FontSize } from '@/ipc/bindings.ts'
 import { newId } from '@/ipc/id.ts'
 import { useSetConf } from '@/mutations/set-conf.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { Page } from '@/routes/-page.tsx'
 import { Profiles } from '@/routes/_app/-settings/profiles.tsx'
-import { FontSize, Lang } from '@/types/conf.ts'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -162,7 +162,7 @@ function Settings() {
               onValueChange={async (value) => {
                 setConf.mutate({
                   ...conf.data,
-                  lang: value as Lang,
+                  lang: value as ConfLang,
                 })
               }}
             />
@@ -211,7 +211,7 @@ function Settings() {
                 }
               }}
             >
-              <Input id="create-profile" name="newProfile" className="" />
+              <Input id="create-profile" name="newProfile" />
               <Button type="submit">
                 <Trans>Créer</Trans>
               </Button>

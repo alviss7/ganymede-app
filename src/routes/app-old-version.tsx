@@ -2,7 +2,9 @@ import { PageScrollableContent } from '@/components/page-scrollable-content.tsx'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { useWebviewEvent } from '@/hooks/use_webview_event'
+import { ConfLang } from '@/ipc/bindings.ts'
 import { clamp } from '@/lib/clamp'
+import { getLang } from '@/lib/conf.ts'
 import { cn } from '@/lib/utils'
 import { useStartUpdate } from '@/mutations/start-update.mutation'
 import { confQuery } from '@/queries/conf.query.ts'
@@ -25,11 +27,11 @@ export const Route = createFileRoute('/app-old-version')({
 
 type UpdateState = 'idle' | 'downloading' | 'finished'
 
-const discordChannels: Record<string, string> = {
-  fr: 'https://discord.com/channels/1243967153590501437/1269278260269682850',
-  en: 'https://discord.com/channels/1243967153590501437/1303090961789751336',
-  pt: 'https://discord.com/channels/1243967153590501437/1303090961789751336', // currently using the english channel
-  es: 'https://discord.com/channels/1243967153590501437/1303090961789751336', // currently using the english channel
+const discordChannels: Record<ConfLang, string> = {
+  Fr: 'https://discord.com/channels/1243967153590501437/1269278260269682850',
+  En: 'https://discord.com/channels/1243967153590501437/1303090961789751336',
+  Pt: 'https://discord.com/channels/1243967153590501437/1303090961789751336', // currently using the english channel
+  Es: 'https://discord.com/channels/1243967153590501437/1303090961789751336', // currently using the english channel
 }
 
 function AppOldVersionPage() {
@@ -75,7 +77,7 @@ function AppOldVersionPage() {
 
       {updateState === 'idle' && (
         <a
-          href={discordChannels[conf.data?.lang.toLowerCase() ?? ('fr' as const)]}
+          href={discordChannels[getLang(conf.data.lang)]}
           draggable={false}
           target="_blank"
           rel="noreferrer noopener"

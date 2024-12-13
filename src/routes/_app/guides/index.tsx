@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button.tsx'
 import { Card } from '@/components/ui/card.tsx'
 import { ClearInput } from '@/components/ui/clear-input'
 import { useProfile } from '@/hooks/use_profile'
+import { GuidesOrFolder } from '@/ipc/bindings.ts'
 import { clamp } from '@/lib/clamp.ts'
 import { rankList } from '@/lib/rank'
 import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation'
 import { confQuery } from '@/queries/conf.query.ts'
 import { guidesInFolderQuery, guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
-import { GuideWithStepsWithType } from '@/types/download.ts'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
@@ -81,7 +81,7 @@ function GuidesPage() {
       return {
         ...guide,
         currentStep,
-      } as GuideWithStepsWithType & { currentStep: number | null }
+      } as Extract<GuidesOrFolder, { type: 'guide' }> & { currentStep: number | null }
     })
     .filter((guide) => guide !== null)
   const notDoneGuides = conf.data.showDoneGuides
@@ -98,7 +98,7 @@ function GuidesPage() {
           list: allGuides.data.map((g) => {
             const currentStep = profile.progresses.find((progress) => progress.id === g.id)?.currentStep ?? null
 
-            return { ...g, currentStep, type: 'guide' } as Omit<GuideWithStepsWithType, 'type'> & {
+            return { ...g, currentStep, type: 'guide' } as Omit<Extract<GuidesOrFolder, { type: 'guide' }>, 'type'> & {
               currentStep: number | null
               type: 'guide'
             }

@@ -1,7 +1,6 @@
-import { GuideZod } from '@/types/guide.ts'
-import { invoke } from '@tauri-apps/api/core'
+import { Status } from '@/ipc/bindings.ts'
+import { taurpc } from '@/ipc/ipc.ts'
 import { fromPromise } from 'neverthrow'
-import { z } from 'zod'
 
 export class GetGuidesFromServerError extends Error {
   static from(error: unknown) {
@@ -9,8 +8,6 @@ export class GetGuidesFromServerError extends Error {
   }
 }
 
-export function getGuidesFromServer(status: string) {
-  return fromPromise(invoke('get_guides_from_server', { status }), GetGuidesFromServerError.from).map((res) => {
-    return z.array(GuideZod).parseAsync(res)
-  })
+export function getGuidesFromServer(status: Status) {
+  return fromPromise(taurpc.guides.getGuidesFromServer(status), GetGuidesFromServerError.from)
 }

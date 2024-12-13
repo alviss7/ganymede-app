@@ -1,5 +1,4 @@
-import { AlmanaxZod } from '@/types/almanax.ts'
-import { invoke } from '@tauri-apps/api/core'
+import { taurpc } from '@/ipc/ipc.ts'
 import { fromPromise } from 'neverthrow'
 
 export class GetAlmanaxError extends Error {
@@ -9,7 +8,5 @@ export class GetAlmanaxError extends Error {
 }
 
 export function getAlmanax() {
-  return fromPromise(invoke('get_almanax'), GetAlmanaxError.from).map((response) => {
-    return AlmanaxZod.parseAsync(response)
-  })
+  return fromPromise(taurpc.almanax.get(), GetAlmanaxError.from)
 }

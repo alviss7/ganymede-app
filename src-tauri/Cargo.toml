@@ -12,31 +12,35 @@ name = "ganymede_app_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.0.2", features = [] }
+tauri-build = { version = "2.0.3", features = [] }
 
 [dependencies]
 tauri = { version = "2.1.1", features = ["macos-private-api"] }
-tauri-plugin-shell = "2.0.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 uuid = { version = "1.11.0", features = ["v6", "fast-rng"] }
-tauri-plugin-http = "2.0.3"
+tauri-plugin-http = "2.2.0"
 serde_path_to_error = "0.1"
-tauri-plugin-clipboard-manager = "2.0.2"
-tauri-plugin-global-shortcut = "2.0.1"
+tauri-plugin-clipboard-manager = "2.2.0"
+tauri-plugin-global-shortcut = "2.2.0"
 glob = "0.3.1"
-chrono = "0.4.38"
-semver = "1.0.23"
-tauri-plugin-os = "2"
+chrono = "0.4.39"
+semver = "1.0.24"
+tauri-plugin-os = "2.2.0"
 tauri-plugin-sentry = "0.2"
-thiserror = "2.0.3"
-tauri-plugin-log = "2"
+thiserror = "2.0.6"
+tauri-plugin-log = "2.2.0"
 log = "^0.4"
+taurpc = "0.3.2"
+specta = { version = "=2.0.0-rc.20", features = ["derive"] }
+specta-util = { version = "0.0.7", features = ["export"] }
+tokio = { version = "1.42.0", features = ["full"] }
+tauri-plugin-opener = "2.2.1"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
-tauri-plugin-window-state = "2.0.2"
+tauri-plugin-window-state = "2.2.0"
 machine-uid = "0.5.3"
-tauri-plugin-updater = "2"
+tauri-plugin-updater = "2.3.0"
 
 [profile.release]
 debug = true

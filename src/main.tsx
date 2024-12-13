@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client'
 import { ErrorComponent } from './components/error-component.tsx'
 import { dynamicActiveLocale } from './i18n.ts'
 import './main.css'
+import { getLang } from '@/lib/conf.ts'
 import { sentry, setupSentry } from '@/lib/sentry.ts'
 import { whiteListQuery } from '@/queries/white_list.query.ts'
 import { attachConsole, error } from '@tauri-apps/plugin-log'
@@ -63,7 +64,7 @@ queryClient
   .then(async (conf) => {
     window.document.documentElement.style.setProperty('--opacity', `${conf.opacity.toFixed(2)}`)
 
-    await dynamicActiveLocale(conf.lang.toLowerCase())
+    await dynamicActiveLocale(getLang(conf.lang).toLowerCase())
   })
   .catch((err) => {
     error(err)

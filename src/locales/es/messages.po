@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/routes/app-old-version.tsx:84
+#: src/routes/app-old-version.tsx:86
 msgid "<0>Vous trouverez les notes de version sur notre Discord <1>#changelog</1></0>"
 msgstr "<0>Encontrarás las notas de versión en nuestro Discord <1>#changelog</1></0>"
 
@@ -29,7 +29,7 @@ msgstr "Mostrar las guías terminadas"
 msgid "Ajouter"
 msgstr "Añadir"
 
-#: src/routes/_app/downloads/$status.tsx:140
+#: src/routes/_app/downloads/$status.tsx:141
 msgid "Attention"
 msgstr "Atención"
 
@@ -37,11 +37,11 @@ msgstr "Atención"
 msgid "Attention !"
 msgstr "¡Atención!"
 
-#: src/routes/_app/downloads/$status.tsx:160
+#: src/routes/_app/downloads/$status.tsx:161
 msgid "Aucun guides trouvé"
 msgstr "No se encontraron guías"
 
-#: src/routes/_app/downloads/$status.tsx:176
+#: src/routes/_app/downloads/$status.tsx:177
 msgid "Aucun guides trouvé avec {term}"
 msgstr "No se encontraron guías con {term}"
 
@@ -80,40 +80,40 @@ msgstr "¡Esta herramienta tiene como objetivo asistirte durante toda tu aventur
 msgid "Chasse au trésor"
 msgstr "Búsqueda del tesoro"
 
-#: src/components/guide-frame.tsx:250
+#: src/components/guide-frame.tsx:255
 msgid "Cliquez pour copier le nom de l'objet. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del objeto. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:251
+#: src/components/guide-frame.tsx:256
 msgid "Cliquez pour copier le nom de l'objet. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del objeto. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:258
+#: src/components/guide-frame.tsx:263
 msgid "Cliquez pour copier le nom de la quête. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre de la misión. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:259
+#: src/components/guide-frame.tsx:264
 msgid "Cliquez pour copier le nom de la quête. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre de la misión. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:246
+#: src/components/guide-frame.tsx:251
 msgid "Cliquez pour copier le nom du donjon. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del calabozo. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:247
+#: src/components/guide-frame.tsx:252
 msgid "Cliquez pour copier le nom du donjon. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del calabozo. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:254
+#: src/components/guide-frame.tsx:259
 msgid "Cliquez pour copier le nom du monstre. Cmd+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del monstruo. Cmd+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:255
+#: src/components/guide-frame.tsx:260
 msgid "Cliquez pour copier le nom du monstre. Ctrl+clic pour ouvrir sur dofusdb"
 msgstr "Haz clic para copiar el nombre del monstruo. Ctrl+clic para abrir en dofusdb"
 
-#: src/components/guide-frame.tsx:293
-#: src/components/guide-frame.tsx:327
+#: src/components/guide-frame.tsx:298
+#: src/components/guide-frame.tsx:332
 msgid "Cliquez pour ouvrir dans le navigateur"
 msgstr "Haz clic para abrir en el navegador"
 
@@ -159,7 +159,7 @@ msgstr "Crear una nueva nota"
 msgid "Créez vos guides via le site officiel et téléchargez ceux des autres !"
 msgstr "¡Crea tus guías en el sitio oficial y descarga las de otros!"
 
-#: src/routes/_app/downloads/$status.tsx:197
+#: src/routes/_app/downloads/$status.tsx:212
 msgid "de <0>{0}</0>"
 msgstr "de <0>{0}</0>"
 
@@ -192,42 +192,42 @@ msgid "Grande"
 msgstr "Grande"
 
 #: src/components/title-bar.tsx:49
-#: src/routes/_app/downloads/$status.tsx:94
+#: src/routes/_app/downloads/$status.tsx:93
 #: src/routes/_app/guides/index.tsx:38
 #: src/routes/_app/guides/index.tsx:135
 msgid "Guides"
 msgstr "Guías"
 
-#: src/routes/_app/downloads/$status.tsx:92
+#: src/routes/_app/downloads/$status.tsx:91
 #: src/routes/_app/downloads/index.tsx:51
 msgid "Guides certifiés"
 msgstr "Guías certificadas"
 
-#: src/routes/_app/downloads/$status.tsx:88
+#: src/routes/_app/downloads/$status.tsx:87
 #: src/routes/_app/downloads/index.tsx:57
 msgid "Guides draft"
 msgstr "Borradores de guías"
 
-#: src/routes/_app/downloads/$status.tsx:90
+#: src/routes/_app/downloads/$status.tsx:89
 #: src/routes/_app/downloads/index.tsx:48
 msgid "Guides principaux"
 msgstr "Guías principales"
 
-#: src/routes/_app/downloads/$status.tsx:86
+#: src/routes/_app/downloads/$status.tsx:85
 msgid "Guides privés"
 msgstr "Guías privadas"
 
-#: src/routes/_app/downloads/$status.tsx:84
+#: src/routes/_app/downloads/$status.tsx:83
 #: src/routes/_app/downloads/index.tsx:54
 msgid "Guides publics"
 msgstr "Guías públicas"
 
-#: src/routes/_app/downloads/$status.tsx:188
+#: src/routes/_app/downloads/$status.tsx:189
 #: src/routes/_app/guides/index.tsx:201
 msgid "id <0>{0}</0>"
 msgstr "id <0>{0}</0>"
 
-#: src/routes/app-old-version.tsx:115
+#: src/routes/app-old-version.tsx:117
 msgid "Il semblerait que la mise à jour ait eu un problème."
 msgstr "Parece que la actualización ha tenido un problema."
 
@@ -236,7 +236,7 @@ msgstr "Parece que la actualización ha tenido un problema."
 msgid "Informations supplémentaires : {0}"
 msgstr "Información adicional: {0}"
 
-#: src/routes/_app/downloads/$status.tsx:151
+#: src/routes/_app/downloads/$status.tsx:152
 msgid "J'ai compris"
 msgstr "Entendido"
 
@@ -248,11 +248,11 @@ msgstr "Entendido"
 msgid "Langue"
 msgstr "Idioma"
 
-#: src/routes/_app/downloads/$status.tsx:143
+#: src/routes/_app/downloads/$status.tsx:144
 msgid "Les guides de cette section n'ont pas été vérifiés manuellement par l'équipe Ganymède. <0/> Bien que les liens vers les sites soient sécurisés, veuillez vérifier attentivement les guides <1>sur notre site</1> avant de les télécharger."
 msgstr "Las guías de esta sección no han sido verificadas manualmente por el equipo de Ganymede. <0/> Aunque los enlaces a los sitios son seguros, por favor, verifica cuidadosamente las guías <1>en nuestro sitio</1> antes de descargarlas."
 
-#: src/components/guide-frame.tsx:54
+#: src/components/guide-frame.tsx:59
 msgid "lien masqué"
 msgstr "enlace oculto"
 
@@ -260,11 +260,11 @@ msgstr "enlace oculto"
 msgid "Mettre à jour le guide"
 msgstr "Actualizar la guía"
 
-#: src/routes/app-old-version.tsx:97
+#: src/routes/app-old-version.tsx:99
 msgid "Mise à jour en cours."
 msgstr "Actualización en curso."
 
-#: src/routes/app-old-version.tsx:103
+#: src/routes/app-old-version.tsx:105
 msgid "Mise à jour terminée. L'application va redémarrer."
 msgstr "Actualización completada. La aplicación se reiniciará."
 
@@ -329,7 +329,7 @@ msgstr "Perfiles"
 msgid "Rafraichir le dossier des guides téléchargés"
 msgstr "Actualizar la carpeta de guías descargadas"
 
-#: src/routes/_app/downloads/$status.tsx:171
+#: src/routes/_app/downloads/$status.tsx:172
 #: src/routes/_app/guides/index.tsx:171
 msgid "Rechercher un guide"
 msgstr "Buscar una guía"
@@ -367,7 +367,7 @@ msgstr "Tamaño del texto de las guías"
 msgid "Téléchargements"
 msgstr "Descargas"
 
-#: src/routes/app-old-version.tsx:114
+#: src/routes/app-old-version.tsx:116
 msgid "Télécharger la version {toVersion}"
 msgstr "Descargar la versión {toVersion}"
 
@@ -399,7 +399,7 @@ msgstr "Ha ocurrido un error al recuperar la configuración."
 msgid "Votre progression dans les guides sera réinitialisée. Les guides téléchargés seront toujours présents."
 msgstr "Tu progreso en las guías será restablecido. Las guías descargadas seguirán disponibles."
 
-#: src/routes/app-old-version.tsx:63
+#: src/routes/app-old-version.tsx:65
 msgid "Vous ne disposez pas de la dernière version de <0>Ganymède</0>."
 msgstr "No tienes la última versión de <0>Ganymède</0>."
 
@@ -407,6 +407,6 @@ msgstr "No tienes la última versión de <0>Ganymède</0>."
 msgid "Vous pouvez créer, utiliser et partager des guides vous permettant d'optimiser votre aventure."
 msgstr "Puedes crear, usar y compartir guías que te permitirán optimizar tu aventura."
 
-#: src/routes/app-old-version.tsx:70
+#: src/routes/app-old-version.tsx:72
 msgid "Vous utilisez actuellement la version <0>{fromVersion}</0>."
 msgstr "Actualmente estás usando la versión <0>{fromVersion}</0>."

@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core'
+import { taurpc } from '@/ipc/ipc.ts'
 import { fromPromise } from 'neverthrow'
 
 class GetIsAppOldVersionError extends Error {
@@ -8,8 +8,5 @@ class GetIsAppOldVersionError extends Error {
 }
 
 export function isAppOldVersion() {
-  return fromPromise(
-    invoke<{ from: string; to: string; isOld: boolean }>('is_app_version_old'),
-    GetIsAppOldVersionError.from,
-  )
+  return fromPromise(taurpc.isAppVersionOld(), GetIsAppOldVersionError.from)
 }

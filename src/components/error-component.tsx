@@ -1,22 +1,22 @@
+import { ConfLang } from '@/ipc/bindings.ts'
+import { GetConfError } from '@/ipc/conf'
+import { useResetConf } from '@/mutations/reset-conf.mutation'
 import { confQuery } from '@/queries/conf.query'
-import { Lang } from '@/types/conf'
 import { Trans } from '@lingui/macro'
 import { useQuery } from '@tanstack/react-query'
 import { ErrorComponentProps, useLocation } from '@tanstack/react-router'
 import { TriangleAlertIcon } from 'lucide-react'
 import { useState } from 'react'
-import { GetConfError } from '@/ipc/conf'
 import { PageScrollableContent } from './page-scrollable-content'
 import { SelectLangLabel, SelectLangSelect } from './select-lang'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { Button } from './ui/button'
-import { useResetConf } from '@/mutations/reset-conf.mutation'
 
 export function ErrorComponent({ error, reset, info }: ErrorComponentProps) {
   const location = useLocation()
   const isMacOs = navigator.userAgent.toLowerCase().includes('mac os x')
   const conf = useQuery(confQuery)
-  const [lang, setLang] = useState<Lang>('Fr')
+  const [lang, setLang] = useState<ConfLang>('Fr')
   const resetConf = useResetConf()
 
   const onClickResetConf = () => {
@@ -32,7 +32,7 @@ export function ErrorComponent({ error, reset, info }: ErrorComponentProps) {
             id="select-lang"
             value={lang}
             onValueChange={(value) => {
-              setLang(value as Lang)
+              setLang(value as ConfLang)
             }}
           />
         </section>

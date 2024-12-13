@@ -1,5 +1,6 @@
 import kamasIcon from '@/assets/kamas.webp'
 import xpIcon from '@/assets/xp.webp'
+import { getLang } from '@/lib/conf.ts'
 import { almanaxQuery } from '@/queries/almanax.query'
 import { confQuery } from '@/queries/conf.query'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
@@ -8,7 +9,7 @@ import { DownloadImage } from './download-image'
 
 export function AlmanaxFrame() {
   const conf = useSuspenseQuery(confQuery)
-  const almanax = useQuery(almanaxQuery(conf.data.lang))
+  const almanax = useQuery(almanaxQuery(getLang(conf.data.lang)))
 
   return (
     <div className="scroller relative z-10 mx-1 flex h-[9.5rem] items-center justify-center overflow-y-auto rounded-md border-2 border-blue-100/80 bg-secondary text-secondary-foreground">

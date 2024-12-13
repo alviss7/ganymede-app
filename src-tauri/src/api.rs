@@ -1,12 +1,9 @@
 use log::debug;
 use serde::{Deserialize, Serialize};
-use tauri::{AppHandle, Runtime};
-use tauri_plugin_http::reqwest;
+use tauri::AppHandle;
 
 #[cfg(not(dev))]
 use log::info;
-#[cfg(not(dev))]
-use serde::Serialize;
 
 pub const DOFUSDB_API: &str = "https://api.dofusdb.fr";
 #[cfg(not(dev))]
@@ -16,12 +13,16 @@ pub const GANYMEDE_API_V2: &str = "https://ganymede-dofus.com/api/v2";
 const GITHUB_API: &str = "https://api.github.com/repos/GanymedeTeam/ganymede-app";
 
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, Serialize, thiserror::Error)]
 pub enum Error {
+    #[error("failed to get os")]
     OsNotFound,
-    BuildClientBuilder(reqwest::Error),
-    RequestDownloaded(reqwest::Error),
-    DownloadedCount(reqwest::StatusCode, String),
+    #[error("failed to build client builder: {0}")]
+    BuildClientBuilder(String),
+    #[error("failed to request downloaded: {0}")]
+    RequestDownloaded(String),
+    #[error("failed to increment downloaded count: {0} - {1}")]
+    DownloadedCount(String, String),
 }
 
 #[cfg(not(dev))]
@@ -67,19 +68,19 @@ pub async fn increment_app_download_count(
     let res = tauri_plugin_http::reqwest::ClientBuilder::new()
         .user_agent("GANYMEDE_TAURI_APP")
         .build()
-        .map_err(Error::BuildClientBuilder)?
+        .map_err(|err| Error::BuildClientBuilder(err.to_string()))?
         .post(format!("{}/downloaded", GANYMEDE_API))
         .header("Content-Type", "application/json")
         .body(body)
         .send()
         .await
-        .map_err(Error::RequestDownloaded)?;
+        .map_err(|err| Error::RequestDownloaded(err.to_string()))?;
 
     if res.status().is_success() {
         Ok(res)
     } else {
         Err(Error::DownloadedCount(
-            res.status(),
+            res.status().to_string(),
             res.text().await.expect("[Api] failed to get response text"),
         ))
     }
@@ -90,29 +91,17 @@ struct AppRelease {
     tag_name: String,
 }
 
+#[derive(Debug, Serialize, thiserror::Error)]
 pub enum AppVersionError {
-    GitHub(reqwest::Error),
-    JsonMalformed(reqwest::Error),
-    SemverParse(semver::Error),
+    #[error("failed to get latest release from GitHub: {0}")]
+    GitHub(String),
+    #[error("failed to parse GitHub release json: {0}")]
+    JsonMalformed(String),
+    #[error("failed to parse semver: {0}")]
+    SemverParse(String),
 }
 
-impl Into<tauri::ipc::InvokeError> for AppVersionError {
-    fn into(self) -> tauri::ipc::InvokeError {
-        match self {
-            AppVersionError::GitHub(err) => {
-                tauri::ipc::InvokeError::from(format!("GitHub({})", err.to_string()))
-            }
-            AppVersionError::JsonMalformed(err) => {
-                tauri::ipc::InvokeError::from(format!("JsonMalformed({})", err.to_string()))
-            }
-            AppVersionError::SemverParse(err) => {
-                tauri::ipc::InvokeError::from(format!("SemverParse({})", err.to_string()))
-            }
-        }
-    }
-}
-
-#[derive(Serialize)]
+#[taurpc::ipc_type]
 pub struct IsOld {
     from: String,
     to: String,
@@ -120,37 +109,48 @@ pub struct IsOld {
     is_old: bool,
 }
 
-#[tauri::command]
-pub async fn is_app_version_old<R: Runtime>(app: AppHandle<R>) -> Result<IsOld, AppVersionError> {
-    let version = app.package_info().version.to_string();
+#[taurpc::procedures(export_to = "../src/ipc/bindings.ts")]
+pub trait Api {
+    #[taurpc(alias = "isAppVersionOld")]
+    async fn is_app_version_old(app_handle: AppHandle) -> Result<IsOld, AppVersionError>;
+}
 
-    let client = tauri_plugin_http::reqwest::ClientBuilder::new()
-        .user_agent("GANYMEDE_TAURI_APP")
-        .build()
-        .unwrap();
+#[derive(Clone)]
+pub struct ApiImpl;
 
-    let res = client
-        .get(format!("{}/releases/latest", GITHUB_API))
-        .send()
-        .await
-        .map_err(AppVersionError::GitHub)?
-        .json::<AppRelease>()
-        .await
-        .map_err(AppVersionError::JsonMalformed)?;
+#[taurpc::resolvers]
+impl Api for ApiImpl {
+    async fn is_app_version_old(self, app: AppHandle) -> Result<IsOld, AppVersionError> {
+        let version = app.package_info().version.to_string();
 
-    let release_version = semver::VersionReq::parse(format!("<{}", res.tag_name).as_str())
-        .map_err(AppVersionError::SemverParse)?;
+        let client = tauri_plugin_http::reqwest::ClientBuilder::new()
+            .user_agent("GANYMEDE_TAURI_APP")
+            .build()
+            .unwrap();
 
-    let version = semver::Version::parse(&version).unwrap();
+        let res = client
+            .get(format!("{}/releases/latest", GITHUB_API))
+            .send()
+            .await
+            .map_err(|err| AppVersionError::GitHub(err.to_string()))?
+            .json::<AppRelease>()
+            .await
+            .map_err(|err| AppVersionError::JsonMalformed(err.to_string()))?;
 
-    debug!(
-        "[Api] version from package: {:?} - release_version from GitHub: {:?}",
-        version, release_version
-    );
+        let release_version = semver::VersionReq::parse(format!("<{}", res.tag_name).as_str())
+            .map_err(|err| AppVersionError::SemverParse(err.to_string()))?;
 
-    Ok(IsOld {
-        from: version.to_string(),
-        to: res.tag_name,
-        is_old: release_version.matches(&version),
-    })
+        let version = semver::Version::parse(&version).unwrap();
+
+        debug!(
+            "[Api] version from package: {:?} - release_version from GitHub: {:?}",
+            version, release_version
+        );
+
+        Ok(IsOld {
+            from: version.to_string(),
+            to: res.tag_name,
+            is_old: release_version.matches(&version),
+        })
+    }
 }

@@ -1,5 +1,5 @@
-import { invoke } from '@tauri-apps/api/core'
-import { fromPromise, ResultAsync } from 'neverthrow'
+import { taurpc } from '@/ipc/ipc.ts'
+import { fromPromise } from 'neverthrow'
 
 class StartUpdateError extends Error {
   static from(err: unknown) {
@@ -7,6 +7,6 @@ class StartUpdateError extends Error {
   }
 }
 
-export function startUpdate(): ResultAsync<void, StartUpdateError> {
-  return fromPromise(invoke('start_update'), StartUpdateError.from)
+export function startUpdate() {
+  return fromPromise(taurpc.update.startUpdate(), StartUpdateError.from)
 }

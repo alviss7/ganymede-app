@@ -16,6 +16,7 @@ import { Card } from '@/components/ui/card.tsx'
 import { ClearInput } from '@/components/ui/clear-input'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination.tsx'
 import { useScrollToTop } from '@/hooks/use_scroll_to_top'
+import { getLang } from '@/lib/conf.ts'
 import { getGuideById } from '@/lib/guide'
 import { rankList } from '@/lib/rank'
 import { paginate } from '@/lib/search'
@@ -23,7 +24,6 @@ import { confQuery } from '@/queries/conf.query.ts'
 import { guidesFromServerQuery, itemsPerPage } from '@/queries/guides-from-server.query.ts'
 import { guidesQuery } from '@/queries/guides.query'
 import { Page } from '@/routes/-page.tsx'
-import { StatusZod } from '@/types/status.ts'
 import { Trans, t } from '@lingui/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
@@ -37,16 +37,14 @@ const SearchZod = z.object({
   search: z.string().optional(),
 })
 
+const ParamsZod = z.object({
+  status: z.enum(['public', 'private', 'draft', 'gp', 'certified']),
+})
+
 export const Route = createFileRoute('/_app/downloads/$status')({
   component: DownloadGuidePage,
   params: {
-    parse: (status) => {
-      return z
-        .object({
-          status: StatusZod,
-        })
-        .parse(status)
-    },
+    parse: ParamsZod.parse,
     stringify: (params) => {
       return {
         status: params.status,
@@ -133,7 +131,7 @@ function DownloadGuidePage() {
         })
 
   const hasPagination = term === '' && guides.data.length !== 0 && guides.data.length > itemsPerPage
-  const intl = new Intl.NumberFormat(conf.data.lang.toLowerCase(), {})
+  const intl = new Intl.NumberFormat(getLang(conf.data.lang).toLowerCase(), {})
 
   return (
     <Page key={`download-${status}`} to="/downloads" title={title}>

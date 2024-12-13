@@ -50,7 +50,12 @@ export function GuideFrame({
     replace: (domNode) => {
       // #region positions
       if (domNode.type === 'text') {
-        if (domNode.data.includes('https://') || domNode.data.includes('http://')) {
+        const href = domNode.data
+        const isHrefHttp = href !== '' && href.startsWith('http')
+        const url = isHrefHttp ? new URL(href) : undefined
+        const isValid = url !== undefined ? whiteList.data.includes(`${url.protocol}//${url.hostname}`) : false
+
+        if (isHrefHttp && !isValid) {
           return <Trans>lien masqué</Trans>
         }
 
