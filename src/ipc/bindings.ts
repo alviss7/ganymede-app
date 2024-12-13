@@ -70,7 +70,7 @@ export type TauRpcUpdateApiOutputTypes = { proc_name: "startUpdate"; output_type
 
 export type User = { id: number; name: string; is_admin: number; is_certified: number }
 
-const ARGS_MAP = {'update':'{"startUpdate":[]}', 'guides':'{"getFlatGuides":["folder"],"downloadGuideFromServer":["guide_id","folder"],"getGuides":["folder"],"getGuidesFromServer":["status"],"getGuideFromServer":["guide_id"],"openGuidesFolder":[]}', 'almanax':'{"get":[]}', 'base':'{"openUrl":["url"],"newId":[]}', 'conf':'{"set":["conf"],"toggleGuideCheckbox":["guide_id","step_index","checkbox_index"],"get":[],"reset":[]}', '':'{"isAppVersionOld":[]}', 'security':'{"getWhiteList":[]}', 'image':'{"fetchImage":["url"]}'}
+const ARGS_MAP = {'':'{"isAppVersionOld":[]}', 'image':'{"fetchImage":["url"]}', 'security':'{"getWhiteList":[]}', 'guides':'{"getFlatGuides":["folder"],"getGuideFromServer":["guide_id"],"openGuidesFolder":[],"downloadGuideFromServer":["guide_id","folder"],"getGuides":["folder"],"getGuidesFromServer":["status"]}', 'update':'{"startUpdate":[]}', 'almanax':'{"get":[]}', 'conf':'{"reset":[],"get":[],"set":["conf"],"toggleGuideCheckbox":["guide_id","step_index","checkbox_index"]}', 'base':'{"newId":[],"openUrl":["url"]}'}
 import { createTauRPCProxy as createProxy } from "taurpc"
 
 export const createTauRPCProxy = () => createProxy<Router>(ARGS_MAP)

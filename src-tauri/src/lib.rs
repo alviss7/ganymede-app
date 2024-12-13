@@ -31,13 +31,13 @@ mod shortcut;
 mod tauri_api_ext;
 mod update;
 
-#[cfg(debug_assertions)]
+#[cfg(dev)]
 const LOG_TARGETS: [Target; 2] = [
     Target::new(TargetKind::Stdout),
     Target::new(TargetKind::Webview),
 ];
 
-#[cfg(not(debug_assertions))]
+#[cfg(not(dev))]
 const LOG_TARGETS: [Target; 2] = [
     Target::new(TargetKind::Stdout),
     Target::new(TargetKind::LogDir { file_name: None }),
