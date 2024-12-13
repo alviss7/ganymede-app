@@ -1,15 +1,12 @@
 name: 'on-release'
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
-    types:
-      - closed
+      - "1.7.0"
 
 jobs:
   publish-tauri:
-    if: startsWith(github.head_ref, 'changeset-release')
     permissions:
       contents: write
     strategy:
