@@ -3,17 +3,17 @@ import { useGuide } from '@/hooks/use_guide.ts'
 import { useProfile } from '@/hooks/use_profile.ts'
 import { useProgressStep } from '@/hooks/use_progress_step'
 import { clamp } from '@/lib/clamp'
-import { copyPosition } from '@/lib/copy-position'
+import { copyPosition } from '@/lib/copy-position.ts'
 import { getGuideById } from '@/lib/guide'
 import { getProgress } from '@/lib/progress.ts'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils.ts'
 import { useDownloadGuideFromServer } from '@/mutations/download-guide-from-server.mutation'
 import { useOpenGuideLink } from '@/mutations/open-guide-link.mutation'
 import { useToggleGuideCheckbox } from '@/mutations/toggle-guide-checkbox.mutation'
 import { confQuery } from '@/queries/conf.query'
 import { guidesQuery } from '@/queries/guides.query'
 import { whiteListQuery } from '@/queries/white_list.query.ts'
-import { Trans, t } from '@lingui/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
@@ -33,6 +33,7 @@ export function GuideFrame({
   guideId: number
   stepIndex: number
 }) {
+  const { t } = useLingui()
   const conf = useSuspenseQuery(confQuery)
   const profile = useProfile()
   const toggleGuideCheckbox = useToggleGuideCheckbox()
@@ -172,8 +173,8 @@ export function GuideFrame({
                   <button
                     {...domNode.attribs}
                     className={cn(
-                      '!contents group select-none data-[type=guide-step]:no-underline',
-                      downloadGuide.isError && '!text-destructive',
+                      'contents! group select-none data-[type=guide-step]:no-underline',
+                      downloadGuide.isError && 'text-destructive!',
                       domNode.attribs.class,
                     )}
                     disabled={downloadGuide.isPending}
@@ -230,7 +231,7 @@ export function GuideFrame({
           const isMacOs = navigator.userAgent.toLowerCase().includes('mac os x')
 
           return (
-            <div {...restAttribs} className={cn('!contents', nodeClassName)}>
+            <div {...restAttribs} className={cn('contents!', nodeClassName)}>
               <button
                 type="button"
                 className="group contents"
@@ -300,7 +301,7 @@ export function GuideFrame({
               className={cn(
                 'inline-flex select-none',
                 isIcon && '-translate-y-0.5 text-[0.8em]',
-                !isIcon && '!cursor-pointer pb-2',
+                !isIcon && 'cursor-pointer! pb-2',
                 domNode.attribs.class,
               )}
             />

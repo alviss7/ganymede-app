@@ -2,7 +2,7 @@ import { ConfLang } from '@/ipc/bindings.ts'
 import { GetConfError } from '@/ipc/conf'
 import { useResetConf } from '@/mutations/reset-conf.mutation'
 import { confQuery } from '@/queries/conf.query'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { ErrorComponentProps, useLocation } from '@tanstack/react-router'
 import { TriangleAlertIcon } from 'lucide-react'
@@ -24,7 +24,7 @@ export function ErrorComponent({ error, reset, info }: ErrorComponentProps) {
   }
 
   return (
-    <PageScrollableContent className="container mx-auto flex h-app-without-header flex-col gap-4 px-4 py-2">
+    <PageScrollableContent className="container flex h-app-without-header flex-col gap-4 px-4 py-2">
       {(conf.isError && conf.error instanceof GetConfError) || location.pathname.includes('/settings') ? (
         <section>
           <SelectLangLabel htmlFor="select-lang" />

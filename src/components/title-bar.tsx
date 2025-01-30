@@ -5,7 +5,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
-import { Trans, t } from '@lingui/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Link, useLocation } from '@tanstack/react-router'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import {
@@ -25,6 +25,7 @@ import {
 const appWindow = getCurrentWindow()
 
 export function TitleBar() {
+  const { t } = useLingui()
   const location = useLocation()
 
   const linksAreDisabled = location.pathname.includes('app-old-version')
@@ -33,7 +34,7 @@ export function TitleBar() {
     <div className="sticky top-0 z-10 flex h-[30px] items-center bg-primary text-primary-foreground">
       {!linksAreDisabled && (
         <DropdownMenu>
-          <DropdownMenuTrigger className="h-full px-2 outline-none">
+          <DropdownMenuTrigger className="h-full px-2 outline-hidden">
             <MenuIcon className="size-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" alignOffset={6} sideOffset={0}>
