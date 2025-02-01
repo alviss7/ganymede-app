@@ -19,7 +19,7 @@ export function Position({
 
   return (
     <button
-      className="w-20 text-start text-sm text-yellow-400"
+      className="w-20 cursor-pointer text-start text-sm text-yellow-400"
       onClick={onClick}
       title={conf.data.autoTravelCopy ? t`Copier la commande autopilote` : t`Copier la position`}
     >

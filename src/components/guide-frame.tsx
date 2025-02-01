@@ -74,7 +74,7 @@ export function GuideFrame({
               {posX !== undefined && posY !== undefined && (
                 <button
                   type="button"
-                  className="inline-flex hover:saturate-50 focus:saturate-[12.5%]"
+                  className="inline-flex cursor-pointer text-yellow-400 hover:saturate-50 focus:saturate-[12.5%]"
                   onClick={async () => {
                     await copyPosition(Number.parseInt(posX, 10), Number.parseInt(posY, 10), conf.data.autoTravelCopy)
                   }}
