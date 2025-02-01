@@ -53,7 +53,7 @@ export function AlmanaxFrame() {
           <ChevronRightIcon />
         </Button>
         <div className="sticky top-0 z-10 flex grow items-center gap-2 font-semibold text-blue-300">
-          <span className="mx-auto">{dateToDayMonthYear(date)}</span>
+          <span className="mx-auto text-xs xs:text-base">{dateToDayMonthYear(date)}</span>
           <Button className="h-7" onClick={onGoToday}>
             <Trans>Aujourd'hui</Trans>
           </Button>

@@ -1,8 +1,7 @@
 import { getAlmanax } from '@/ipc/almanax.ts'
 import { ConfLang } from '@/ipc/bindings.ts'
 import { queryOptions } from '@tanstack/react-query'
-import dayjs, { type Dayjs } from 'dayjs'
-import { newDateFromParis } from '../lib/date'
+import { type Dayjs } from 'dayjs'
 
 export const almanaxQuery = (lang: ConfLang, level: number, date: Dayjs) => {
   return queryOptions({
@@ -16,7 +15,5 @@ export const almanaxQuery = (lang: ConfLang, level: number, date: Dayjs) => {
 
       return res.value
     },
-    // staleTime is set until the next almanax
-    staleTime: newDateFromParis().add(1, 'day').diff(dayjs.tz(undefined, 'Europe/Paris'), 'millisecond'),
   })
 }
