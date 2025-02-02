@@ -234,7 +234,7 @@ export function GuideFrame({
             <div {...restAttribs} className={cn('contents!', nodeClassName)}>
               <button
                 type="button"
-                className="group contents"
+                className="group contents cursor-pointer"
                 onClick={async (evt) => {
                   // open in browser if ctrl/cmd is pressed
                   if (isMacOs ? evt.metaKey : evt.ctrlKey) {
