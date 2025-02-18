@@ -1,15 +1,17 @@
-import { FlagPerLang } from '@/components/flag-per-lang'
+import { FlagPerLang } from '@/components/flag-per-lang.tsx'
 import { GenericLoader } from '@/components/generic-loader.tsx'
 import { GuideDownloadButton } from '@/components/guide-card.tsx'
-import { PageScrollableContent } from '@/components/page-scrollable-content'
+import { PageScrollableContent } from '@/components/page-scrollable-content.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Card } from '@/components/ui/card.tsx'
-import { ClearInput } from '@/components/ui/clear-input'
-import { useProfile } from '@/hooks/use_profile'
+import { ClearInput } from '@/components/ui/clear-input.tsx'
+import { useProfile } from '@/hooks/use_profile.ts'
 import { GuidesOrFolder } from '@/ipc/bindings.ts'
 import { clamp } from '@/lib/clamp.ts'
-import { rankList } from '@/lib/rank'
-import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation'
+import { getStepOr } from '@/lib/progress.ts'
+import { rankList } from '@/lib/rank.ts'
+import { OpenedGuideZod } from '@/lib/tabs.ts'
+import { useOpenGuidesFolder } from '@/mutations/open-guides-folder.mutation.ts'
 import { confQuery } from '@/queries/conf.query.ts'
 import { guidesInFolderQuery, guidesQuery } from '@/queries/guides.query.ts'
 import { Page } from '@/routes/-page.tsx'
@@ -19,10 +21,11 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { ChevronRightIcon, FolderIcon, FolderOpenIcon, FolderSyncIcon } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
-import { BackButtonLink } from '../downloads/-back-button-link'
+import { BackButtonLink } from '../downloads/-back-button-link.tsx'
 
 const Search = z.object({
   path: z.string().default(''),
+  from: OpenedGuideZod.optional(),
 })
 
 export const Route = createFileRoute('/_app/guides/')({
@@ -33,12 +36,15 @@ export const Route = createFileRoute('/_app/guides/')({
 
 function Pending() {
   const { t } = useLingui()
-  const { path } = Route.useSearch()
+  const { path, from } = Route.useSearch()
+
+  const comesFromGuide = !!from
 
   return (
     <Page
-      title={t`Guides`}
+      title={comesFromGuide ? t`Choisissez un guide` : t`Guides`}
       key="guide-page"
+      className="slot-[page-title-text]:whitespace-nowrap"
       backButton={path !== '' && <BackButtonLink to="/guides" search={{ path }} disabled />}
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
@@ -63,6 +69,9 @@ function Pending() {
 function GuidesPage() {
   const path = Route.useSearch({
     select: (search) => (search.path.startsWith('/') ? search.path.slice(1) : search.path),
+  })
+  const comesFrom = Route.useSearch({
+    select: (s) => s.from,
   })
   const { t } = useLingui()
   const conf = useSuspenseQuery(confQuery)
@@ -128,12 +137,29 @@ function GuidesPage() {
 
   const paths = path.split('/')
   const pathsWithoutLast = paths.slice(0, -1)
+  const comesFromGuide = comesFrom !== undefined
 
   return (
     <Page
       key="guide-page"
-      title={t`Guides`}
-      backButton={path !== '' && <BackButtonLink to="/guides" search={{ path: pathsWithoutLast.join('/') }} />}
+      className="slot-[page-title-text]:whitespace-nowrap"
+      title={comesFromGuide ? t`Choisissez un guide` : t`Guides`}
+      backButton={
+        path !== '' ? (
+          <BackButtonLink
+            to="/guides"
+            search={{ path: pathsWithoutLast.join('/'), ...(comesFromGuide ? { from: comesFrom } : {}) }}
+          />
+        ) : (
+          comesFromGuide && (
+            <BackButtonLink
+              to="/guides/$id"
+              params={{ id: comesFrom }}
+              search={{ step: getStepOr(profile, comesFrom, 0) }}
+            />
+          )
+        )
+      }
       actions={
         <div className="flex w-full items-center justify-end gap-1 text-sm">
           {guides.isFetched && guides.isFetching && <GenericLoader className="size-4" />}
@@ -176,7 +202,7 @@ function GuidesPage() {
                   <Link
                     className="items-center"
                     to="/guides"
-                    search={{ path: `${path}/${guide.name}` }}
+                    search={{ path: `${path}/${guide.name}`, ...(comesFromGuide ? { from: comesFrom } : {}) }}
                     draggable={false}
                   >
                     <span className="grow">{guide.name}</span>
@@ -212,7 +238,7 @@ function GuidesPage() {
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <Button asChild variant="secondary" size="icon" disabled={!hasOpenButton}>
-                    <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: step - 1 }} draggable={false}>
+                    <Link to="/guides/$id" params={{ id: guide.id }} search={{ step: step - 1 }}>
                       <ChevronRightIcon />
                     </Link>
                   </Button>
