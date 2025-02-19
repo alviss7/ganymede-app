@@ -1,11 +1,12 @@
 import { TabsTrigger } from '@/components/ui/tabs.tsx'
-import { useGuide } from '@/hooks/use_guide.ts'
+import { useGuide, useGuideOrUndefined } from '@/hooks/use_guide.ts'
 import { useProfile } from '@/hooks/use_profile.ts'
 import { useTabs } from '@/hooks/use_tabs.ts'
 import { clamp } from '@/lib/clamp.ts'
 import { getStepOr } from '@/lib/progress.ts'
 import { useNavigate } from '@tanstack/react-router'
 import { XIcon } from 'lucide-react'
+import { useEffect } from 'react'
 
 export function GuideTabsTrigger({
   id,
@@ -14,11 +15,21 @@ export function GuideTabsTrigger({
   id: number
   currentId: number
 }) {
-  const guide = useGuide(id)
+  const guide = useGuideOrUndefined(id)
   const removeTab = useTabs((s) => s.removeTab)
   const tabs = useTabs((s) => s.tabs)
   const navigate = useNavigate()
   const profile = useProfile()
+
+  useEffect(() => {
+    if (!guide) {
+      removeTab(id)
+    }
+  }, [guide])
+
+  if (!guide) {
+    return null
+  }
 
   return (
     <div className="group/tab relative line-clamp-1 flex w-full items-center justify-center">

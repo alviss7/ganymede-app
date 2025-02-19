@@ -12,3 +12,9 @@ export function useGuide(guideId: number) {
 
   return guide
 }
+
+export function useGuideOrUndefined(guideId: number) {
+  const guides = useSuspenseQuery(guidesQuery())
+
+  return guides.data.find((guide) => guide.id === guideId)
+}

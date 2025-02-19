@@ -34,7 +34,7 @@ export const useTabs = create<State>()(
     }),
     {
       name: 'guide-tabs',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
     },
   ),
 )
