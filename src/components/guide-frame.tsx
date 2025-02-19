@@ -303,7 +303,7 @@ export function GuideFrame({
                     {domToReact(domNode.children as DOMNode[], options)}
                   </div>
                 </TooltipTrigger>
-                <TooltipContent className="flex items-center gap-1">
+                <TooltipContent className="flex max-w-[calc(100vw-3rem)] items-center gap-1">
                   <img src="https://dev.ganymede-dofus.com/images/icon_quest.png" className="size-6" />
                   <span className="text-base">{questName}</span>
                 </TooltipContent>

@@ -1,5 +1,5 @@
 import { TabsTrigger } from '@/components/ui/tabs.tsx'
-import { useGuide, useGuideOrUndefined } from '@/hooks/use_guide.ts'
+import { useGuideOrUndefined } from '@/hooks/use_guide.ts'
 import { useProfile } from '@/hooks/use_profile.ts'
 import { useTabs } from '@/hooks/use_tabs.ts'
 import { clamp } from '@/lib/clamp.ts'
