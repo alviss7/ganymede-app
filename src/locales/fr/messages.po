@@ -71,8 +71,12 @@ msgstr "Carte"
 msgid "Catégories"
 msgstr "Catégories"
 
+#: src/components/error-component.tsx:89
+msgid "Cause non retrouvée."
+msgstr "Cause non retrouvée."
+
 #: src/components/error-component.tsx:81
-#: src/components/error-component.tsx:110
+#: src/components/error-component.tsx:112
 msgid "Causée par :"
 msgstr "Causée par :"
 
@@ -247,8 +251,8 @@ msgid "Il semblerait que la mise à jour ait eu un problème."
 msgstr "Il semblerait que la mise à jour ait eu un problème."
 
 #. placeholder {0}: info.componentStack
-#: src/components/error-component.tsx:93
-#: src/components/error-component.tsx:122
+#: src/components/error-component.tsx:95
+#: src/components/error-component.tsx:124
 msgid "Informations supplémentaires : {0}"
 msgstr "Informations supplémentaires : {0}"
 
@@ -355,7 +359,7 @@ msgstr "Rechercher un profil..."
 msgid "Réduire"
 msgstr "Réduire"
 
-#: src/components/error-component.tsx:128
+#: src/components/error-component.tsx:130
 msgid "Réessayer"
 msgstr "Réessayer"
 
@@ -400,7 +404,7 @@ msgstr "Très petite"
 msgid "Twitter de Ganymède"
 msgstr "Twitter de Ganymède"
 
-#: src/components/error-component.tsx:104
+#: src/components/error-component.tsx:106
 msgid "Une erreur est survenue"
 msgstr "Une erreur est survenue"
 

@@ -71,8 +71,12 @@ msgstr "Mapa"
 msgid "Catégories"
 msgstr "Categorias"
 
+#: src/components/error-component.tsx:89
+msgid "Cause non retrouvée."
+msgstr "Causa não encontrada."
+
 #: src/components/error-component.tsx:81
-#: src/components/error-component.tsx:110
+#: src/components/error-component.tsx:112
 msgid "Causée par :"
 msgstr "Causada por:"
 
@@ -247,8 +251,8 @@ msgid "Il semblerait que la mise à jour ait eu un problème."
 msgstr "Parece que houve um problema com a atualização."
 
 #. placeholder {0}: info.componentStack
-#: src/components/error-component.tsx:93
-#: src/components/error-component.tsx:122
+#: src/components/error-component.tsx:95
+#: src/components/error-component.tsx:124
 msgid "Informations supplémentaires : {0}"
 msgstr "Informações adicionais: {0}"
 
@@ -355,7 +359,7 @@ msgstr "Procurar um perfil..."
 msgid "Réduire"
 msgstr "Minimizar"
 
-#: src/components/error-component.tsx:128
+#: src/components/error-component.tsx:130
 msgid "Réessayer"
 msgstr "Tentar novamente"
 
@@ -400,7 +404,7 @@ msgstr "Extra pequena"
 msgid "Twitter de Ganymède"
 msgstr "Twitter do Ganimedes"
 
-#: src/components/error-component.tsx:104
+#: src/components/error-component.tsx:106
 msgid "Une erreur est survenue"
 msgstr "Ocorreu um erro"
 

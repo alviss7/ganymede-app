@@ -76,15 +76,17 @@ export function ErrorComponent({ error, reset, info }: ErrorComponentProps) {
             </AlertTitle>
             <AlertDescription>
               <pre>{error.message}</pre>
-              {error.cause != null && (
+              {error.cause != null ? (
                 <span>
                   <Trans>Causée par :</Trans>
                   <pre className="whitespace-break-spaces">
                     {typeof error.cause === 'object' &&
-                      'message' in error.cause &&
-                      typeof error.cause.message === 'string' &&
-                      error.cause.message}
-                    {typeof error.cause === 'string' && error.cause}
+                    'message' in error.cause &&
+                    typeof error.cause.message === 'string'
+                      ? error.cause.message
+                      : typeof error.cause === 'string'
+                        ? error.cause
+                        : (JSON.stringify(error.cause, null, 2) ?? <Trans>Cause non retrouvée.</Trans>)}
                   </pre>
                 </span>
               )}
